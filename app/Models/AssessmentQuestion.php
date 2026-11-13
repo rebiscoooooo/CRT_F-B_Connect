@@ -35,4 +35,3 @@ class AssessmentQuestion extends Model
         return $this->belongsTo(Assessment::class);
     }
 }
-

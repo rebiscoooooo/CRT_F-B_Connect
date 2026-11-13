@@ -120,7 +120,12 @@ class AssessmentController extends Controller
 
         $submission->delete();
 
-        return redirect()->route('admin.assessments.index')
+        if (request()->header('referer') && str_contains(request()->header('referer'), "/admin/assessments/{$submission->id}")) {
+            return redirect()->route('admin.assessments.index')
+                ->with('success', 'Student submission was removed successfully.');
+        }
+
+        return redirect()->back(fallback: route('admin.assessments.index'))
             ->with('success', 'Student submission was removed successfully.');
     }
 
@@ -184,4 +189,3 @@ class AssessmentController extends Controller
         return back()->with('success', 'Lesson assessment updated successfully.');
     }
 }
-

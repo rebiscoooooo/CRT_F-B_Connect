@@ -25,13 +25,18 @@ import {
     ClipboardCheck,
     Award,
     HelpCircle,
+    Megaphone,
+    Mail,
 } from 'lucide-react';
 
-export default function ResourceShow({ resource, relatedResources = [], folders = [], assessment = null }) {
+export default function ResourceShow({ resource, relatedResources = [], folders = [], assessment = null, studentCount = 0 }) {
     const [isMoveOpen, setIsMoveOpen] = useState(false);
     const [targetFolderId, setTargetFolderId] = useState(resource.folder_id || '');
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [copied, setCopied] = useState(false);
+    const [isAnnounceOpen, setIsAnnounceOpen] = useState(false);
+    const [announceMessage, setAnnounceMessage] = useState('');
+    const [isAnnouncing, setIsAnnouncing] = useState(false);
 
     const handleMove = (e) => {
         e.preventDefault();
@@ -46,6 +51,20 @@ export default function ResourceShow({ resource, relatedResources = [], folders 
 
     const handleDelete = () => {
         router.delete(`/admin/resources/${resource.id}`);
+    };
+
+    const handleBroadcastAnnouncement = (e) => {
+        e.preventDefault();
+        setIsAnnouncing(true);
+        router.post(`/admin/resources/${resource.id}/announce`, {
+            announcement_message: announceMessage,
+        }, {
+            onSuccess: () => {
+                setIsAnnounceOpen(false);
+                setAnnounceMessage('');
+            },
+            onFinish: () => setIsAnnouncing(false),
+        });
     };
 
     const handleShare = () => {
@@ -310,6 +329,14 @@ export default function ResourceShow({ resource, relatedResources = [], folders 
                         </Link>
 
                         <button
+                            onClick={() => setIsAnnounceOpen(true)}
+                            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm shadow-indigo-500/20 transition-all cursor-pointer"
+                        >
+                            <Megaphone className="w-4 h-4" />
+                            Broadcast Email Announcement
+                        </button>
+
+                        <button
                             onClick={() => setIsMoveOpen(true)}
                             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 transition-all"
                         >
@@ -464,6 +491,55 @@ export default function ResourceShow({ resource, relatedResources = [], folders 
                         </button>
                     </div>
                 </div>
+            </Modal>
+
+            {/* Broadcast Email Announcement Modal */}
+            <Modal isOpen={isAnnounceOpen} onClose={() => setIsAnnounceOpen(false)} title="Broadcast Email Announcement">
+                <form onSubmit={handleBroadcastAnnouncement} className="space-y-4">
+                    <div className="p-4 rounded-xl bg-indigo-50 border border-indigo-100 flex items-start gap-3 text-xs text-indigo-950">
+                        <Megaphone className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
+                        <div>
+                            <p className="font-bold">Send Announcement to All Students</p>
+                            <p className="mt-0.5 text-indigo-800">
+                                This will send an official email announcement and notification alert for <strong>"{resource.title}"</strong> to all <strong>{studentCount} active registered students</strong>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                            Custom Announcement Note / Instructions (Optional)
+                        </label>
+                        <textarea
+                            value={announceMessage}
+                            onChange={(e) => setAnnounceMessage(e.target.value)}
+                            rows={4}
+                            placeholder="e.g. Students are required to review this masterclass and complete the assessment before laboratory hours."
+                            className="w-full px-3.5 py-2.5 text-xs bg-white rounded-xl border border-slate-200 focus:border-indigo-600 focus:outline-none placeholder:text-slate-400"
+                        />
+                        <p className="text-[10px] text-slate-500 mt-1">
+                            This custom note will be highlighted in the email alongside the lesson preview and direct link.
+                        </p>
+                    </div>
+
+                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+                        <button
+                            type="button"
+                            onClick={() => setIsAnnounceOpen(false)}
+                            className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={isAnnouncing}
+                            className="inline-flex items-center gap-2 px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm disabled:opacity-60 cursor-pointer"
+                        >
+                            <Mail className="w-3.5 h-3.5" />
+                            {isAnnouncing ? 'Sending to Students...' : 'Send Email Announcement'}
+                        </button>
+                    </div>
+                </form>
             </Modal>
         </AppLayout>
     );

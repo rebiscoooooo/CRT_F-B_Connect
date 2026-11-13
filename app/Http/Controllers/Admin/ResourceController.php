@@ -3,13 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ResourceAnnouncementMail;
 use App\Models\ActivityLog;
 use App\Models\Resource;
 use App\Models\ResourceCategory;
 use App\Models\ResourceFolder;
+use App\Models\SystemNotification;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -142,10 +147,12 @@ class ResourceController extends Controller
     {
         $categories = ResourceCategory::orderBy('name')->get();
         $folders = ResourceFolder::with('category')->orderBy('name')->get();
+        $studentCount = User::where('role', 'student')->where('status', 'active')->count();
 
         return Inertia::render('Admin/Resources/Create', [
             'categories' => $categories,
             'folders' => $folders,
+            'studentCount' => $studentCount,
         ]);
     }
 
@@ -173,6 +180,8 @@ class ResourceController extends Controller
             'external_url' => ['nullable', 'url', 'max:1000'],
             'file' => $fileRules,
             'thumbnail' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg', 'max:10240'],
+            'send_announcement' => ['nullable', 'boolean'],
+            'announcement_message' => ['nullable', 'string', 'max:2000'],
         ], [
             'file.mimes' => match ($type) {
                 'video' => 'The uploaded file must be a valid video (MP4, WebM, MOV, MKV).',
@@ -238,7 +247,44 @@ class ResourceController extends Controller
             $resource->id
         );
 
-        return redirect()->route('admin.resources.show', $resource->id)->with('success', 'Resource uploaded successfully!');
+        $studentsCount = 0;
+        if ($request->boolean('send_announcement')) {
+            $students = User::where('role', 'student')->where('status', 'active')->get();
+            $studentsCount = $students->count();
+            $instructor = Auth::user();
+            $customMessage = $request->input('announcement_message');
+
+            foreach ($students as $student) {
+                try {
+                    Mail::to($student->email)->send(new ResourceAnnouncementMail($resource, $student, $customMessage, $instructor));
+                } catch (\Throwable $e) {
+                    Log::warning("Failed to send announcement email to {$student->email}: {$e->getMessage()}");
+                }
+
+                SystemNotification::create([
+                    'user_id' => $student->id,
+                    'title' => 'New Learning Material: '.$resource->title,
+                    'message' => $customMessage ?: "A new {$resource->resource_type} lesson \"{$resource->title}\" was published by {$instructor->name}.",
+                    'type' => 'announcement',
+                    'link' => "/student/resources/{$resource->id}",
+                    'created_at' => now(),
+                ]);
+            }
+
+            ActivityLog::record(
+                'announcement_broadcast',
+                "Broadcasted email announcement for \"{$resource->title}\" to {$studentsCount} registered students",
+                Auth::id(),
+                Resource::class,
+                $resource->id
+            );
+        }
+
+        $successMsg = $studentsCount > 0
+            ? "Resource uploaded and announcement emailed to {$studentsCount} registered students!"
+            : 'Resource uploaded successfully!';
+
+        return redirect()->route('admin.resources.show', $resource->id)->with('success', $successMsg);
     }
 
     public function show(Resource $resource): Response
@@ -265,6 +311,7 @@ class ResourceController extends Controller
             'relatedResources' => $relatedResources,
             'folders' => $allFolders,
             'assessment' => $assessment,
+            'studentCount' => User::where('role', 'student')->where('status', 'active')->count(),
         ]);
     }
 
@@ -304,6 +351,8 @@ class ResourceController extends Controller
             'external_url' => ['nullable', 'url', 'max:1000'],
             'file' => $fileRules,
             'thumbnail' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg', 'max:10240'],
+            'send_announcement' => ['nullable', 'boolean'],
+            'announcement_message' => ['nullable', 'string', 'max:2000'],
         ], [
             'file.mimes' => match ($type) {
                 'video' => 'The uploaded file must be a valid video (MP4, WebM, MOV, MKV).',
@@ -419,5 +468,46 @@ class ResourceController extends Controller
         }
 
         return back()->with('error', 'File not found for download.');
+    }
+
+    /**
+     * Broadcast an email announcement for an existing resource to all registered students.
+     */
+    public function broadcastAnnouncement(Request $request, Resource $resource): RedirectResponse
+    {
+        $validated = $request->validate([
+            'announcement_message' => ['nullable', 'string', 'max:2000'],
+        ]);
+
+        $students = User::where('role', 'student')->where('status', 'active')->get();
+        $instructor = Auth::user();
+        $customMessage = $validated['announcement_message'] ?? null;
+
+        foreach ($students as $student) {
+            try {
+                Mail::to($student->email)->send(new ResourceAnnouncementMail($resource, $student, $customMessage, $instructor));
+            } catch (\Throwable $e) {
+                Log::warning("Failed to send announcement email to {$student->email}: {$e->getMessage()}");
+            }
+
+            SystemNotification::create([
+                'user_id' => $student->id,
+                'title' => 'New Learning Material: '.$resource->title,
+                'message' => $customMessage ?: "A new {$resource->resource_type} lesson \"{$resource->title}\" was announced by {$instructor->name}.",
+                'type' => 'announcement',
+                'link' => "/student/resources/{$resource->id}",
+                'created_at' => now(),
+            ]);
+        }
+
+        ActivityLog::record(
+            'announcement_broadcast',
+            "Broadcasted announcement email for \"{$resource->title}\" to {$students->count()} registered students",
+            Auth::id(),
+            Resource::class,
+            $resource->id
+        );
+
+        return back()->with('success', "Announcement emailed to {$students->count()} registered students successfully!");
     }
 }

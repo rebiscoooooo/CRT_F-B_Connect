@@ -59,6 +59,7 @@ Route::middleware(['auth', 'active'])->group(function () {
         Route::post('/resources/{resource}/move', [AdminResourceController::class, 'move'])->name('resources.move');
         Route::post('/resources/{resource}/visibility', [AdminResourceController::class, 'updateVisibility'])->name('resources.visibility');
         Route::get('/resources/{resource}/download', [AdminResourceController::class, 'download'])->name('resources.download');
+        Route::post('/resources/{resource}/announce', [AdminResourceController::class, 'broadcastAnnouncement'])->name('resources.announce');
 
         // Folders
         Route::post('/folders', [AdminFolderController::class, 'store'])->name('folders.store');

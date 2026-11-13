@@ -27,6 +27,7 @@ export default function AdminAssessmentsIndex({ submissions, statistics, resourc
     const [status, setStatus] = useState(filters.status || '');
     const [resourceId, setResourceId] = useState(filters.resource_id || '');
     const [submissionToDelete, setSubmissionToDelete] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const handleFilter = (e) => {
         e && e.preventDefault();
@@ -49,8 +50,15 @@ export default function AdminAssessmentsIndex({ submissions, statistics, resourc
 
     const confirmDelete = () => {
         if (!submissionToDelete) return;
+        setIsDeleting(true);
         router.delete(`/admin/assessments/${submissionToDelete.id}`, {
-            onSuccess: () => setSubmissionToDelete(null),
+            preserveScroll: true,
+            onSuccess: () => {
+                setSubmissionToDelete(null);
+                setIsDeleting(false);
+            },
+            onError: () => setIsDeleting(false),
+            onFinish: () => setIsDeleting(false),
         });
     };
 
@@ -392,8 +400,13 @@ export default function AdminAssessmentsIndex({ submissions, statistics, resourc
             </div>
 
             {/* Confirm Delete / Reset Modal */}
-            <Modal show={Boolean(submissionToDelete)} onClose={() => setSubmissionToDelete(null)}>
-                <div className="p-6 space-y-4">
+            <Modal
+                isOpen={Boolean(submissionToDelete)}
+                show={Boolean(submissionToDelete)}
+                onClose={() => setSubmissionToDelete(null)}
+                title="Remove Student Attempt"
+            >
+                <div className="space-y-4">
                     <div className="flex items-center gap-3 text-rose-600">
                         <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center">
                             <Trash2 className="w-5 h-5" />
@@ -412,20 +425,21 @@ export default function AdminAssessmentsIndex({ submissions, statistics, resourc
                         </div>
                     )}
 
-                    <div className="pt-2 flex items-center justify-end gap-2">
+                    <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
                         <button
                             type="button"
                             onClick={() => setSubmissionToDelete(null)}
-                            className="px-4 py-2 text-xs font-bold rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600"
+                            className="px-4 py-2 text-xs font-bold rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 cursor-pointer"
                         >
                             Cancel
                         </button>
                         <button
                             type="button"
                             onClick={confirmDelete}
-                            className="px-4 py-2 text-xs font-bold rounded-xl bg-rose-600 hover:bg-rose-700 text-white shadow-xs"
+                            disabled={isDeleting}
+                            className="px-4 py-2 text-xs font-bold rounded-xl bg-rose-600 hover:bg-rose-700 text-white shadow-xs disabled:opacity-50 cursor-pointer"
                         >
-                            Yes, Remove Attempt
+                            {isDeleting ? 'Removing...' : 'Yes, Remove Attempt'}
                         </button>
                     </div>
                 </div>

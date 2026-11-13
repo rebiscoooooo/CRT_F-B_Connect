@@ -55,4 +55,3 @@ class Assessment extends Model
         return (int) $this->questions()->sum('points');
     }
 }
-

@@ -15,7 +15,10 @@ import {
     Sparkles,
     Info,
     X,
-    FileCheck
+    FileCheck,
+    Megaphone,
+    Mail,
+    Bell,
 } from 'lucide-react';
 
 const RESOURCE_TYPE_CONFIG = {
@@ -118,7 +121,7 @@ const RESOURCE_TYPE_CONFIG = {
     },
 };
 
-export default function ResourceCreate({ categories = [], folders = [] }) {
+export default function ResourceCreate({ categories = [], folders = [], studentCount = 0 }) {
     const urlParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
     const initialCategory = urlParams.get('category_id') || (categories[0]?.id || '');
     const initialFolder = urlParams.get('folder_id') || '';
@@ -138,6 +141,8 @@ export default function ResourceCreate({ categories = [], folders = [] }) {
         external_url: '',
         file: null,
         thumbnail: null,
+        send_announcement: false,
+        announcement_message: '',
     });
 
     const [filePreview, setFilePreview] = useState(null);
@@ -516,6 +521,61 @@ export default function ResourceCreate({ categories = [], folders = [] }) {
                                     <option value="archived">Archived</option>
                                 </select>
                             </div>
+                        </div>
+
+                        {/* Student Email Announcement Notification Block */}
+                        <div className={`p-5 rounded-2xl border transition-all ${
+                            data.send_announcement
+                                ? 'bg-blue-50/80 border-blue-300 ring-2 ring-blue-500/20'
+                                : 'bg-slate-50/70 border-slate-200'
+                        }`}>
+                            <div className="flex items-start justify-between gap-4">
+                                <label className="flex items-start gap-3 cursor-pointer select-none">
+                                    <input
+                                        type="checkbox"
+                                        checked={data.send_announcement}
+                                        onChange={(e) => setData('send_announcement', e.target.checked)}
+                                        className="mt-0.5 w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300 cursor-pointer"
+                                    />
+                                    <div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs font-bold text-slate-900">
+                                                Broadcast Email Announcement to All Registered Students
+                                            </span>
+                                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">
+                                                {studentCount} Students
+                                            </span>
+                                        </div>
+                                        <p className="text-[11px] text-slate-500 mt-0.5">
+                                            Automatically sends an official academic email announcement and in-portal alert to all active student inboxes.
+                                        </p>
+                                    </div>
+                                </label>
+
+                                <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+                                    data.send_announcement ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'
+                                }`}>
+                                    <Megaphone className="w-4 h-4" />
+                                </div>
+                            </div>
+
+                            {data.send_announcement && (
+                                <div className="mt-4 pt-4 border-t border-blue-200/60 space-y-2">
+                                    <label className="block text-xs font-bold text-blue-950 uppercase tracking-wider">
+                                        Custom Announcement Note / Instructor Instructions (Optional)
+                                    </label>
+                                    <textarea
+                                        value={data.announcement_message}
+                                        onChange={(e) => setData('announcement_message', e.target.value)}
+                                        rows={3}
+                                        placeholder="e.g. Please review this video masterclass and take the assessment before our culinary lab on Monday. Bring your complete chef uniform."
+                                        className="w-full px-3.5 py-2.5 text-xs bg-white rounded-xl border border-blue-200 focus:border-blue-600 focus:outline-none placeholder:text-slate-400"
+                                    />
+                                    <p className="text-[10px] text-blue-700/80">
+                                        ℹ️ This custom note will appear prominently highlighted in the student's email notification alongside the direct lesson access link.
+                                    </p>
+                                </div>
+                            )}
                         </div>
 
                         {/* Upload Progress Bar */}

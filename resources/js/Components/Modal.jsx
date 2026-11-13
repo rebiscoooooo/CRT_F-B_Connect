@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
 
-export default function Modal({ isOpen, onClose, title, children, maxWidth = 'max-w-lg' }) {
+export default function Modal({ isOpen, show, onClose, title, children, maxWidth = 'max-w-lg' }) {
+    const isVisible = Boolean(isOpen !== undefined ? isOpen : show);
+
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.key === 'Escape' && isOpen) {
+            if (e.key === 'Escape' && isVisible) {
                 onClose();
             }
         };
 
-        if (isOpen) {
+        if (isVisible) {
             document.body.style.overflow = 'hidden';
             window.addEventListener('keydown', handleKeyDown);
         } else {
@@ -20,9 +22,9 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = 'ma
             document.body.style.overflow = 'unset';
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [isOpen, onClose]);
+    }, [isVisible, onClose]);
 
-    if (!isOpen) return null;
+    if (!isVisible) return null;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">

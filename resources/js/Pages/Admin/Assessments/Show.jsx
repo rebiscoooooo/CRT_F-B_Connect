@@ -25,6 +25,7 @@ import {
 
 export default function AdminAssessmentShow({ submission }) {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const user = submission.user;
     const assessment = submission.assessment;
@@ -33,7 +34,13 @@ export default function AdminAssessmentShow({ submission }) {
     const isPassed = submission.status === 'passed';
 
     const handleDelete = () => {
-        router.delete(`/admin/assessments/${submission.id}`);
+        setIsDeleting(true);
+        router.delete(`/admin/assessments/${submission.id}`, {
+            onFinish: () => {
+                setIsDeleting(false);
+                setIsDeleteModalOpen(false);
+            },
+        });
     };
 
     return (
@@ -283,32 +290,44 @@ export default function AdminAssessmentShow({ submission }) {
             </div>
 
             {/* Confirm Delete Attempt Modal */}
-            <Modal show={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)}>
-                <div className="p-6 space-y-4">
+            <Modal
+                isOpen={isDeleteModalOpen}
+                show={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                title="Remove Student Attempt Record"
+            >
+                <div className="space-y-4">
                     <div className="flex items-center gap-3 text-rose-600">
                         <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center">
                             <Trash2 className="w-5 h-5" />
                         </div>
                         <div>
                             <h3 className="font-bold text-slate-900 text-base">Remove This Attempt Record?</h3>
-                            <p className="text-xs text-slate-500">This action will remove the record and allow the student to retake the quiz cleanly.</p>
+                            <p className="text-xs text-slate-500">This action will delete this submission record and allow the student to retake cleanly.</p>
                         </div>
                     </div>
 
-                    <div className="pt-2 flex items-center justify-end gap-2">
+                    <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 space-y-1">
+                        <p><strong>Student:</strong> {user?.name} ({user?.student_number || 'N/A'})</p>
+                        <p><strong>Score:</strong> {submission.score} / {submission.total_points} ({Number(submission.percentage).toFixed(1)}%)</p>
+                        <p><strong>Lesson:</strong> {resource?.title}</p>
+                    </div>
+
+                    <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
                         <button
                             type="button"
                             onClick={() => setIsDeleteModalOpen(false)}
-                            className="px-4 py-2 text-xs font-bold rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600"
+                            className="px-4 py-2 text-xs font-bold rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 cursor-pointer"
                         >
                             Cancel
                         </button>
                         <button
                             type="button"
                             onClick={handleDelete}
-                            className="px-4 py-2 text-xs font-bold rounded-xl bg-rose-600 hover:bg-rose-700 text-white shadow-xs"
+                            disabled={isDeleting}
+                            className="px-4 py-2 text-xs font-bold rounded-xl bg-rose-600 hover:bg-rose-700 text-white shadow-xs disabled:opacity-50 cursor-pointer"
                         >
-                            Yes, Remove Attempt
+                            {isDeleting ? 'Removing...' : 'Yes, Remove Attempt'}
                         </button>
                     </div>
                 </div>

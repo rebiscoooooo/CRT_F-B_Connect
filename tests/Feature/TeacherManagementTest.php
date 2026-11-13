@@ -201,4 +201,3 @@ class TeacherManagementTest extends TestCase
         $response->assertRedirect(route('student.dashboard'));
     }
 }
-

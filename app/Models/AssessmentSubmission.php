@@ -43,4 +43,3 @@ class AssessmentSubmission extends Model
         return $this->belongsTo(User::class);
     }
 }
-

@@ -226,4 +226,3 @@ class TeacherController extends Controller
         return back()->with('success', "Staff account for \"{$userName}\" has been removed.");
     }
 }
-

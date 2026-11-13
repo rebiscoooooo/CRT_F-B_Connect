@@ -232,6 +232,29 @@ class AssessmentModuleTest extends TestCase
         ]);
     }
 
+    public function test_admin_deleting_submission_from_show_page_redirects_to_index(): void
+    {
+        $submission = AssessmentSubmission::create([
+            'assessment_id' => $this->assessment->id,
+            'user_id' => $this->student->id,
+            'score' => 2,
+            'total_points' => 2,
+            'percentage' => 100.0,
+            'status' => 'passed',
+            'answers' => ['1' => 'B', '2' => 'A'],
+            'submitted_at' => now(),
+        ]);
+
+        $response = $this->actingAs($this->admin)
+            ->from("/admin/assessments/{$submission->id}")
+            ->delete("/admin/assessments/{$submission->id}");
+
+        $response->assertRedirect(route('admin.assessments.index'));
+        $this->assertDatabaseMissing('assessment_submissions', [
+            'id' => $submission->id,
+        ]);
+    }
+
     public function test_students_cannot_access_admin_assessments(): void
     {
         $response = $this->actingAs($this->student)->get('/admin/assessments');
