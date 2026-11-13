@@ -143,6 +143,10 @@ export default function ResourceCreate({ categories = [], folders = [], studentC
         thumbnail: null,
         send_announcement: false,
         announcement_message: '',
+        generate_smart_assessment: true,
+        passing_percentage: 75,
+        time_limit_minutes: 15,
+        assessment_published: true,
     });
 
     const [filePreview, setFilePreview] = useState(null);
@@ -521,6 +525,97 @@ export default function ResourceCreate({ categories = [], folders = [], studentC
                                     <option value="archived">Archived</option>
                                 </select>
                             </div>
+                        </div>
+
+                        {/* Smart AI Assessment Quiz Block */}
+                        <div className={`p-5 rounded-2xl border transition-all ${
+                            data.generate_smart_assessment
+                                ? 'bg-gradient-to-br from-indigo-50/90 via-blue-50/70 to-white border-indigo-300 ring-2 ring-indigo-500/20'
+                                : 'bg-slate-50/70 border-slate-200'
+                        }`}>
+                            <div className="flex items-start justify-between gap-4">
+                                <label className="flex items-start gap-3 cursor-pointer select-none">
+                                    <input
+                                        type="checkbox"
+                                        checked={data.generate_smart_assessment}
+                                        onChange={(e) => setData('generate_smart_assessment', e.target.checked)}
+                                        className="mt-0.5 w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300 cursor-pointer"
+                                    />
+                                    <div>
+                                        <div className="flex items-center gap-2 flex-wrap">
+                                            <span className="text-xs font-bold text-slate-900">
+                                                Smart AI Assessment Generator
+                                            </span>
+                                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800">
+                                                <Sparkles className="w-3 h-3 text-indigo-600" />
+                                                Auto 10 Questions
+                                            </span>
+                                        </div>
+                                        <p className="text-[11px] text-slate-500 mt-0.5">
+                                            Automatically synthesizes a comprehensive 10-question multiple-choice quiz based on this uploaded material, complete with answer keys and pedagogical explanations.
+                                        </p>
+                                    </div>
+                                </label>
+
+                                <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+                                    data.generate_smart_assessment ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-500'
+                                }`}>
+                                    <Sparkles className="w-4 h-4" />
+                                </div>
+                            </div>
+
+                            {data.generate_smart_assessment && (
+                                <div className="mt-4 pt-4 border-t border-indigo-200/60 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div>
+                                        <label className="block text-[11px] font-bold text-indigo-950 uppercase tracking-wider mb-1">
+                                            Passing Requirement
+                                        </label>
+                                        <select
+                                            value={data.passing_percentage}
+                                            onChange={(e) => setData('passing_percentage', Number(e.target.value))}
+                                            className="w-full px-3 py-2 text-xs bg-white rounded-xl border border-indigo-200 focus:border-indigo-600 focus:outline-none"
+                                        >
+                                            <option value={60}>60% (6 / 10 Points)</option>
+                                            <option value={70}>70% (7 / 10 Points)</option>
+                                            <option value={75}>75% (7.5 / 10 Points — Standard)</option>
+                                            <option value={80}>80% (8 / 10 Points)</option>
+                                            <option value={85}>85% (8.5 / 10 Points)</option>
+                                            <option value={90}>90% (9 / 10 Points)</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-[11px] font-bold text-indigo-950 uppercase tracking-wider mb-1">
+                                            Time Limit
+                                        </label>
+                                        <select
+                                            value={data.time_limit_minutes}
+                                            onChange={(e) => setData('time_limit_minutes', Number(e.target.value))}
+                                            className="w-full px-3 py-2 text-xs bg-white rounded-xl border border-indigo-200 focus:border-indigo-600 focus:outline-none"
+                                        >
+                                            <option value={0}>No Time Limit</option>
+                                            <option value={10}>10 Minutes</option>
+                                            <option value={15}>15 Minutes (Recommended)</option>
+                                            <option value={20}>20 Minutes</option>
+                                            <option value={30}>30 Minutes</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-[11px] font-bold text-indigo-950 uppercase tracking-wider mb-1">
+                                            Quiz Availability
+                                        </label>
+                                        <select
+                                            value={data.assessment_published ? '1' : '0'}
+                                            onChange={(e) => setData('assessment_published', e.target.value === '1')}
+                                            className="w-full px-3 py-2 text-xs bg-white rounded-xl border border-indigo-200 focus:border-indigo-600 focus:outline-none"
+                                        >
+                                            <option value="1">Publish Immediately (Live)</option>
+                                            <option value="0">Draft (Review Before Publishing)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         {/* Student Email Announcement Notification Block */}

@@ -27,6 +27,12 @@ import {
     HelpCircle,
     Megaphone,
     Mail,
+    Sparkles,
+    RefreshCw,
+    ChevronDown,
+    ChevronUp,
+    CheckCircle2,
+    Clock,
 } from 'lucide-react';
 
 export default function ResourceShow({ resource, relatedResources = [], folders = [], assessment = null, studentCount = 0 }) {
@@ -37,6 +43,37 @@ export default function ResourceShow({ resource, relatedResources = [], folders 
     const [isAnnounceOpen, setIsAnnounceOpen] = useState(false);
     const [announceMessage, setAnnounceMessage] = useState('');
     const [isAnnouncing, setIsAnnouncing] = useState(false);
+
+    // Smart Assessment Quiz State
+    const [isSmartGenerateOpen, setIsSmartGenerateOpen] = useState(false);
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [showQuestionsPreview, setShowQuestionsPreview] = useState(false);
+    const [genPassingPercentage, setGenPassingPercentage] = useState(assessment?.passing_percentage || 75);
+    const [genTimeLimit, setGenTimeLimit] = useState(assessment?.time_limit_minutes ?? 15);
+    const [genPublished, setGenPublished] = useState(assessment?.is_published ?? true);
+
+    const handleSmartGenerate = (e) => {
+        if (e) e.preventDefault();
+        setIsGenerating(true);
+        router.post(`/admin/resources/${resource.id}/assessment/smart-generate`, {
+            passing_percentage: genPassingPercentage,
+            time_limit_minutes: genTimeLimit,
+            is_published: genPublished,
+        }, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setIsSmartGenerateOpen(false);
+                setShowQuestionsPreview(true);
+            },
+            onFinish: () => setIsGenerating(false),
+        });
+    };
+
+    const handleToggleAssessmentStatus = () => {
+        router.post(`/admin/resources/${resource.id}/assessment/toggle-status`, {}, {
+            preserveScroll: true,
+        });
+    };
 
     const handleMove = (e) => {
         e.preventDefault();
@@ -216,97 +253,252 @@ export default function ResourceShow({ resource, relatedResources = [], folders 
 
                     {/* Lesson Assessment & Student Submissions */}
                     <div className="bg-white rounded-3xl border border-slate-200 shadow-2xs overflow-hidden">
-                        <div className="p-6 bg-slate-50/75 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        {/* Header bar */}
+                        <div className="p-6 bg-gradient-to-r from-slate-50 via-indigo-50/40 to-slate-50 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
-                                    <ClipboardCheck className="w-5 h-5" />
+                                <div className="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold shadow-xs">
+                                    <Sparkles className="w-5 h-5 text-indigo-100" />
                                 </div>
                                 <div>
-                                    <h3 className="text-base font-bold text-slate-900">
-                                        Lesson Assessment &amp; Student Submissions
-                                    </h3>
-                                    <p className="text-xs text-slate-500">
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <h3 className="text-base font-bold text-slate-900">
+                                            Lesson Assessment Quiz
+                                        </h3>
+                                        {assessment && (
+                                            <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                                                assessment.is_published
+                                                    ? 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200'
+                                                    : 'bg-amber-100 text-amber-800 ring-1 ring-amber-200'
+                                            }`}>
+                                                {assessment.is_published ? '● Live for Students' : '○ Draft Mode'}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <p className="text-xs text-slate-500 mt-0.5">
                                         {assessment
                                             ? `${assessment.title} • ${assessment.questions?.length || 0} Questions (Passing: ${assessment.passing_percentage}%)`
-                                            : 'No assessment quiz attached to this lesson.'}
+                                            : 'No assessment attached yet. Generate a 10-question smart quiz below.'}
                                     </p>
                                 </div>
                             </div>
 
-                            {assessment && (
-                                <Link
-                                    href={`/admin/assessments?resource_id=${resource.id}`}
-                                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors shadow-2xs"
+                            <div className="flex items-center gap-2 flex-wrap">
+                                <button
+                                    onClick={() => setIsSmartGenerateOpen(true)}
+                                    disabled={isGenerating}
+                                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-xs disabled:opacity-50 cursor-pointer"
                                 >
-                                    View All Submissions
-                                </Link>
-                            )}
+                                    <Sparkles className="w-3.5 h-3.5 text-indigo-200" />
+                                    {assessment ? 'Regenerate 10 Questions' : 'Smart Generate 10 Questions'}
+                                </button>
+
+                                {assessment && (
+                                    <>
+                                        <button
+                                            onClick={handleToggleAssessmentStatus}
+                                            className="px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors cursor-pointer"
+                                            title="Toggle whether students can see and take this quiz"
+                                        >
+                                            {assessment.is_published ? 'Switch to Draft' : 'Publish Quiz'}
+                                        </button>
+
+                                        <Link
+                                            href={`/admin/assessments?resource_id=${resource.id}`}
+                                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-100 text-xs font-bold transition-colors"
+                                        >
+                                            Submissions ({assessment.submissions?.length || 0})
+                                        </Link>
+                                    </>
+                                )}
+                            </div>
                         </div>
 
                         {assessment ? (
-                            <div className="p-6 space-y-4">
-                                <div className="flex items-center justify-between">
-                                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                                        Student Attempts on this Lesson ({assessment.submissions?.length || 0})
-                                    </h4>
+                            <div className="p-6 space-y-6">
+                                {/* Quiz Summary Meta Pills */}
+                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                    <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+                                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Questions</span>
+                                        <span className="text-base font-black text-slate-800">{assessment.questions?.length || 0} Items</span>
+                                    </div>
+                                    <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+                                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Points</span>
+                                        <span className="text-base font-black text-slate-800">{assessment.total_points || assessment.questions?.length || 10} Pts</span>
+                                    </div>
+                                    <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+                                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Passing Score</span>
+                                        <span className="text-base font-black text-emerald-600">{assessment.passing_percentage}%</span>
+                                    </div>
+                                    <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+                                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Time Limit</span>
+                                        <span className="text-base font-black text-slate-800">
+                                            {assessment.time_limit_minutes ? `${assessment.time_limit_minutes} Mins` : 'Unlimited'}
+                                        </span>
+                                    </div>
                                 </div>
 
-                                {assessment.submissions && assessment.submissions.length > 0 ? (
-                                    <div className="divide-y divide-slate-100">
-                                        {assessment.submissions.map((sub) => {
-                                            const isPassed = sub.status === 'passed';
-                                            return (
-                                                <div key={sub.id} className="py-3.5 flex items-center justify-between gap-4">
-                                                    <div className="flex items-center gap-3">
-                                                        <img
-                                                            src={sub.user?.avatar_url}
-                                                            alt={sub.user?.name}
-                                                            className="w-8 h-8 rounded-lg object-cover ring-1 ring-slate-200"
-                                                        />
-                                                        <div>
-                                                            <p className="text-xs font-bold text-slate-900">{sub.user?.name}</p>
-                                                            <p className="text-[10px] text-slate-400 font-mono">{sub.user?.student_number}</p>
-                                                        </div>
-                                                    </div>
+                                {/* Collapsible 10 Questions Preview Accordion */}
+                                <div className="rounded-2xl border border-slate-200 bg-slate-50/50 overflow-hidden">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowQuestionsPreview(!showQuestionsPreview)}
+                                        className="w-full p-4 flex items-center justify-between text-left hover:bg-slate-100/70 transition-colors cursor-pointer"
+                                    >
+                                        <div className="flex items-center gap-2">
+                                            <ClipboardCheck className="w-4 h-4 text-indigo-600" />
+                                            <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                                                Review All {assessment.questions?.length || 0} Questions &amp; Answer Keys
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
+                                            <span>{showQuestionsPreview ? 'Hide Details' : 'View Questions'}</span>
+                                            {showQuestionsPreview ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                                        </div>
+                                    </button>
 
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="text-right">
-                                                            <div className="text-xs font-black text-slate-800">
-                                                                {sub.score} / {sub.total_points} ({Number(sub.percentage).toFixed(0)}%)
-                                                            </div>
-                                                            <span className="text-[10px] text-slate-400">
-                                                                {new Date(sub.submitted_at || sub.created_at).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                                    {showQuestionsPreview && (
+                                        <div className="p-4 sm:p-6 border-t border-slate-200 bg-white space-y-5">
+                                            {assessment.questions?.map((q, idx) => (
+                                                <div key={q.id || idx} className="p-4 rounded-2xl border border-slate-200/80 bg-slate-50/40 space-y-3">
+                                                    <div className="flex items-start justify-between gap-3">
+                                                        <div className="flex items-start gap-2.5">
+                                                            <span className="w-6 h-6 rounded-lg bg-indigo-100 text-indigo-800 font-black text-xs flex items-center justify-center shrink-0">
+                                                                {q.order || idx + 1}
                                                             </span>
+                                                            <h4 className="font-bold text-slate-900 text-xs sm:text-sm leading-snug">
+                                                                {q.question_text}
+                                                            </h4>
+                                                        </div>
+                                                        <span className="text-[11px] font-semibold text-slate-400 shrink-0">
+                                                            {q.points || 1} pt
+                                                        </span>
+                                                    </div>
+
+                                                    {/* Options Grid */}
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                                                        {q.options?.map((opt) => {
+                                                            const isCorrect = String(opt.key).toUpperCase() === String(q.correct_answer).toUpperCase();
+                                                            return (
+                                                                <div
+                                                                    key={opt.key}
+                                                                    className={`p-2.5 rounded-xl border text-xs flex items-start gap-2 transition-all ${
+                                                                        isCorrect
+                                                                            ? 'bg-emerald-50 border-emerald-300 text-emerald-950 font-bold ring-1 ring-emerald-400/40'
+                                                                            : 'bg-white border-slate-200 text-slate-600'
+                                                                    }`}
+                                                                >
+                                                                    <span className={`w-5 h-5 rounded-md text-[11px] font-bold flex items-center justify-center shrink-0 ${
+                                                                        isCorrect ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-500'
+                                                                    }`}>
+                                                                        {opt.key}
+                                                                    </span>
+                                                                    <span className="leading-snug">{opt.text}</span>
+                                                                    {isCorrect && (
+                                                                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 ml-auto mt-0.5" />
+                                                                    )}
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+
+                                                    {/* Pedagogical Explanation */}
+                                                    {q.explanation && (
+                                                        <div className="p-2.5 rounded-xl bg-indigo-50/60 border border-indigo-100 text-[11px] text-indigo-900 flex items-start gap-2">
+                                                            <Sparkles className="w-3.5 h-3.5 text-indigo-600 shrink-0 mt-0.5" />
+                                                            <div>
+                                                                <strong className="font-bold">Pedagogical Rationale: </strong>
+                                                                {q.explanation}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Student Submissions Section */}
+                                <div className="space-y-3 pt-2">
+                                    <div className="flex items-center justify-between">
+                                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                                            Student Attempts on this Lesson ({assessment.submissions?.length || 0})
+                                        </h4>
+                                    </div>
+
+                                    {assessment.submissions && assessment.submissions.length > 0 ? (
+                                        <div className="divide-y divide-slate-100 rounded-2xl border border-slate-100 overflow-hidden">
+                                            {assessment.submissions.map((sub) => {
+                                                const isPassed = sub.status === 'passed';
+                                                return (
+                                                    <div key={sub.id} className="p-3.5 flex items-center justify-between gap-4 hover:bg-slate-50/60 transition-colors">
+                                                        <div className="flex items-center gap-3">
+                                                            <img
+                                                                src={sub.user?.avatar_url}
+                                                                alt={sub.user?.name}
+                                                                className="w-8 h-8 rounded-lg object-cover ring-1 ring-slate-200"
+                                                            />
+                                                            <div>
+                                                                <p className="text-xs font-bold text-slate-900">{sub.user?.name}</p>
+                                                                <p className="text-[10px] text-slate-400 font-mono">{sub.user?.student_number}</p>
+                                                            </div>
                                                         </div>
 
-                                                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
-                                                            isPassed ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
-                                                        }`}>
-                                                            {isPassed ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
-                                                            {isPassed ? 'Passed' : 'Failed'}
-                                                        </span>
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="text-right">
+                                                                <div className="text-xs font-black text-slate-800">
+                                                                    {sub.score} / {sub.total_points} ({Number(sub.percentage).toFixed(0)}%)
+                                                                </div>
+                                                                <span className="text-[10px] text-slate-400">
+                                                                    {new Date(sub.submitted_at || sub.created_at).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                                                                </span>
+                                                            </div>
 
-                                                        <Link
-                                                            href={`/admin/assessments/${sub.id}`}
-                                                            className="p-1.5 rounded-lg bg-slate-50 hover:bg-blue-50 text-slate-500 hover:text-blue-600 transition-colors text-xs font-bold"
-                                                            title="Inspect answers"
-                                                        >
-                                                            View
-                                                        </Link>
+                                                            <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                                                                isPassed ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                                                            }`}>
+                                                                {isPassed ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
+                                                                {isPassed ? 'Passed' : 'Failed'}
+                                                            </span>
+
+                                                            <Link
+                                                                href={`/admin/assessments/${sub.id}`}
+                                                                className="p-1.5 rounded-lg bg-slate-50 hover:bg-blue-50 text-slate-500 hover:text-blue-600 transition-colors text-xs font-bold"
+                                                                title="Inspect answers"
+                                                            >
+                                                                View
+                                                            </Link>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                ) : (
-                                    <div className="py-8 text-center text-xs text-slate-400">
-                                        No student submissions recorded yet for this lesson.
-                                    </div>
-                                )}
+                                                );
+                                            })}
+                                        </div>
+                                    ) : (
+                                        <div className="py-8 text-center text-xs text-slate-400 bg-slate-50/50 rounded-2xl border border-slate-100">
+                                            No student submissions recorded yet for this lesson.
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         ) : (
-                            <div className="p-8 text-center text-xs text-slate-400">
-                                No assessment quiz configured.
+                            <div className="p-8 sm:p-12 text-center space-y-4">
+                                <div className="w-14 h-14 rounded-3xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center mx-auto shadow-xs">
+                                    <Sparkles className="w-7 h-7" />
+                                </div>
+                                <div className="max-w-md mx-auto space-y-1">
+                                    <h4 className="text-base font-bold text-slate-900">
+                                        No Assessment Attached to this Lesson Yet
+                                    </h4>
+                                    <p className="text-xs text-slate-500">
+                                        The Smart Assessment Engine will synthesize 10 multiple-choice questions tailored to "{resource.title}" with answer keys and pedagogical rationales.
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => setIsSmartGenerateOpen(true)}
+                                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-md shadow-indigo-500/20 cursor-pointer"
+                                >
+                                    <Sparkles className="w-4 h-4 text-indigo-200" />
+                                    Generate 10-Question Smart Assessment
+                                </button>
                             </div>
                         )}
                     </div>
@@ -537,6 +729,90 @@ export default function ResourceShow({ resource, relatedResources = [], folders 
                         >
                             <Mail className="w-3.5 h-3.5" />
                             {isAnnouncing ? 'Sending to Students...' : 'Send Email Announcement'}
+                        </button>
+                    </div>
+                </form>
+            </Modal>
+
+            {/* Smart Assessment Quiz Generator Modal */}
+            <Modal isOpen={isSmartGenerateOpen} onClose={() => setIsSmartGenerateOpen(false)} title="Smart Assessment Quiz Generator">
+                <form onSubmit={handleSmartGenerate} className="space-y-4">
+                    <div className="p-4 rounded-xl bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-200/80 flex items-start gap-3 text-xs text-indigo-950">
+                        <Sparkles className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
+                        <div>
+                            <p className="font-bold">Synthesize 10-Question Smart Assessment</p>
+                            <p className="mt-0.5 text-indigo-800">
+                                The Smart Assessment Engine will generate 10 rigorous, curriculum-aligned multiple-choice questions tailored to <strong>"{resource.title}"</strong> ({resource.resource_type}), complete with answer keys, realistic distractors, and pedagogical rationales.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="space-y-3">
+                        <div>
+                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                                Passing Requirement
+                            </label>
+                            <select
+                                value={genPassingPercentage}
+                                onChange={(e) => setGenPassingPercentage(Number(e.target.value))}
+                                className="w-full px-3.5 py-2.5 text-xs bg-white rounded-xl border border-slate-200 focus:border-indigo-600 focus:outline-none"
+                            >
+                                <option value={60}>60% (6 / 10 Points)</option>
+                                <option value={70}>70% (7 / 10 Points)</option>
+                                <option value={75}>75% (7.5 / 10 Points — Standard)</option>
+                                <option value={80}>80% (8 / 10 Points)</option>
+                                <option value={85}>85% (8.5 / 10 Points)</option>
+                                <option value={90}>90% (9 / 10 Points)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                                Time Limit
+                            </label>
+                            <select
+                                value={genTimeLimit}
+                                onChange={(e) => setGenTimeLimit(Number(e.target.value))}
+                                className="w-full px-3.5 py-2.5 text-xs bg-white rounded-xl border border-slate-200 focus:border-indigo-600 focus:outline-none"
+                            >
+                                <option value={0}>No Time Limit</option>
+                                <option value={10}>10 Minutes</option>
+                                <option value={15}>15 Minutes (Recommended)</option>
+                                <option value={20}>20 Minutes</option>
+                                <option value={30}>30 Minutes</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                                Quiz Availability
+                            </label>
+                            <select
+                                value={genPublished ? '1' : '0'}
+                                onChange={(e) => setGenPublished(e.target.value === '1')}
+                                className="w-full px-3.5 py-2.5 text-xs bg-white rounded-xl border border-slate-200 focus:border-indigo-600 focus:outline-none"
+                            >
+                                <option value="1">Publish Immediately (Live for Students)</option>
+                                <option value="0">Draft (Admin review before publishing)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+                        <button
+                            type="button"
+                            onClick={() => setIsSmartGenerateOpen(false)}
+                            className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={isGenerating}
+                            className="inline-flex items-center gap-2 px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm disabled:opacity-60 cursor-pointer"
+                        >
+                            <Sparkles className="w-3.5 h-3.5 text-indigo-200" />
+                            {isGenerating ? 'Synthesizing 10 Questions...' : 'Generate 10-Question Quiz Now'}
                         </button>
                     </div>
                 </form>

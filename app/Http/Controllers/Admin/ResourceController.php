@@ -10,6 +10,7 @@ use App\Models\ResourceCategory;
 use App\Models\ResourceFolder;
 use App\Models\SystemNotification;
 use App\Models\User;
+use App\Services\SmartAssessmentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -182,6 +183,10 @@ class ResourceController extends Controller
             'thumbnail' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg', 'max:10240'],
             'send_announcement' => ['nullable', 'boolean'],
             'announcement_message' => ['nullable', 'string', 'max:2000'],
+            'generate_smart_assessment' => ['nullable', 'boolean'],
+            'passing_percentage' => ['nullable', 'integer', 'min:1', 'max:100'],
+            'time_limit_minutes' => ['nullable', 'integer', 'min:1', 'max:180'],
+            'assessment_published' => ['nullable', 'boolean'],
         ], [
             'file.mimes' => match ($type) {
                 'video' => 'The uploaded file must be a valid video (MP4, WebM, MOV, MKV).',
@@ -247,6 +252,28 @@ class ResourceController extends Controller
             $resource->id
         );
 
+        // Smart Assessment Quiz Auto-Generation (10 Questions based on material)
+        $assessmentGenerated = false;
+        $shouldGenerateAssessment = $request->has('generate_smart_assessment')
+            ? $request->boolean('generate_smart_assessment')
+            : true;
+
+        if ($shouldGenerateAssessment) {
+            try {
+                $smartService = app(SmartAssessmentService::class);
+                $smartService->generateForResource(
+                    $resource,
+                    passingPercentage: (int) ($validated['passing_percentage'] ?? 75),
+                    timeLimitMinutes: isset($validated['time_limit_minutes']) ? (int) $validated['time_limit_minutes'] : 15,
+                    isPublished: $request->has('assessment_published') ? $request->boolean('assessment_published') : true,
+                    createdBy: Auth::id()
+                );
+                $assessmentGenerated = true;
+            } catch (\Throwable $e) {
+                Log::warning("Failed to auto-generate smart assessment for resource {$resource->id}: {$e->getMessage()}");
+            }
+        }
+
         $studentsCount = 0;
         if ($request->boolean('send_announcement')) {
             $students = User::where('role', 'student')->where('status', 'active')->get();
@@ -280,11 +307,15 @@ class ResourceController extends Controller
             );
         }
 
-        $successMsg = $studentsCount > 0
-            ? "Resource uploaded and announcement emailed to {$studentsCount} registered students!"
-            : 'Resource uploaded successfully!';
+        $messages = ['Resource uploaded successfully!'];
+        if ($assessmentGenerated) {
+            $messages[] = '10-question Smart Assessment Quiz generated.';
+        }
+        if ($studentsCount > 0) {
+            $messages[] = "Email announcement sent to {$studentsCount} students.";
+        }
 
-        return redirect()->route('admin.resources.show', $resource->id)->with('success', $successMsg);
+        return redirect()->route('admin.resources.show', $resource->id)->with('success', implode(' ', $messages));
     }
 
     public function show(Resource $resource): Response
@@ -353,6 +384,10 @@ class ResourceController extends Controller
             'thumbnail' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp,svg', 'max:10240'],
             'send_announcement' => ['nullable', 'boolean'],
             'announcement_message' => ['nullable', 'string', 'max:2000'],
+            'generate_smart_assessment' => ['nullable', 'boolean'],
+            'passing_percentage' => ['nullable', 'integer', 'min:1', 'max:100'],
+            'time_limit_minutes' => ['nullable', 'integer', 'min:1', 'max:180'],
+            'assessment_published' => ['nullable', 'boolean'],
         ], [
             'file.mimes' => match ($type) {
                 'video' => 'The uploaded file must be a valid video (MP4, WebM, MOV, MKV).',

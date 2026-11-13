@@ -498,7 +498,7 @@ export default function Landing({ categories = [], stats = {}, previewResources 
 
             {/* Footer */}
             <footer className="bg-slate-950 text-slate-400 py-12 border-t border-slate-800 text-xs">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                     <div className="space-y-3 md:col-span-2">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full bg-white ring-2 ring-blue-500/30 overflow-hidden flex items-center justify-center">
@@ -521,21 +521,14 @@ export default function Landing({ categories = [], stats = {}, previewResources 
                         </p>
                     </div>
                     <div>
-                        <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-3">Navigation</h4>
+                        <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-3">Quick Links</h4>
                         <ul className="space-y-2">
                             <li><a href="#about" className="hover:text-white transition-colors">About</a></li>
                             <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
                             <li><a href="#preview" className="hover:text-white transition-colors">Resources Preview</a></li>
                             <li><Link href="/login" className="hover:text-white transition-colors">Portal Login</Link></li>
+                            <li><Link href="/register" className="hover:text-white transition-colors">Student Registration</Link></li>
                         </ul>
-                    </div>
-                    <div>
-                        <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-3">Credentials</h4>
-                        <p className="text-slate-400 leading-relaxed mb-2">
-                            Demo Admin: <span className="text-slate-200 font-mono">admin@crt.edu.ph</span><br />
-                            Demo Student: <span className="text-slate-200 font-mono">student@crt.edu.ph</span><br />
-                            Password: <span className="text-slate-200 font-mono">password</span>
-                        </p>
                     </div>
                 </div>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 border-t border-slate-800 text-center">

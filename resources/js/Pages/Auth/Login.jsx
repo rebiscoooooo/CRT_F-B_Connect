@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm, Link, Head } from '@inertiajs/react';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Eye, EyeOff, LogIn, Lock, Mail, ShieldAlert, Sparkles } from 'lucide-react';
+import { Eye, EyeOff, LogIn, Lock, Mail, ShieldAlert } from 'lucide-react';
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
@@ -19,22 +19,6 @@ export default function Login() {
         });
     };
 
-    const fillDemo = (type) => {
-        if (type === 'admin') {
-            setData({
-                login: 'admin@crt.edu.ph',
-                password: 'password',
-                remember: true,
-            });
-        } else {
-            setData({
-                login: 'student@crt.edu.ph',
-                password: 'password',
-                remember: true,
-            });
-        }
-    };
-
     return (
         <GuestLayout>
             <Head title="Sign In — CRT F&B Connect" />
@@ -42,30 +26,6 @@ export default function Login() {
             <div className="mb-6 text-center">
                 <h2 className="text-2xl font-black text-slate-900 tracking-tight">Welcome Back</h2>
                 <p className="text-xs text-slate-500 mt-1">Sign in to your classroom learning account</p>
-            </div>
-
-            {/* Quick Demo Credentials Switcher */}
-            <div className="mb-6 p-3 bg-blue-50/70 border border-blue-100 rounded-2xl flex items-center justify-between text-xs">
-                <div className="flex items-center gap-1.5 text-blue-900 font-medium">
-                    <Sparkles className="w-4 h-4 text-blue-600" />
-                    <span>Quick Demo Login:</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                    <button
-                        type="button"
-                        onClick={() => fillDemo('admin')}
-                        className="px-2.5 py-1 text-[11px] font-bold bg-white text-blue-700 hover:bg-blue-600 hover:text-white rounded-lg border border-blue-200 transition-colors shadow-2xs"
-                    >
-                        Admin
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => fillDemo('student')}
-                        className="px-2.5 py-1 text-[11px] font-bold bg-white text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-lg border border-emerald-200 transition-colors shadow-2xs"
-                    >
-                        Student
-                    </button>
-                </div>
             </div>
 
             <form onSubmit={submit} className="space-y-4">
@@ -82,7 +42,7 @@ export default function Login() {
                             type="text"
                             value={data.login}
                             onChange={(e) => setData('login', e.target.value)}
-                            placeholder="admin@crt.edu.ph or 2024-CRT-0101"
+                            placeholder="Enter your email address or student ID"
                             className={`w-full pl-10 pr-4 py-2.5 text-sm bg-white rounded-xl border ${
                                 errors.login ? 'border-rose-400 focus:ring-rose-400' : 'border-slate-200 focus:border-blue-600 focus:ring-blue-600'
                             } shadow-2xs focus:outline-none focus:ring-2 focus:ring-opacity-20 transition-all`}
@@ -104,7 +64,6 @@ export default function Login() {
                         <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
                             Password
                         </label>
-                        <span className="text-xs text-slate-400 select-none">Default: password</span>
                     </div>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">

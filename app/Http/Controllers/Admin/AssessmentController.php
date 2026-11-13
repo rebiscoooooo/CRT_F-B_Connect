@@ -8,6 +8,7 @@ use App\Models\Assessment;
 use App\Models\AssessmentQuestion;
 use App\Models\AssessmentSubmission;
 use App\Models\Resource;
+use App\Services\SmartAssessmentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -187,5 +188,57 @@ class AssessmentController extends Controller
         );
 
         return back()->with('success', 'Lesson assessment updated successfully.');
+    }
+
+    /**
+     * Generate or regenerate a smart 10-question assessment using the Smart Assessment Engine.
+     */
+    public function generateSmartAssessment(
+        Request $request,
+        Resource $resource,
+        SmartAssessmentService $smartService
+    ): RedirectResponse {
+        $validated = $request->validate([
+            'passing_percentage' => ['nullable', 'integer', 'min:1', 'max:100'],
+            'time_limit_minutes' => ['nullable', 'integer', 'min:1', 'max:180'],
+            'is_published' => ['nullable', 'boolean'],
+        ]);
+
+        $passing = $validated['passing_percentage'] ?? 75;
+        $timeLimit = isset($validated['time_limit_minutes']) ? (int) $validated['time_limit_minutes'] : 15;
+        $isPublished = $request->boolean('is_published', true);
+
+        $smartService->generateForResource(
+            $resource,
+            passingPercentage: $passing,
+            timeLimitMinutes: $timeLimit,
+            isPublished: $isPublished,
+            createdBy: Auth::id()
+        );
+
+        return back()->with('success', "Smart 10-question assessment successfully generated for \"{$resource->title}\"!");
+    }
+
+    /**
+     * Toggle the published status of a resource's assessment.
+     */
+    public function togglePublishStatus(Resource $resource): RedirectResponse
+    {
+        $assessment = $resource->assessment()->firstOrFail();
+
+        $assessment->is_published = ! $assessment->is_published;
+        $assessment->save();
+
+        $statusLabel = $assessment->is_published ? 'published and open to students' : 'saved as draft';
+
+        ActivityLog::record(
+            'assessment_status_toggled',
+            "Assessment for \"{$resource->title}\" is now {$statusLabel}",
+            Auth::id(),
+            Assessment::class,
+            $assessment->id
+        );
+
+        return back()->with('success', "Assessment is now {$statusLabel}.");
     }
 }
