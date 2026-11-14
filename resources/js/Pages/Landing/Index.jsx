@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, Head, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import {
@@ -18,7 +18,12 @@ import {
     Download,
     LogIn,
     UserPlus,
-    LayoutDashboard
+    LayoutDashboard,
+    Menu,
+    X,
+    Info,
+    ChevronRight,
+    Bookmark
 } from 'lucide-react';
 
 export default function Landing({ categories = [], stats = {}, previewResources = [] }) {
@@ -27,6 +32,88 @@ export default function Landing({ categories = [], stats = {}, previewResources 
     const dashboardUrl = user?.is_admin
         ? '/admin/dashboard'
         : (user?.status === 'pending' ? '/approval-pending' : '/student/dashboard');
+
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    // Close sidebar on Escape key and lock body scroll when open
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                setIsSidebarOpen(false);
+            }
+        };
+
+        if (isSidebarOpen) {
+            document.body.style.overflow = 'hidden';
+            window.addEventListener('keydown', handleKeyDown);
+        } else {
+            document.body.style.overflow = '';
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isSidebarOpen]);
+
+    const navLinks = [
+        {
+            id: 'about',
+            href: '#about',
+            label: 'About The Platform',
+            shortLabel: 'About',
+            description: 'Platform overview & competency standards',
+            icon: Info,
+        },
+        {
+            id: 'mission-vision',
+            href: '#mission-vision',
+            label: 'Vision & Mission',
+            shortLabel: 'Vision',
+            description: 'Institutional commitment to practical excellence in BTVTEd',
+            icon: Compass,
+        },
+        {
+            id: 'features',
+            href: '#features',
+            label: 'Platform Features',
+            shortLabel: 'Features',
+            description: 'Multimedia handbook, video player & interactive quizzes',
+            icon: Sparkles,
+        },
+        {
+            id: 'preview',
+            href: '#preview',
+            label: 'Resources Preview',
+            shortLabel: 'Preview',
+            description: 'Curriculum-aligned training videos, modules & procedures',
+            icon: BookOpen,
+        },
+        {
+            id: 'benefits',
+            href: '#benefits',
+            label: 'Platform Benefits',
+            shortLabel: 'Benefits',
+            description: 'Tailored advantages for both students and instructors',
+            icon: Award,
+        },
+    ];
+
+    const scrollToSection = (e, href) => {
+        e.preventDefault();
+        setIsSidebarOpen(false);
+        const targetId = href.replace('#', '');
+        const element = document.getElementById(targetId);
+        if (element) {
+            const offset = 85;
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - offset;
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth',
+            });
+        }
+    };
 
     const categoryIcons = {
         'video-lessons': Video,
@@ -40,61 +127,270 @@ export default function Landing({ categories = [], stats = {}, previewResources 
         <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-600 selection:text-white">
             <Head title="Digital Learning Management System" />
 
+            {/* Slide-Over Drawer Navigation Sidebar */}
+            <div
+                className={`fixed inset-0 z-50 transition-all duration-300 ${
+                    isSidebarOpen ? 'visible pointer-events-auto' : 'invisible pointer-events-none delay-200'
+                }`}
+                aria-hidden={!isSidebarOpen}
+            >
+                {/* Backdrop Blur Overlay */}
+                <div
+                    onClick={() => setIsSidebarOpen(false)}
+                    className={`fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity duration-300 ${
+                        isSidebarOpen ? 'opacity-100' : 'opacity-0'
+                    }`}
+                />
+
+                {/* Left Drawer Container */}
+                <aside
+                    className={`fixed inset-y-0 left-0 w-full max-w-[85vw] sm:max-w-sm bg-white shadow-2xl flex flex-col z-10 transition-transform duration-300 ease-out transform overscroll-contain ${
+                        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+                    }`}
+                >
+                    {/* Drawer Header */}
+                    <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+                        <div className="flex items-center gap-3">
+                            <ApplicationLogo size="sm" />
+                            <div>
+                                <span className="text-base font-black tracking-tight text-slate-900 block leading-tight">
+                                    CRT F&amp;B <span className="text-blue-600">Connect</span>
+                                </span>
+                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                                    Navigation Sidebar
+                                </span>
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => setIsSidebarOpen(false)}
+                            className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-200/70 rounded-xl transition-all"
+                            title="Close Sidebar (Esc)"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
+
+                    {/* User Card if Authenticated or Guest Callout */}
+                    <div className="p-4 sm:p-5 border-b border-slate-100 bg-gradient-to-br from-blue-50/60 via-slate-50 to-sky-50/40">
+                        {user ? (
+                            <div className="space-y-3">
+                                <div className="flex items-center gap-3">
+                                    <img
+                                        src={user.avatar_url}
+                                        alt={user.name}
+                                        className="w-10 h-10 rounded-xl object-cover ring-2 ring-blue-500/30 shadow-xs"
+                                    />
+                                    <div className="min-w-0 flex-1">
+                                        <p className="text-xs font-bold text-slate-900 truncate">{user.name}</p>
+                                        <p className="text-[11px] text-slate-500 truncate">
+                                            {user.is_admin ? 'Faculty / Instructor' : `Student ID: ${user.student_number || 'Enrolled'}`}
+                                        </p>
+                                    </div>
+                                </div>
+                                <Link
+                                    href={dashboardUrl}
+                                    className="w-full py-2.5 px-3 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-sm flex items-center justify-center gap-2 transition-all"
+                                >
+                                    <LayoutDashboard className="w-4 h-4" />
+                                    Go to My Dashboard
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className="space-y-3">
+                                <div>
+                                    <p className="text-xs font-bold text-slate-900">Welcome to CRT F&amp;B Connect</p>
+                                    <p className="text-[11px] text-slate-500 mt-0.5">
+                                        Access classroom materials, video demos, and quizzes.
+                                    </p>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <Link
+                                        href="/login"
+                                        className="py-2 px-3 text-center text-xs font-bold text-slate-700 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-2xs"
+                                    >
+                                        <LogIn className="w-3.5 h-3.5 text-blue-600" />
+                                        Log In
+                                    </Link>
+                                    <Link
+                                        href="/register"
+                                        className="py-2 px-3 text-center text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-xs"
+                                    >
+                                        <UserPlus className="w-3.5 h-3.5" />
+                                        Register
+                                    </Link>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Navlinks List */}
+                    <div className="flex-1 overflow-y-auto p-3.5 space-y-1">
+                        <p className="px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
+                            Page Navigation
+                        </p>
+                        {navLinks.map((link) => {
+                            const Icon = link.icon;
+                            return (
+                                <a
+                                    key={link.id}
+                                    href={link.href}
+                                    onClick={(e) => scrollToSection(e, link.href)}
+                                    className="group flex items-start gap-3 p-2.5 rounded-xl hover:bg-blue-50/80 border border-transparent hover:border-blue-100 transition-all text-left"
+                                >
+                                    <div className="p-2 rounded-lg bg-slate-100 text-slate-600 group-hover:bg-blue-600 group-hover:text-white transition-all shrink-0 mt-0.5">
+                                        <Icon className="w-4 h-4" />
+                                    </div>
+                                    <div className="min-w-0 flex-1">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                                                {link.label}
+                                            </span>
+                                            <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
+                                        </div>
+                                        <p className="text-[11px] text-slate-500 mt-0.5 leading-snug line-clamp-1">
+                                            {link.description}
+                                        </p>
+                                    </div>
+                                </a>
+                            );
+                        })}
+
+                        {/* Quick Resource Categories */}
+                        <div className="pt-3 mt-2 border-t border-slate-100">
+                            <p className="px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
+                                Handbook Categories
+                            </p>
+                            <div className="grid grid-cols-2 gap-1.5 pt-1">
+                                <a
+                                    href="#preview"
+                                    onClick={(e) => scrollToSection(e, '#preview')}
+                                    className="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/70 text-[11px] font-semibold text-slate-700 flex items-center gap-2 transition-all"
+                                >
+                                    <Video className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                                    <span className="truncate">Videos</span>
+                                </a>
+                                <a
+                                    href="#preview"
+                                    onClick={(e) => scrollToSection(e, '#preview')}
+                                    className="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/70 text-[11px] font-semibold text-slate-700 flex items-center gap-2 transition-all"
+                                >
+                                    <FileText className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+                                    <span className="truncate">PDFs</span>
+                                </a>
+                                <a
+                                    href="#preview"
+                                    onClick={(e) => scrollToSection(e, '#preview')}
+                                    className="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/70 text-[11px] font-semibold text-slate-700 flex items-center gap-2 transition-all"
+                                >
+                                    <BookOpen className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                                    <span className="truncate">Text Lessons</span>
+                                </a>
+                                <a
+                                    href="#preview"
+                                    onClick={(e) => scrollToSection(e, '#preview')}
+                                    className="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/70 text-[11px] font-semibold text-slate-700 flex items-center gap-2 transition-all"
+                                >
+                                    <ImageIcon className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                                    <span className="truncate">Illustrations</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Drawer Footer */}
+                    <div className="p-3.5 border-t border-slate-100 bg-slate-50/80 text-center">
+                        <p className="text-[10px] text-slate-500 font-medium">
+                            College of Research &amp; Technology
+                        </p>
+                        <p className="text-[9px] text-slate-400">
+                            Food &amp; Beverage Services Management
+                        </p>
+                    </div>
+                </aside>
+            </div>
+
             {/* Top Navigation Bar */}
-            <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/80">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-                    <div className="flex items-center gap-3.5">
-                        <ApplicationLogo
-                            size="lg"
-                            className="hover:scale-105 transition-transform"
-                        />
-                        <div>
-                            <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900">
+            <nav className="sticky top-0 z-40 bg-white/85 backdrop-blur-md border-b border-slate-200/80">
+                <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
+                    <div className="flex items-center gap-2 sm:gap-3.5 min-w-0">
+                        {/* Sidebar Toggle Button */}
+                        <button
+                            type="button"
+                            onClick={() => setIsSidebarOpen(true)}
+                            className="inline-flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 text-xs font-bold text-slate-700 hover:text-blue-600 bg-slate-100 hover:bg-slate-200/80 rounded-xl transition-all shadow-2xs shrink-0"
+                            title="Open Navigation Sidebar"
+                            aria-label="Open Navigation Sidebar"
+                        >
+                            <Menu className="w-4 h-4 text-blue-600" />
+                            <span className="hidden sm:inline">Menu</span>
+                        </button>
+
+                        <div className="w-9 h-9 sm:w-11 sm:h-11 md:w-13 md:h-13 rounded-full bg-white ring-2 ring-blue-500/20 shadow-xs overflow-hidden flex items-center justify-center shrink-0">
+                            <img
+                                src="/images/logo-badge.png"
+                                alt="CRT F&B Connect Logo"
+                                className="w-full h-full object-cover object-center"
+                                onError={(e) => {
+                                    e.target.src = '/images/logo.png';
+                                }}
+                            />
+                        </div>
+
+                        <div className="min-w-0">
+                            <span className="text-sm sm:text-lg md:text-xl font-black tracking-tight text-slate-900 block truncate">
                                 CRT F&amp;B <span className="text-blue-600">Connect</span>
                             </span>
-                            <span className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                            <span className="hidden md:block text-[10px] md:text-[11px] font-bold text-slate-500 uppercase tracking-wider truncate">
                                 College of Research &amp; Technology
                             </span>
                         </div>
                     </div>
 
-                    <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-                        <a href="#about" className="hover:text-blue-600 transition-colors">About</a>
-                        <a href="#mission-vision" className="hover:text-blue-600 transition-colors">Vision &amp; Mission</a>
-                        <a href="#features" className="hover:text-blue-600 transition-colors">Features</a>
-                        <a href="#preview" className="hover:text-blue-600 transition-colors">Resources Preview</a>
-                        <a href="#benefits" className="hover:text-blue-600 transition-colors">Benefits</a>
+                    {/* Centered nav links on large displays */}
+                    <div className="hidden lg:flex items-center gap-6 xl:gap-7 text-sm font-semibold text-slate-600 shrink-0">
+                        {navLinks.map((link) => (
+                            <a
+                                key={link.id}
+                                href={link.href}
+                                onClick={(e) => scrollToSection(e, link.href)}
+                                className="hover:text-blue-600 transition-colors py-1"
+                            >
+                                {link.shortLabel}
+                            </a>
+                        ))}
                     </div>
 
+                    {/* Right User Actions */}
                     {user ? (
-                        <div className="flex items-center gap-3">
-                            <span className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 text-xs font-bold text-slate-700">
+                        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                            <span className="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 text-xs font-bold text-slate-700">
                                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                Signed in as <span className="text-blue-600 font-extrabold">{user.first_name || user.name}</span>
+                                Signed in as <span className="text-blue-600 font-extrabold truncate max-w-[120px]">{user.first_name || user.name}</span>
                             </span>
                             <Link
                                 href={dashboardUrl}
-                                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 transition-all hover:-translate-y-0.5"
+                                className="inline-flex items-center gap-1.5 px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-600/20 hover:shadow-lg transition-all hover:-translate-y-0.5"
                             >
                                 <LayoutDashboard className="w-4 h-4" />
-                                Go to Dashboard
+                                <span>Dashboard</span>
                             </Link>
                         </div>
                     ) : (
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
                             <Link
                                 href="/login"
-                                className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-700 hover:text-blue-600 hover:bg-slate-100/80 rounded-xl transition-all"
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 sm:px-3.5 sm:py-2 text-xs sm:text-sm font-semibold text-slate-700 hover:text-blue-600 hover:bg-slate-100/80 rounded-xl transition-all"
                             >
-                                <LogIn className="w-4 h-4" />
-                                Log In
+                                <LogIn className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500" />
+                                <span>Log In</span>
                             </Link>
                             <Link
                                 href="/register"
-                                className="inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 transition-all hover:-translate-y-0.5"
+                                className="inline-flex items-center gap-1 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-600/20 hover:shadow-lg transition-all hover:-translate-y-0.5"
                             >
-                                <UserPlus className="w-4 h-4" />
-                                Get Started
+                                <UserPlus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                <span>Get Started</span>
                             </Link>
                         </div>
                     )}
