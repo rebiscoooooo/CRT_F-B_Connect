@@ -52,9 +52,17 @@ export default function Register({ allowRegistration = true }) {
         <GuestLayout>
             <Head title="Student Registration — CRT F&B Connect" />
 
-            <div className="mb-6 text-center">
+            <div className="mb-5 text-center">
                 <h2 className="text-2xl font-black text-slate-900 tracking-tight">Create Student Account</h2>
                 <p className="text-xs text-slate-500 mt-1">Register your details to access classroom materials</p>
+            </div>
+
+            {/* Two-Step Verification Notice */}
+            <div className="p-3 bg-blue-50/70 border border-blue-200/80 rounded-2xl mb-4 flex items-start gap-2.5">
+                <ShieldAlert className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                <div className="text-[11px] text-blue-900 leading-normal">
+                    <span className="font-bold">Two-Step Verification:</span> You will verify your email with a 6-digit OTP, followed by instructor approval to prevent dummy registrations.
+                </div>
             </div>
 
             <form onSubmit={submit} className="space-y-3.5">

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -26,11 +27,16 @@ class User extends Authenticatable
         'last_name',
         'name',
         'email',
+        'email_verified_at',
         'contact_number',
         'password',
+        'otp_code',
+        'otp_expires_at',
         'profile_picture',
         'role',
         'status',
+        'approved_by',
+        'approved_at',
     ];
 
     /**
@@ -41,6 +47,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'otp_code',
     ];
 
     /**
@@ -61,6 +68,8 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'otp_expires_at' => 'datetime',
+            'approved_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -78,6 +87,26 @@ class User extends Authenticatable
     public function isActive(): bool
     {
         return $this->status === 'active';
+    }
+
+    public function isPending(): bool
+    {
+        return $this->status === 'pending';
+    }
+
+    public function isInactive(): bool
+    {
+        return $this->status === 'inactive';
+    }
+
+    public function isPendingApproval(): bool
+    {
+        return $this->isStudent() && $this->status === 'pending' && $this->email_verified_at !== null;
+    }
+
+    public function approver(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'approved_by');
     }
 
     public function getAvatarUrlAttribute(): string

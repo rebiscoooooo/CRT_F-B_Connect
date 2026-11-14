@@ -19,12 +19,21 @@ class EnsureUserIsActive
         $user = $request->user();
 
         if ($user && ! $user->isActive()) {
+            $isPending = $user->isPending();
+            $userId = $user->id;
+
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
+            if ($isPending) {
+                $request->session()->put('pending_approval_user_id', $userId);
+
+                return redirect()->route('approval.pending')->with('info', 'Your account is pending instructor approval.');
+            }
+
             return redirect()->route('login')->withErrors([
-                'email' => 'Your account has been deactivated. Please contact your instructor or administrator.',
+                'login' => 'Your account has been deactivated. Please contact your instructor or administrator.',
             ]);
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\StudentOtpVerificationMail;
 use App\Models\ActivityLog;
 use App\Models\SystemNotification;
 use App\Models\SystemSetting;
@@ -10,6 +11,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -60,21 +63,56 @@ class AuthController extends Controller
         ];
 
         if (Auth::attempt($credentials, (bool) $request->input('remember'))) {
-            RateLimiter::clear($throttleKey);
-            $request->session()->regenerate();
-
             /** @var User $user */
             $user = Auth::user();
 
+            // 1. Email OTP verification check for students
+            if ($user->isStudent() && $user->email_verified_at === null) {
+                $otp = str_pad((string) random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
+                $user->update([
+                    'otp_code' => $otp,
+                    'otp_expires_at' => now()->addMinutes(10),
+                ]);
+
+                try {
+                    Mail::to($user->email)->send(new StudentOtpVerificationMail($user, $otp));
+                } catch (\Throwable $e) {
+                    Log::warning('Failed sending login verification OTP: '.$e->getMessage());
+                }
+
+                $userId = $user->id;
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                $request->session()->put('pending_user_id', $userId);
+
+                return redirect()->route('verification.otp')->with('info', "Please verify your email address. A 6-digit verification code has been sent to {$user->email}.");
+            }
+
+            // 2. Teacher/Admin Approval check for students
+            if ($user->isStudent() && $user->isPending()) {
+                $userId = $user->id;
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                $request->session()->put('pending_approval_user_id', $userId);
+
+                return redirect()->route('approval.pending');
+            }
+
+            // 3. Deactivated check
             if (! $user->isActive()) {
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
 
                 throw ValidationException::withMessages([
-                    'login' => 'Your account is deactivated. Please contact your instructor.',
+                    'login' => 'Your account is deactivated. Please contact your instructor or administrator.',
                 ]);
             }
+
+            RateLimiter::clear($throttleKey);
+            $request->session()->regenerate();
 
             ActivityLog::record('login', 'User logged in to the LMS', $user->id, User::class, $user->id);
 
@@ -129,6 +167,8 @@ class AuthController extends Controller
 
         $fullName = trim($validated['first_name'].' '.($validated['middle_name'] ? $validated['middle_name'].' ' : '').$validated['last_name']);
 
+        $otp = str_pad((string) random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
+
         $user = User::create([
             'student_number' => $validated['student_number'],
             'first_name' => $validated['first_name'],
@@ -139,24 +179,204 @@ class AuthController extends Controller
             'contact_number' => $validated['contact_number'] ?? null,
             'password' => Hash::make($validated['password']),
             'role' => 'student',
-            'status' => 'active',
+            'status' => 'pending',
+            'email_verified_at' => null,
+            'otp_code' => $otp,
+            'otp_expires_at' => now()->addMinutes(10),
+        ]);
+
+        try {
+            Mail::to($user->email)->send(new StudentOtpVerificationMail($user, $otp));
+        } catch (\Throwable $e) {
+            Log::warning('Failed sending OTP email during registration: '.$e->getMessage());
+        }
+
+        ActivityLog::record('register', "Student {$user->name} registered with ID {$user->student_number} (Awaiting OTP verification & teacher approval)", $user->id, User::class, $user->id);
+
+        $request->session()->put('pending_user_id', $user->id);
+
+        return redirect()->route('verification.otp')->with('success', 'Registration submitted! Please enter the 6-digit verification code sent to your email.');
+    }
+
+    public function showVerifyOtp(Request $request): Response|RedirectResponse
+    {
+        $userId = $request->session()->get('pending_user_id');
+
+        if (! $userId && Auth::check() && Auth::user()->isStudent() && Auth::user()->email_verified_at === null) {
+            $userId = Auth::id();
+        }
+
+        if (! $userId) {
+            return redirect()->route('login');
+        }
+
+        $user = User::find($userId);
+
+        if (! $user) {
+            $request->session()->forget('pending_user_id');
+
+            return redirect()->route('login');
+        }
+
+        if ($user->email_verified_at !== null) {
+            if ($user->isPending()) {
+                $request->session()->put('pending_approval_user_id', $user->id);
+
+                return redirect()->route('approval.pending');
+            }
+
+            return redirect()->route('login');
+        }
+
+        return Inertia::render('Auth/VerifyOtp', [
+            'email' => $user->email,
+            'studentNumber' => $user->student_number,
+            'expiresAt' => $user->otp_expires_at?->toISOString(),
+        ]);
+    }
+
+    public function verifyOtp(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'code' => ['required', 'string', 'size:6'],
+        ], [
+            'code.required' => 'Please enter the 6-digit verification code.',
+            'code.size' => 'The verification code must be exactly 6 digits.',
+        ]);
+
+        $userId = $request->session()->get('pending_user_id');
+
+        if (! $userId && Auth::check()) {
+            $userId = Auth::id();
+        }
+
+        if (! $userId) {
+            return redirect()->route('login')->withErrors([
+                'login' => 'Session expired. Please sign in again.',
+            ]);
+        }
+
+        $user = User::find($userId);
+
+        if (! $user) {
+            return redirect()->route('login');
+        }
+
+        if ($user->otp_expires_at && $user->otp_expires_at->isPast()) {
+            throw ValidationException::withMessages([
+                'code' => 'The verification code has expired. Please click "Resend Code" to receive a new one.',
+            ]);
+        }
+
+        if ((string) $user->otp_code !== (string) $validated['code']) {
+            throw ValidationException::withMessages([
+                'code' => 'The 6-digit verification code you entered is incorrect.',
+            ]);
+        }
+
+        $user->update([
             'email_verified_at' => now(),
+            'otp_code' => null,
+            'otp_expires_at' => null,
         ]);
 
-        Auth::login($user);
-        $request->session()->regenerate();
+        ActivityLog::record('verified', "Student {$user->name} verified email address", $user->id, User::class, $user->id);
 
-        ActivityLog::record('register', "Student {$user->name} registered with ID {$user->student_number}", $user->id, User::class, $user->id);
+        // Notify faculty and administrators that a verified student is awaiting approval
+        $admins = User::whereIn('role', ['admin', 'teacher'])->get();
+        foreach ($admins as $admin) {
+            SystemNotification::create([
+                'user_id' => $admin->id,
+                'title' => 'New Student Awaiting Approval',
+                'message' => "Student {$user->name} ({$user->student_number}) verified their email and is waiting for account approval.",
+                'type' => 'student',
+                'link' => '/admin/students?status=pending',
+            ]);
+        }
 
-        SystemNotification::create([
-            'user_id' => $user->id,
-            'title' => 'Welcome to CRT F&B Connect!',
-            'message' => 'Your student account has been successfully created. Explore educational modules and video lessons.',
-            'type' => 'account',
-            'link' => '/student/dashboard',
+        $request->session()->forget('pending_user_id');
+        $request->session()->put('pending_approval_user_id', $user->id);
+
+        return redirect()->route('approval.pending')->with('success', 'Email verified successfully! Your account is now awaiting teacher approval.');
+    }
+
+    public function resendOtp(Request $request): RedirectResponse
+    {
+        $userId = $request->session()->get('pending_user_id');
+
+        if (! $userId && Auth::check()) {
+            $userId = Auth::id();
+        }
+
+        if (! $userId) {
+            return redirect()->route('login');
+        }
+
+        $user = User::find($userId);
+
+        if (! $user) {
+            return redirect()->route('login');
+        }
+
+        $throttleKey = 'resend-otp|'.$user->id;
+        if (RateLimiter::tooManyAttempts($throttleKey, 1)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+
+            return back()->with('error', "Please wait {$seconds} seconds before requesting another verification code.");
+        }
+        RateLimiter::hit($throttleKey, 60);
+
+        $otp = str_pad((string) random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
+        $user->update([
+            'otp_code' => $otp,
+            'otp_expires_at' => now()->addMinutes(10),
         ]);
 
-        return redirect()->route('student.dashboard')->with('success', 'Your student account has been registered successfully!');
+        try {
+            Mail::to($user->email)->send(new StudentOtpVerificationMail($user, $otp));
+        } catch (\Throwable $e) {
+            Log::warning('Failed resending OTP email: '.$e->getMessage());
+        }
+
+        return back()->with('success', "A new 6-digit verification code has been sent to {$user->email}.");
+    }
+
+    public function showApprovalPending(Request $request): Response|RedirectResponse
+    {
+        $userId = $request->session()->get('pending_approval_user_id') ?? $request->session()->get('pending_user_id');
+
+        if (! $userId && Auth::check()) {
+            $userId = Auth::id();
+        }
+
+        if (! $userId) {
+            return redirect()->route('login');
+        }
+
+        $user = User::find($userId);
+
+        if (! $user) {
+            $request->session()->forget(['pending_approval_user_id', 'pending_user_id']);
+
+            return redirect()->route('login');
+        }
+
+        if ($user->isActive()) {
+            $request->session()->forget(['pending_approval_user_id', 'pending_user_id']);
+
+            return redirect()->route('login')->with('success', 'Great news! Your account has been approved by your teacher. You may now sign in.');
+        }
+
+        return Inertia::render('Auth/ApprovalPending', [
+            'student' => [
+                'name' => $user->name,
+                'student_number' => $user->student_number,
+                'email' => $user->email,
+                'status' => $user->status,
+                'email_verified' => $user->email_verified_at !== null,
+                'registered_at' => $user->created_at->format('M d, Y h:i A'),
+            ],
+        ]);
     }
 
     public function logout(Request $request): RedirectResponse

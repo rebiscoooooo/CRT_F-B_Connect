@@ -20,6 +20,12 @@ export default function StudentShow({ student, activities = [] }) {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [editForm, setEditForm] = useState({ ...student });
 
+    const handleApprove = () => {
+        if (confirm(`Approve student account for ${student.name} (${student.student_number})? This grants them access to learning modules.`)) {
+            router.post(`/admin/students/${student.id}/approve`);
+        }
+    };
+
     const handleToggleStatus = () => {
         router.post(`/admin/students/${student.id}/toggle-status`);
     };
@@ -61,9 +67,13 @@ export default function StudentShow({ student, activities = [] }) {
                             <h2 className="mt-4 text-xl font-bold text-slate-900">{student.name}</h2>
                             <p className="text-xs font-mono font-bold text-blue-600 mt-0.5">{student.student_number}</p>
                             <span className={`inline-block px-3 py-1 mt-2 text-[10px] font-bold uppercase rounded-full ${
-                                student.status === 'active' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
+                                student.status === 'active'
+                                    ? 'bg-emerald-50 text-emerald-700'
+                                    : student.status === 'pending'
+                                    ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                                    : 'bg-rose-50 text-rose-700'
                             }`}>
-                                {student.status}
+                                {student.status === 'pending' ? 'Pending Approval' : student.status}
                             </span>
                         </div>
 
@@ -80,9 +90,26 @@ export default function StudentShow({ student, activities = [] }) {
                                 <Calendar className="w-4 h-4 text-slate-400 flex-shrink-0" />
                                 <span>Enrolled {new Date(student.created_at).toLocaleDateString([], { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                             </div>
+                            {student.approved_at && (
+                                <div className="flex items-center gap-3 text-emerald-700 bg-emerald-50/70 p-2.5 rounded-xl border border-emerald-200/60">
+                                    <CheckCircle className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                                    <span>
+                                        Approved by {student.approver?.name || 'Administrator'} on {new Date(student.approved_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
+                                    </span>
+                                </div>
+                            )}
                         </div>
 
-                        <div className="mt-6 pt-6 border-t border-slate-100 flex items-center justify-center gap-2">
+                        <div className="mt-6 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-center gap-2">
+                            {student.status === 'pending' && (
+                                <button
+                                    onClick={handleApprove}
+                                    className="px-4 py-2 text-xs font-bold rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-all flex items-center gap-1.5"
+                                >
+                                    <CheckCircle className="w-4 h-4" />
+                                    Approve Account
+                                </button>
+                            )}
                             <button
                                 onClick={handleToggleStatus}
                                 className={`px-4 py-2 text-xs font-bold rounded-xl border transition-colors ${

@@ -15,7 +15,10 @@ import {
     XCircle,
     ArrowUpDown,
     ShieldAlert,
-    ExternalLink
+    ExternalLink,
+    Clock,
+    UserCheck,
+    AlertCircle
 } from 'lucide-react';
 
 export default function StudentIndex({ students = { data: [] }, filters = {}, stats = {} }) {
@@ -89,6 +92,22 @@ export default function StudentIndex({ students = { data: [] }, filters = {}, st
         });
     };
 
+    const handleApprove = (student) => {
+        if (confirm(`Approve student account for ${student.name} (${student.student_number})? This grants them access to learning modules.`)) {
+            router.post(`/admin/students/${student.id}/approve`, {}, {
+                preserveScroll: true,
+            });
+        }
+    };
+
+    const handleReject = (student) => {
+        if (confirm(`Reject and delete registration for ${student.name}? This will remove the dummy/unauthorized record.`)) {
+            router.post(`/admin/students/${student.id}/reject`, {}, {
+                preserveScroll: true,
+            });
+        }
+    };
+
     const handleToggleStatus = (student) => {
         router.post(`/admin/students/${student.id}/toggle-status`);
     };
@@ -134,7 +153,7 @@ export default function StudentIndex({ students = { data: [] }, filters = {}, st
             </div>
 
             {/* Summary Counters */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div className="p-4 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
                     <div>
                         <p className="text-xs font-semibold text-slate-500 uppercase">Total Students</p>
@@ -151,6 +170,22 @@ export default function StudentIndex({ students = { data: [] }, filters = {}, st
                     </div>
                     <div className="p-3 rounded-xl bg-emerald-50 text-emerald-600">
                         <CheckCircle className="w-6 h-6" />
+                    </div>
+                </div>
+                <div className="p-4 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <div className="flex items-center gap-1.5">
+                            <p className="text-xs font-semibold text-slate-500 uppercase">Pending Approval</p>
+                            {(stats.pending || 0) > 0 && (
+                                <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-amber-500 text-white animate-pulse">
+                                    Action
+                                </span>
+                            )}
+                        </div>
+                        <p className="text-2xl font-bold text-amber-600 mt-1">{stats.pending || 0}</p>
+                    </div>
+                    <div className="p-3 rounded-xl bg-amber-50 text-amber-600">
+                        <Clock className="w-6 h-6" />
                     </div>
                 </div>
                 <div className="p-4 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
@@ -189,6 +224,7 @@ export default function StudentIndex({ students = { data: [] }, filters = {}, st
                         >
                             <option value="">All Statuses</option>
                             <option value="active">Active Only</option>
+                            <option value="pending">Pending Approval</option>
                             <option value="inactive">Inactive Only</option>
                         </select>
 
@@ -261,21 +297,38 @@ export default function StudentIndex({ students = { data: [] }, filters = {}, st
                                             {new Date(student.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
                                         </td>
                                         <td className="py-3.5 px-4">
-                                            <button
-                                                onClick={() => handleToggleStatus(student)}
-                                                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase transition-all ${
-                                                    student.status === 'active'
-                                                        ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
-                                                        : 'bg-rose-50 text-rose-700 hover:bg-rose-100'
-                                                }`}
-                                                title="Click to toggle account status"
-                                            >
-                                                <span className={`w-1.5 h-1.5 rounded-full ${student.status === 'active' ? 'bg-emerald-500' : 'bg-rose-500'}`} />
-                                                {student.status}
-                                            </button>
+                                            {student.status === 'pending' ? (
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-amber-50 text-amber-800 border border-amber-200">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                                                    Pending Approval
+                                                </span>
+                                            ) : (
+                                                <button
+                                                    onClick={() => handleToggleStatus(student)}
+                                                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase transition-all ${
+                                                        student.status === 'active'
+                                                            ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+                                                            : 'bg-rose-50 text-rose-700 hover:bg-rose-100'
+                                                    }`}
+                                                    title="Click to toggle account status"
+                                                >
+                                                    <span className={`w-1.5 h-1.5 rounded-full ${student.status === 'active' ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                                                    {student.status}
+                                                </button>
+                                            )}
                                         </td>
                                         <td className="py-3.5 px-4 text-right">
                                             <div className="inline-flex items-center gap-1.5">
+                                                {student.status === 'pending' && (
+                                                    <button
+                                                        onClick={() => handleApprove(student)}
+                                                        className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-2xs transition-all mr-1"
+                                                        title="Approve Student Account"
+                                                    >
+                                                        <CheckCircle className="w-3.5 h-3.5" />
+                                                        Approve
+                                                    </button>
+                                                )}
                                                 <Link
                                                     href={`/admin/students/${student.id}`}
                                                     className="p-1.5 text-slate-400 hover:text-blue-600 rounded-lg hover:bg-blue-50"
@@ -429,6 +482,7 @@ export default function StudentIndex({ students = { data: [] }, filters = {}, st
                                 className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
                             >
                                 <option value="active">Active</option>
+                                <option value="pending">Pending Approval</option>
                                 <option value="inactive">Inactive</option>
                             </select>
                         </div>
@@ -532,6 +586,7 @@ export default function StudentIndex({ students = { data: [] }, filters = {}, st
                                     className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
                                 >
                                     <option value="active">Active</option>
+                                    <option value="pending">Pending Approval</option>
                                     <option value="inactive">Inactive</option>
                                 </select>
                             </div>

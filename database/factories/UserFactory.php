@@ -49,4 +49,14 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Indicate that the user account is pending teacher/admin approval.
+     */
+    public function pending(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => 'pending',
+        ]);
+    }
 }

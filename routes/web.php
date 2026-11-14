@@ -27,6 +27,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
+// Two-Step Student Account Verification & Approval
+Route::get('/verify-otp', [AuthController::class, 'showVerifyOtp'])->name('verification.otp');
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('verification.otp.submit');
+Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->name('verification.otp.resend');
+Route::get('/approval-pending', [AuthController::class, 'showApprovalPending'])->name('approval.pending');
+
 // Authenticated shared routes
 Route::middleware(['auth', 'active'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -72,6 +78,8 @@ Route::middleware(['auth', 'active'])->group(function () {
         Route::get('/students/export', [AdminStudentController::class, 'export'])->name('students.export');
         Route::get('/students/{user}', [AdminStudentController::class, 'show'])->name('students.show');
         Route::put('/students/{user}', [AdminStudentController::class, 'update'])->name('students.update');
+        Route::post('/students/{user}/approve', [AdminStudentController::class, 'approve'])->name('students.approve');
+        Route::post('/students/{user}/reject', [AdminStudentController::class, 'reject'])->name('students.reject');
         Route::post('/students/{user}/toggle-status', [AdminStudentController::class, 'toggleStatus'])->name('students.toggleStatus');
         Route::delete('/students/{user}', [AdminStudentController::class, 'destroy'])->name('students.destroy');
 

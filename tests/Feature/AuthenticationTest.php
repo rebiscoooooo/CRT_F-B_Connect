@@ -64,13 +64,15 @@ class AuthenticationTest extends TestCase
             'terms' => true,
         ]);
 
-        $response->assertRedirect('/student/dashboard');
+        $response->assertRedirect('/verify-otp');
         $this->assertDatabaseHas('users', [
             'student_number' => '2024-CRT-9999',
             'email' => 'ben.santos@crt.edu.ph',
             'role' => 'student',
+            'status' => 'pending',
+            'email_verified_at' => null,
         ]);
-        $this->assertAuthenticated();
+        $this->assertGuest();
     }
 
     public function test_inactive_student_cannot_login(): void

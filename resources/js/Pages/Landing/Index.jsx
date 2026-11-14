@@ -15,7 +15,6 @@ import {
     Smartphone,
     Award,
     Compass,
-    Eye,
     Download,
     LogIn,
     UserPlus
@@ -54,7 +53,7 @@ export default function Landing({ categories = [], stats = {}, previewResources 
 
                     <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
                         <a href="#about" className="hover:text-blue-600 transition-colors">About</a>
-                        <a href="#mission-vision" className="hover:text-blue-600 transition-colors">Mission &amp; Vision</a>
+                        <a href="#mission-vision" className="hover:text-blue-600 transition-colors">Vision &amp; Mission</a>
                         <a href="#features" className="hover:text-blue-600 transition-colors">Features</a>
                         <a href="#preview" className="hover:text-blue-600 transition-colors">Resources Preview</a>
                         <a href="#benefits" className="hover:text-blue-600 transition-colors">Benefits</a>
@@ -209,25 +208,14 @@ export default function Landing({ categories = [], stats = {}, previewResources 
                             Institutional Guidance
                         </span>
                         <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-3">
-                            Mission &amp; Vision
+                            Vision &amp; Mission
                         </h2>
                         <p className="text-slate-600 text-sm mt-3">
-                            Guiding principles driving the College of Research &amp; Technology's Food &amp; Beverage program.
+                            Guiding principles driving the Bachelor of Technical-Vocational Teacher Education (BTVTEd) Food &amp; Beverage program.
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {/* Mission */}
-                        <div className="bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
-                            <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <Compass className="w-7 h-7" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Mission</h3>
-                            <p className="text-slate-600 leading-relaxed">
-                                To provide students with an accessible, high-standard digital learning ecosystem that delivers state-of-the-art culinary resources, fosters technical competence, instills professional work ethics, and nurtures passionate hospitality professionals prepared for national and international careers.
-                            </p>
-                        </div>
-
                         {/* Vision */}
                         <div className="bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
                             <div className="w-14 h-14 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -235,7 +223,18 @@ export default function Landing({ categories = [], stats = {}, previewResources 
                             </div>
                             <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Vision</h3>
                             <p className="text-slate-600 leading-relaxed">
-                                To be recognized as a premier educational benchmark in digital hospitality instruction, empowering generations of students with technological proficiency, culinary mastery, and unmatched dining service excellence.
+                                &ldquo;To be a premier, accessible, and innovative digital learning platform that empowers Bachelor of Technical-Vocational Teacher Education (BTVTEd) students with industry-standard competencies, bridging theoretical knowledge and practical excellence in Food and Beverage Services.&rdquo;
+                            </p>
+                        </div>
+
+                        {/* Mission */}
+                        <div className="bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+                            <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                <Compass className="w-7 h-7" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Mission</h3>
+                            <p className="text-slate-600 leading-relaxed">
+                                &ldquo;To provide a comprehensive, multimedia-enhanced digital handbook system that delivers organized learning materials, clear video demonstrations, step-by-step procedures, and interactive activities, ensuring flexible, self-paced, and engaging skill development for future technical-vocational educators.&rdquo;
                             </p>
                         </div>
                     </div>
@@ -340,7 +339,7 @@ export default function Landing({ categories = [], stats = {}, previewResources 
                     </div>
 
                     {/* Category Cards */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {categories.map((cat) => {
                             const IconComponent = categoryIcons[cat.slug] || Folder;
                             return (
@@ -375,36 +374,6 @@ export default function Landing({ categories = [], stats = {}, previewResources 
                             );
                         })}
                     </div>
-
-                    {/* Sample Resources Grid */}
-                    {previewResources.length > 0 && (
-                        <div>
-                            <h3 className="text-lg font-bold text-slate-900 mb-6">Recent Materials Added</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {previewResources.map((res) => (
-                                    <div
-                                        key={res.id}
-                                        className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col"
-                                    >
-                                        <div className="p-5 flex-1">
-                                            <span className="inline-block px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-md bg-blue-50 text-blue-700 tracking-wider">
-                                                {res.resource_type}
-                                            </span>
-                                            <h4 className="mt-3 text-base font-bold text-slate-900 line-clamp-1">{res.title}</h4>
-                                            <p className="mt-2 text-xs text-slate-500 line-clamp-2 leading-relaxed">{res.description}</p>
-                                        </div>
-                                        <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                                            <span className="font-semibold text-slate-700">{res.category?.name}</span>
-                                            <span className="flex items-center gap-1 font-mono text-[11px]">
-                                                <Eye className="w-3.5 h-3.5 text-slate-400" />
-                                                {res.views_count}
-                                            </span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
                 </div>
             </section>
 

@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\StudentAccountApprovedMail;
 use App\Models\ActivityLog;
+use App\Models\SystemNotification;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -48,6 +52,7 @@ class StudentController extends Controller
         $stats = [
             'total' => User::where('role', 'student')->count(),
             'active' => User::where('role', 'student')->where('status', 'active')->count(),
+            'pending' => User::where('role', 'student')->where('status', 'pending')->count(),
             'inactive' => User::where('role', 'student')->where('status', 'inactive')->count(),
         ];
 
@@ -72,7 +77,7 @@ class StudentController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'contact_number' => ['nullable', 'string', 'max:30'],
             'password' => ['required', 'string', 'min:8'],
-            'status' => ['required', 'in:active,inactive'],
+            'status' => ['required', 'in:active,pending,inactive'],
         ]);
 
         $fullName = trim($validated['first_name'].' '.($validated['middle_name'] ? $validated['middle_name'].' ' : '').$validated['last_name']);
@@ -89,6 +94,8 @@ class StudentController extends Controller
             'role' => 'student',
             'status' => $validated['status'],
             'email_verified_at' => now(),
+            'approved_by' => Auth::id(),
+            'approved_at' => now(),
         ]);
 
         ActivityLog::record('created', "Added student account for {$user->name} ({$user->student_number})", Auth::id(), User::class, $user->id);
@@ -108,7 +115,7 @@ class StudentController extends Controller
             ->get();
 
         return Inertia::render('Admin/Students/Show', [
-            'student' => $user,
+            'student' => $user->load('approver'),
             'activities' => $activities,
         ]);
     }
@@ -126,7 +133,7 @@ class StudentController extends Controller
             'last_name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'contact_number' => ['nullable', 'string', 'max:30'],
-            'status' => ['required', 'in:active,inactive'],
+            'status' => ['required', 'in:active,pending,inactive'],
             'password' => ['nullable', 'string', 'min:8'],
         ]);
 
@@ -143,6 +150,11 @@ class StudentController extends Controller
             'status' => $validated['status'],
         ];
 
+        if ($validated['status'] === 'active' && ! $user->approved_at) {
+            $updateData['approved_by'] = Auth::id();
+            $updateData['approved_at'] = now();
+        }
+
         if (! empty($validated['password'])) {
             $updateData['password'] = Hash::make($validated['password']);
         }
@@ -154,6 +166,54 @@ class StudentController extends Controller
         return back()->with('success', 'Student record updated successfully.');
     }
 
+    public function approve(User $user): RedirectResponse
+    {
+        if (! $user->isStudent()) {
+            abort(403);
+        }
+
+        $user->update([
+            'status' => 'active',
+            'approved_by' => Auth::id(),
+            'approved_at' => now(),
+            'email_verified_at' => $user->email_verified_at ?? now(),
+        ]);
+
+        try {
+            Mail::to($user->email)->send(new StudentAccountApprovedMail($user, Auth::user()));
+        } catch (\Throwable $e) {
+            Log::warning('Failed sending student approval email: '.$e->getMessage());
+        }
+
+        SystemNotification::create([
+            'user_id' => $user->id,
+            'title' => 'Student Account Approved!',
+            'message' => 'Your student account has been approved by '.Auth::user()->name.'. You now have full access to learning modules and assessments.',
+            'type' => 'account',
+            'link' => '/student/dashboard',
+        ]);
+
+        ActivityLog::record('approved', "Approved student account for {$user->name} ({$user->student_number})", Auth::id(), User::class, $user->id);
+
+        return back()->with('success', "Student {$user->name} has been approved successfully!");
+    }
+
+    public function reject(User $user): RedirectResponse
+    {
+        if (! $user->isStudent()) {
+            abort(403);
+        }
+
+        $name = $user->name;
+        $studentNumber = $user->student_number;
+
+        $user->delete();
+
+        ActivityLog::record('rejected', "Rejected and removed registration for {$name} ({$studentNumber})", Auth::id());
+
+        return back()->with('success', "Student registration for {$name} was rejected and removed.");
+    }
+
     public function toggleStatus(User $user): RedirectResponse
     {
         if (! $user->isStudent()) {
@@ -161,7 +221,14 @@ class StudentController extends Controller
         }
 
         $newStatus = $user->status === 'active' ? 'inactive' : 'active';
-        $user->update(['status' => $newStatus]);
+        $updateData = ['status' => $newStatus];
+
+        if ($newStatus === 'active' && ! $user->approved_at) {
+            $updateData['approved_by'] = Auth::id();
+            $updateData['approved_at'] = now();
+        }
+
+        $user->update($updateData);
 
         ActivityLog::record('updated', "Set student status for {$user->name} to {$newStatus}", Auth::id(), User::class, $user->id);
 
