@@ -95,4 +95,51 @@ class AuthenticationTest extends TestCase
         $response->assertRedirect('/login');
         $this->assertGuest();
     }
+
+    public function test_authenticated_student_visiting_login_is_redirected_to_student_dashboard(): void
+    {
+        $student = User::factory()->create([
+            'role' => 'student',
+            'status' => 'active',
+            'email_verified_at' => now(),
+        ]);
+
+        $response = $this->actingAs($student)->get('/login');
+
+        $response->assertRedirect(route('student.dashboard'));
+    }
+
+    public function test_authenticated_admin_visiting_login_is_redirected_to_admin_dashboard(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+            'status' => 'active',
+        ]);
+
+        $response = $this->actingAs($admin)->get('/login');
+
+        $response->assertRedirect(route('admin.dashboard'));
+    }
+
+    public function test_authenticated_user_visiting_register_is_redirected_to_dashboard(): void
+    {
+        $student = User::factory()->create([
+            'role' => 'student',
+            'status' => 'active',
+            'email_verified_at' => now(),
+        ]);
+
+        $response = $this->actingAs($student)->get('/register');
+
+        $response->assertRedirect(route('student.dashboard'));
+    }
+
+    public function test_web_responses_prevent_back_button_caching(): void
+    {
+        $response = $this->get('/login');
+
+        $response->assertHeader('Cache-Control');
+        $this->assertStringContainsString('no-cache', (string) $response->headers->get('Cache-Control'));
+        $this->assertStringContainsString('no-store', (string) $response->headers->get('Cache-Control'));
+    }
 }

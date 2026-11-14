@@ -24,7 +24,12 @@ class AuthController extends Controller
     public function showLogin(): Response|RedirectResponse
     {
         if (Auth::check()) {
+            /** @var User $user */
             $user = Auth::user();
+
+            if ($user->isStudent() && $user->isPending()) {
+                return redirect()->route('approval.pending');
+            }
 
             return $user->isAdmin()
                 ? redirect()->route('admin.dashboard')
@@ -133,7 +138,14 @@ class AuthController extends Controller
     public function showRegister(): Response|RedirectResponse
     {
         if (Auth::check()) {
-            return Auth::user()->isAdmin()
+            /** @var User $user */
+            $user = Auth::user();
+
+            if ($user->isStudent() && $user->isPending()) {
+                return redirect()->route('approval.pending');
+            }
+
+            return $user->isAdmin()
                 ? redirect()->route('admin.dashboard')
                 : redirect()->route('student.dashboard');
         }

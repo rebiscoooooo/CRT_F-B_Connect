@@ -42,4 +42,3 @@ class StudentAccountApprovedMail extends Mailable
         return [];
     }
 }
-

@@ -1,10 +1,36 @@
-import React, { useState } from 'react';
-import { useForm, Link, Head } from '@inertiajs/react';
+import React, { useState, useEffect } from 'react';
+import { useForm, Link, Head, usePage, router } from '@inertiajs/react';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Eye, EyeOff, LogIn, Lock, Mail, ShieldAlert } from 'lucide-react';
 
 export default function Login() {
+    const { auth } = usePage().props;
     const [showPassword, setShowPassword] = useState(false);
+
+    // If already logged in, automatically return to active session instead of showing login
+    useEffect(() => {
+        if (auth?.user) {
+            const destination = auth.user.is_admin
+                ? '/admin/dashboard'
+                : (auth.user.status === 'pending' ? '/approval-pending' : '/student/dashboard');
+            router.visit(destination, { replace: true });
+        }
+    }, [auth]);
+
+    // Handle browser back button bfcache restoration
+    useEffect(() => {
+        const handlePageShow = (event) => {
+            if (event.persisted && auth?.user) {
+                const destination = auth.user.is_admin
+                    ? '/admin/dashboard'
+                    : (auth.user.status === 'pending' ? '/approval-pending' : '/student/dashboard');
+                router.visit(destination, { replace: true });
+            }
+        };
+
+        window.addEventListener('pageshow', handlePageShow);
+        return () => window.removeEventListener('pageshow', handlePageShow);
+    }, [auth]);
 
     const { data, setData, post, processing, errors, reset } = useForm({
         login: '',

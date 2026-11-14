@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Head } from '@inertiajs/react';
+import { Link, Head, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import {
     GraduationCap,
@@ -17,10 +17,17 @@ import {
     Compass,
     Download,
     LogIn,
-    UserPlus
+    UserPlus,
+    LayoutDashboard
 } from 'lucide-react';
 
 export default function Landing({ categories = [], stats = {}, previewResources = [] }) {
+    const { auth } = usePage().props;
+    const user = auth?.user;
+    const dashboardUrl = user?.is_admin
+        ? '/admin/dashboard'
+        : (user?.status === 'pending' ? '/approval-pending' : '/student/dashboard');
+
     const categoryIcons = {
         'video-lessons': Video,
         'illustrations': ImageIcon,
@@ -59,22 +66,38 @@ export default function Landing({ categories = [], stats = {}, previewResources 
                         <a href="#benefits" className="hover:text-blue-600 transition-colors">Benefits</a>
                     </div>
 
-                    <div className="flex items-center gap-3">
-                        <Link
-                            href="/login"
-                            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-700 hover:text-blue-600 hover:bg-slate-100/80 rounded-xl transition-all"
-                        >
-                            <LogIn className="w-4 h-4" />
-                            Log In
-                        </Link>
-                        <Link
-                            href="/register"
-                            className="inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 transition-all hover:-translate-y-0.5"
-                        >
-                            <UserPlus className="w-4 h-4" />
-                            Get Started
-                        </Link>
-                    </div>
+                    {user ? (
+                        <div className="flex items-center gap-3">
+                            <span className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 text-xs font-bold text-slate-700">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                Signed in as <span className="text-blue-600 font-extrabold">{user.first_name || user.name}</span>
+                            </span>
+                            <Link
+                                href={dashboardUrl}
+                                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 transition-all hover:-translate-y-0.5"
+                            >
+                                <LayoutDashboard className="w-4 h-4" />
+                                Go to Dashboard
+                            </Link>
+                        </div>
+                    ) : (
+                        <div className="flex items-center gap-3">
+                            <Link
+                                href="/login"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-700 hover:text-blue-600 hover:bg-slate-100/80 rounded-xl transition-all"
+                            >
+                                <LogIn className="w-4 h-4" />
+                                Log In
+                            </Link>
+                            <Link
+                                href="/register"
+                                className="inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 transition-all hover:-translate-y-0.5"
+                            >
+                                <UserPlus className="w-4 h-4" />
+                                Get Started
+                            </Link>
+                        </div>
+                    )}
                 </div>
             </nav>
 
@@ -102,19 +125,40 @@ export default function Landing({ categories = [], stats = {}, previewResources 
                         </p>
 
                         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-                            <Link
-                                href="/register"
-                                className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-2xl shadow-xl shadow-blue-600/25 hover:shadow-2xl hover:shadow-blue-600/35 transition-all hover:-translate-y-1"
-                            >
-                                Get Started as a Student
-                                <ArrowRight className="w-5 h-5" />
-                            </Link>
-                            <Link
-                                href="/login"
-                                className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold text-slate-800 bg-white hover:bg-slate-50 border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5"
-                            >
-                                Instructor &amp; Student Login
-                            </Link>
+                            {user ? (
+                                <>
+                                    <Link
+                                        href={dashboardUrl}
+                                        className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-2xl shadow-xl shadow-blue-600/25 hover:shadow-2xl hover:shadow-blue-600/35 transition-all hover:-translate-y-1"
+                                    >
+                                        <LayoutDashboard className="w-5 h-5" />
+                                        Return to My Dashboard
+                                        <ArrowRight className="w-5 h-5" />
+                                    </Link>
+                                    <a
+                                        href="#preview"
+                                        className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold text-slate-800 bg-white hover:bg-slate-50 border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5"
+                                    >
+                                        Explore Learning Materials
+                                    </a>
+                                </>
+                            ) : (
+                                <>
+                                    <Link
+                                        href="/register"
+                                        className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-2xl shadow-xl shadow-blue-600/25 hover:shadow-2xl hover:shadow-blue-600/35 transition-all hover:-translate-y-1"
+                                    >
+                                        Get Started as a Student
+                                        <ArrowRight className="w-5 h-5" />
+                                    </Link>
+                                    <Link
+                                        href="/login"
+                                        className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold text-slate-800 bg-white hover:bg-slate-50 border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5"
+                                    >
+                                        Instructor &amp; Student Login
+                                    </Link>
+                                </>
+                            )}
                         </div>
 
                         {/* Real Dynamic Stats Counters */}
@@ -448,19 +492,32 @@ export default function Landing({ categories = [], stats = {}, previewResources 
                         Join your fellow CRT Food and Beverage students and instructors today. Experience convenient, organized access to all your educational materials.
                     </p>
                     <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
-                        <Link
-                            href="/register"
-                            className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold text-slate-900 bg-white hover:bg-slate-100 rounded-2xl shadow-xl transition-all hover:scale-105"
-                        >
-                            Register as a Student
-                            <ArrowRight className="w-5 h-5" />
-                        </Link>
-                        <Link
-                            href="/login"
-                            className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-2xl shadow-lg transition-all"
-                        >
-                            Sign In to Portal
-                        </Link>
+                        {user ? (
+                            <Link
+                                href={dashboardUrl}
+                                className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold text-slate-900 bg-white hover:bg-slate-100 rounded-2xl shadow-xl transition-all hover:scale-105"
+                            >
+                                <LayoutDashboard className="w-5 h-5 text-blue-600" />
+                                Return to Classroom Dashboard
+                                <ArrowRight className="w-5 h-5 text-blue-600" />
+                            </Link>
+                        ) : (
+                            <>
+                                <Link
+                                    href="/register"
+                                    className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold text-slate-900 bg-white hover:bg-slate-100 rounded-2xl shadow-xl transition-all hover:scale-105"
+                                >
+                                    Register as a Student
+                                    <ArrowRight className="w-5 h-5" />
+                                </Link>
+                                <Link
+                                    href="/login"
+                                    className="inline-flex items-center gap-2 px-8 py-4 text-base font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-2xl shadow-lg transition-all"
+                                >
+                                    Sign In to Portal
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </section>
@@ -495,8 +552,14 @@ export default function Landing({ categories = [], stats = {}, previewResources 
                             <li><a href="#about" className="hover:text-white transition-colors">About</a></li>
                             <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
                             <li><a href="#preview" className="hover:text-white transition-colors">Resources Preview</a></li>
-                            <li><Link href="/login" className="hover:text-white transition-colors">Portal Login</Link></li>
-                            <li><Link href="/register" className="hover:text-white transition-colors">Student Registration</Link></li>
+                            {user ? (
+                                <li><Link href={dashboardUrl} className="text-blue-400 font-bold hover:text-white transition-colors">My Dashboard</Link></li>
+                            ) : (
+                                <>
+                                    <li><Link href="/login" className="hover:text-white transition-colors">Portal Login</Link></li>
+                                    <li><Link href="/register" className="hover:text-white transition-colors">Student Registration</Link></li>
+                                </>
+                            )}
                         </ul>
                     </div>
                 </div>

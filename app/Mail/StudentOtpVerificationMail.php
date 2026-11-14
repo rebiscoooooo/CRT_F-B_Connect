@@ -42,4 +42,3 @@ class StudentOtpVerificationMail extends Mailable
         return [];
     }
 }
-

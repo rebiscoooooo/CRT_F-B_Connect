@@ -3,6 +3,7 @@
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Http\Middleware\EnsureUserRole;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\PreventBackHistory;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -23,11 +24,34 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
             HandleInertiaRequests::class,
+            PreventBackHistory::class,
         ]);
         $middleware->alias([
             'role' => EnsureUserRole::class,
             'active' => EnsureUserIsActive::class,
         ]);
+        $middleware->redirectGuestsTo(fn (Request $request) => route('login'));
+        $middleware->redirectUsersTo(function (Request $request) {
+            $user = $request->user();
+
+            if (! $user) {
+                return route('home');
+            }
+
+            if ($user->isAdmin()) {
+                return route('admin.dashboard');
+            }
+
+            if ($user->isStudent()) {
+                if ($user->isPending()) {
+                    return route('approval.pending');
+                }
+
+                return route('student.dashboard');
+            }
+
+            return route('home');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->report(function (Throwable $e): void {
