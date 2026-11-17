@@ -18,6 +18,13 @@ html {
 }
 
 @layer utilities {
+    .dashboard-grid-pattern {
+        background-image: radial-gradient(rgba(148, 163, 184, 0.45) 1.25px, transparent 1.25px);
+        background-size: 28px 28px;
+        mask-image: radial-gradient(ellipse 95% 85% at 50% 20%, black 50%, transparent 98%);
+        -webkit-mask-image: radial-gradient(ellipse 95% 85% at 50% 20%, black 50%, transparent 98%);
+    }
+
     .glass-nav {
         background-color: rgba(211, 226, 245, 0.75);
         backdrop-filter: blur(18px) saturate(180%);

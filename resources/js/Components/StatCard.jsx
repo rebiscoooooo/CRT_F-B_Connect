@@ -39,7 +39,7 @@ export default function StatCard({ title, value, subtitle, icon: Icon, color = '
     };
 
     return (
-        <div className={`group bg-white p-6 rounded-2xl border ${colorStyles.border} ${colorStyles.glow} shadow-sm hover:shadow-md transition-all duration-200`}>
+        <div className={`group bg-white/95 backdrop-blur-sm p-6 rounded-2xl border ${colorStyles.border} ${colorStyles.glow} shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200`}>
             <div className="flex items-center justify-between">
                 <div>
                     <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{title}</p>
