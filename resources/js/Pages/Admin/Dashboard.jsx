@@ -287,12 +287,14 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                             <XAxis dataKey="type" stroke="#94a3b8" fontSize={11} />
                             <YAxis stroke="#94a3b8" fontSize={11} allowDecimals={false} />
                             <Tooltip
+                                cursor={{ fill: 'rgba(37, 99, 235, 0.04)', radius: 8 }}
                                 contentStyle={{
                                     backgroundColor: '#0F172A',
                                     borderRadius: '0.75rem',
                                     border: 'none',
                                     color: '#fff',
                                     fontSize: '12px',
+                                    boxShadow: '0 10px 25px -5px rgba(15, 23, 42, 0.3)',
                                 }}
                             />
                             <Bar dataKey="count" fill="#2563EB" radius={[6, 6, 0, 0]} name="Materials Count" />
@@ -326,9 +328,9 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                                     <div className="flex items-center gap-3 overflow-hidden">
                                         <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600 flex-shrink-0">
                                             {res.resource_type === 'video' ? <Video className="w-4 h-4" /> :
-                                             res.resource_type === 'illustration' ? <ImageIcon className="w-4 h-4" /> :
-                                             res.resource_type === 'pdf' ? <FileText className="w-4 h-4" /> :
-                                             <BookOpen className="w-4 h-4" />}
+                                                res.resource_type === 'illustration' ? <ImageIcon className="w-4 h-4" /> :
+                                                    res.resource_type === 'pdf' ? <FileText className="w-4 h-4" /> :
+                                                        <BookOpen className="w-4 h-4" />}
                                         </div>
                                         <div className="truncate">
                                             <Link
@@ -343,9 +345,8 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-3 text-right flex-shrink-0">
-                                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
-                                            res.visibility === 'published' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'
-                                        }`}>
+                                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${res.visibility === 'published' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'
+                                            }`}>
                                             {res.visibility}
                                         </span>
                                         <span className="text-[11px] text-slate-400 font-mono hidden sm:block">
@@ -395,9 +396,8 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                                                 <p className="text-[11px] text-slate-500 font-mono">{st.student_number || st.email}</p>
                                             </div>
                                         </div>
-                                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                                            st.status === 'active' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'
-                                        }`}>
+                                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${st.status === 'active' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'
+                                            }`}>
                                             {st.status}
                                         </span>
                                     </div>
