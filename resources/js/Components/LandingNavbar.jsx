@@ -14,6 +14,9 @@ import {
 export default function LandingNavbar() {
     const { auth } = usePage().props;
     const user = auth?.user;
+    const dashboardUrl = user?.is_admin
+        ? '/admin/dashboard'
+        : (user?.status === 'pending' ? '/approval-pending' : '/student/dashboard');
 
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -142,7 +145,7 @@ export default function LandingNavbar() {
                         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                             {user ? (
                                 <Link
-                                    href={user.is_admin ? '/admin/dashboard' : '/student/dashboard'}
+                                    href={dashboardUrl}
                                     className="relative group overflow-hidden inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-blue-600 via-blue-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 rounded-xl shadow-[0_4px_14px_0_rgba(37,99,235,0.35)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.45)] border border-white/20 transition-all duration-200 hover:-translate-y-0.5"
                                 >
                                     <span>Dashboard</span>
@@ -211,7 +214,7 @@ export default function LandingNavbar() {
                             <div className="pt-3 border-t border-slate-200/60 flex flex-col sm:flex-row gap-2">
                                 {user ? (
                                     <Link
-                                        href={user.is_admin ? '/admin/dashboard' : '/student/dashboard'}
+                                        href={dashboardUrl}
                                         className="flex items-center justify-center gap-2 w-full py-2.5 px-4 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-600/20"
                                     >
                                         <span>Go to Dashboard</span>
