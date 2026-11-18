@@ -95,7 +95,7 @@ export default function LandingNavbar() {
                             : 'glass-nav bg-white/75 shadow-[0_8px_32px_0_rgba(15,23,42,0.06),inset_0_1px_1px_0_rgba(255,255,255,0.9)]'
                         }`}
                 >
-                    <div className="px-4 sm:px-6 h-18 sm:h-20 flex items-center justify-between gap-4">
+                    <div className="px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
                         {/* Brand Logo & Name */}
                         <a
                             href="#"
@@ -103,20 +103,20 @@ export default function LandingNavbar() {
                                 e.preventDefault();
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
-                            className="flex items-center gap-3 group transition-transform shrink-0"
+                            className="flex items-center gap-2 sm:gap-3 group transition-transform shrink-0 min-w-0"
                         >
-                            <div className="relative">
+                            <div className="relative shrink-0">
                                 <ApplicationLogo
                                     size="md"
                                     className="group-hover:scale-105 transition-transform duration-300"
                                 />
                                 <div className="absolute -inset-1 rounded-full bg-blue-500/10 blur-sm -z-10 group-hover:bg-blue-500/20 transition-colors" />
                             </div>
-                            <div className="flex flex-col">
-                                <span className="text-base sm:text-xl font-black tracking-tight text-slate-900 leading-tight">
+                            <div className="flex flex-col min-w-0">
+                                <span className="text-sm sm:text-xl font-black tracking-tight text-slate-900 leading-tight truncate">
                                     CRT F&amp;B <span className="bg-gradient-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent">Connect</span>
                                 </span>
-                                <span className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                <span className="hidden sm:block text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                                     College of Research &amp; Technology
                                 </span>
                             </div>
@@ -148,7 +148,7 @@ export default function LandingNavbar() {
                             {user ? (
                                 <Link
                                     href={dashboardUrl}
-                                    className="relative group overflow-hidden inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-blue-600 via-blue-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 rounded-xl shadow-[0_4px_14px_0_rgba(37,99,235,0.35)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.45)] border border-white/20 transition-all duration-200 hover:-translate-y-0.5"
+                                    className="hidden sm:inline-flex relative group overflow-hidden items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-blue-600 via-blue-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 rounded-xl shadow-[0_4px_14px_0_rgba(37,99,235,0.35)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.45)] border border-white/20 transition-all duration-200 hover:-translate-y-0.5"
                                 >
                                     <span>Dashboard</span>
                                     <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -158,14 +158,14 @@ export default function LandingNavbar() {
                                 <>
                                     <Link
                                         href="/login"
-                                        className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-slate-700 hover:text-blue-600 bg-white/50 hover:bg-white/90 border border-slate-200/60 hover:border-blue-200/80 rounded-xl shadow-xs backdrop-blur-md transition-all duration-200"
+                                        className="hidden sm:inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-slate-700 hover:text-blue-600 bg-white/50 hover:bg-white/90 border border-slate-200/60 hover:border-blue-200/80 rounded-xl shadow-xs backdrop-blur-md transition-all duration-200"
                                     >
                                         <LogIn className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500" />
                                         <span>Log In</span>
                                     </Link>
                                     <Link
                                         href="/register"
-                                        className="relative group overflow-hidden inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-blue-600 via-blue-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 rounded-xl shadow-[0_4px_14px_0_rgba(37,99,235,0.35)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.45)] border border-white/20 transition-all duration-200 hover:-translate-y-0.5"
+                                        className="hidden md:inline-flex relative group overflow-hidden items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-blue-600 via-blue-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 rounded-xl shadow-[0_4px_14px_0_rgba(37,99,235,0.35)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.45)] border border-white/20 transition-all duration-200 hover:-translate-y-0.5"
                                     >
                                         <UserPlus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                         <span>Get Started</span>
@@ -174,7 +174,7 @@ export default function LandingNavbar() {
                                 </>
                             )}
 
-                            {/* Mobile Hamburger Button */}
+                            {/* Mobile Hamburger Button — visible below lg */}
                             <button
                                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                                 className="p-2 sm:p-2.5 rounded-xl bg-white/60 hover:bg-white/95 border border-slate-200/70 text-slate-700 hover:text-blue-600 shadow-xs backdrop-blur-md lg:hidden transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
