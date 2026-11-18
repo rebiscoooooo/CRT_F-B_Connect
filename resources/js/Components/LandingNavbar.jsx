@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import PwaInstallButton from '@/Components/PwaInstallButton';
 import {
     LogIn,
     UserPlus,
@@ -143,6 +144,7 @@ export default function LandingNavbar() {
 
                         {/* Right: Actions */}
                         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                            <PwaInstallButton className="hidden sm:inline-flex" />
                             {user ? (
                                 <Link
                                     href={dashboardUrl}
@@ -212,6 +214,7 @@ export default function LandingNavbar() {
                             </div>
 
                             <div className="pt-3 border-t border-slate-200/60 flex flex-col sm:flex-row gap-2">
+                                <PwaInstallButton className="w-full justify-center" />
                                 {user ? (
                                     <Link
                                         href={dashboardUrl}

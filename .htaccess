@@ -1,0 +1,42 @@
+﻿# ==============================================================================
+# CRT F&B Connect - Hostinger / Apache Root Redirection & Security
+# ==============================================================================
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Prevent direct HTTP access to sensitive files and folders
+    RewriteRule ^(\.env|\.git|\.github|app|bootstrap|config|database|resources|routes|storage|tests|vendor)(/.*)?$ - [F,L,NC]
+
+    # Block access to dot-files and package manifests in the root
+    <FilesMatch "^(\.env|\.gitignore|\.gitattributes|artisan|composer\.(json|lock)|package\.(json|lock)|phpunit\.xml|README\.md|vite\.config\.js|tailwind\.config\.js)">
+        <IfModule mod_authz_core.c>
+            Require all denied
+        </IfModule>
+        <IfModule !mod_authz_core.c>
+            Order allow,deny
+            Deny from all
+        </IfModule>
+    </FilesMatch>
+
+    # Pass Authorization Header to Laravel
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Pass X-XSRF-Token Header to Laravel
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # Route all incoming requests to the public/ directory
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Handle PHP environment overrides if mod_php is present
+<IfModule mod_php.c>
+    php_value upload_max_filesize 1024M
+    php_value post_max_size 1050M
+    php_value memory_limit 2048M
+    php_value max_execution_time 3600
+    php_value max_input_time 3600
+</IfModule>

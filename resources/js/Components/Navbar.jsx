@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import { Bell, Menu, X, User as UserIcon, LogOut, ChevronDown, CheckCheck, ExternalLink } from 'lucide-react';
 import ApplicationLogo from './ApplicationLogo';
+import PwaInstallButton from './PwaInstallButton';
 
 export default function Navbar({ onToggleSidebar }) {
     const { auth, notifications, appName } = usePage().props;
@@ -54,6 +55,8 @@ export default function Navbar({ onToggleSidebar }) {
 
             {/* Right: Notifications & User profile */}
             <div className="flex items-center gap-2 sm:gap-3">
+                <PwaInstallButton className="hidden md:inline-flex" />
+
                 {/* Notifications Dropdown */}
                 <div className="relative" ref={notifRef}>
                     <button

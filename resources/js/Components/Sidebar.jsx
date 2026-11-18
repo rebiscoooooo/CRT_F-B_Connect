@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import ApplicationLogo from './ApplicationLogo';
+import PwaInstallButton from './PwaInstallButton';
 import {
     LayoutDashboard,
     FolderKanban,
@@ -185,8 +186,9 @@ export default function Sidebar({ isOpen, onClose }) {
                     </Link>
                 </div>
 
-                {/* Footer Sign Out */}
-                <div className="p-3.5 border-t border-slate-100 bg-slate-50/40">
+                {/* Footer Sign Out & PWA Install */}
+                <div className="p-3.5 border-t border-slate-100 bg-slate-50/40 space-y-2">
+                    <PwaInstallButton className="w-full justify-center" text="Install Application" />
                     <Link
                         href="/logout"
                         method="post"
