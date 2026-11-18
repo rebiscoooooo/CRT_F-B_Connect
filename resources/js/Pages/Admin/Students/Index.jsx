@@ -18,7 +18,11 @@ import {
     ExternalLink,
     Clock,
     UserCheck,
-    AlertCircle
+    AlertCircle,
+    Mail,
+    Phone,
+    Calendar,
+    User
 } from 'lucide-react';
 
 export default function StudentIndex({ students = { data: [] }, filters = {}, stats = {} }) {
@@ -44,6 +48,9 @@ export default function StudentIndex({ students = { data: [] }, filters = {}, st
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [editForm, setEditForm] = useState(null);
     const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
+
+    // Profile Preview Modal
+    const [profileModalStudent, setProfileModalStudent] = useState(null);
 
     // Delete Student Modal
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -275,18 +282,35 @@ export default function StudentIndex({ students = { data: [] }, filters = {}, st
                                             {student.student_number || '—'}
                                         </td>
                                         <td className="py-3.5 px-4">
-                                            <div className="flex items-center gap-2.5">
-                                                <img
-                                                    src={student.avatar_url}
-                                                    alt={student.name}
-                                                    className="w-7 h-7 rounded-lg object-cover ring-1 ring-slate-200"
-                                                />
-                                                <Link
-                                                    href={`/admin/students/${student.id}`}
-                                                    className="font-bold text-slate-900 hover:text-blue-600"
+                                            <div className="flex items-center gap-3">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setProfileModalStudent(student)}
+                                                    className="relative group/avatar cursor-pointer shrink-0 rounded-xl overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                                                    title={`View profile for ${student.name}`}
                                                 >
-                                                    {student.name}
-                                                </Link>
+                                                    <img
+                                                        src={student.avatar_url}
+                                                        alt={student.name}
+                                                        className="w-9 h-9 rounded-xl object-cover ring-2 ring-slate-200/80 group-hover/avatar:ring-blue-500 group-hover/avatar:scale-105 transition-all shadow-2xs"
+                                                    />
+                                                    <div className="absolute inset-0 bg-blue-600/30 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
+                                                        <Eye className="w-3.5 h-3.5 text-white" />
+                                                    </div>
+                                                </button>
+                                                <div className="min-w-0">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setProfileModalStudent(student)}
+                                                        className="font-bold text-slate-900 hover:text-blue-600 text-left block truncate cursor-pointer transition-colors"
+                                                        title={`Click to preview profile of ${student.name}`}
+                                                    >
+                                                        {student.name}
+                                                    </button>
+                                                    <span className="text-[10px] text-slate-400 sm:hidden block font-mono">
+                                                        {student.student_number}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </td>
                                         <td className="py-3.5 px-4 text-slate-600">{student.email}</td>
@@ -635,6 +659,110 @@ export default function StudentIndex({ students = { data: [] }, filters = {}, st
                         </button>
                     </div>
                 </div>
+            </Modal>
+            {/* Modal: Student Profile Preview */}
+            <Modal isOpen={!!profileModalStudent} onClose={() => setProfileModalStudent(null)} title="Student Profile Overview">
+                {profileModalStudent && (
+                    <div className="space-y-5">
+                        {/* Header Banner & Avatar */}
+                        <div className="relative rounded-2xl bg-gradient-to-r from-blue-600 via-blue-700 to-sky-600 p-6 text-white text-center overflow-hidden">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+                            <div className="relative z-10 flex flex-col items-center">
+                                <img
+                                    src={profileModalStudent.avatar_url}
+                                    alt={profileModalStudent.name}
+                                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover ring-4 ring-white/90 shadow-xl"
+                                />
+                                <h3 className="mt-3 text-lg sm:text-xl font-black text-white tracking-tight">
+                                    {profileModalStudent.name}
+                                </h3>
+                                <div className="mt-1 flex items-center gap-2 flex-wrap justify-center">
+                                    <span className="font-mono text-xs font-bold text-sky-200 bg-white/15 px-2.5 py-0.5 rounded-lg backdrop-blur-xs">
+                                        ID: {profileModalStudent.student_number || 'N/A'}
+                                    </span>
+                                    <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                                        profileModalStudent.status === 'active'
+                                            ? 'bg-emerald-500 text-white shadow-xs'
+                                            : profileModalStudent.status === 'pending'
+                                            ? 'bg-amber-400 text-slate-900 shadow-xs'
+                                            : 'bg-slate-400 text-white'
+                                    }`}>
+                                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                                        {profileModalStudent.status === 'pending' ? 'Pending Approval' : profileModalStudent.status}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Profile Details List */}
+                        <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 space-y-3 text-xs">
+                            <div className="flex items-center gap-3 text-slate-700">
+                                <div className="w-8 h-8 rounded-lg bg-blue-100/70 text-blue-600 flex items-center justify-center shrink-0">
+                                    <Mail className="w-4 h-4" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Email Address</span>
+                                    <p className="font-semibold text-slate-900 truncate">{profileModalStudent.email}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 text-slate-700">
+                                <div className="w-8 h-8 rounded-lg bg-emerald-100/70 text-emerald-600 flex items-center justify-center shrink-0">
+                                    <Phone className="w-4 h-4" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Contact Number</span>
+                                    <p className="font-semibold text-slate-900 font-mono">{profileModalStudent.contact_number || 'Not provided'}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 text-slate-700">
+                                <div className="w-8 h-8 rounded-lg bg-sky-100/70 text-sky-600 flex items-center justify-center shrink-0">
+                                    <Calendar className="w-4 h-4" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Registration Date</span>
+                                    <p className="font-semibold text-slate-900">
+                                        {new Date(profileModalStudent.created_at).toLocaleDateString([], { month: 'long', day: 'numeric', year: 'numeric' })}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 pt-3 border-t border-slate-100">
+                            <Link
+                                href={`/admin/students/${profileModalStudent.id}`}
+                                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition-all"
+                            >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                                <span>Open Full Student Record &amp; Logs</span>
+                            </Link>
+
+                            <div className="w-full sm:w-auto flex items-center gap-2 justify-end">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        const st = profileModalStudent;
+                                        setProfileModalStudent(null);
+                                        setEditForm({ ...st });
+                                        setIsEditOpen(true);
+                                    }}
+                                    className="w-full sm:w-auto px-4 py-2 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl"
+                                >
+                                    Edit Details
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setProfileModalStudent(null)}
+                                    className="w-full sm:w-auto px-4 py-2 text-xs font-semibold text-slate-500 hover:text-slate-800"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </Modal>
         </AppLayout>
     );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, Link, Head, usePage, router } from '@inertiajs/react';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Eye, EyeOff, UserPlus, ShieldAlert, GraduationCap } from 'lucide-react';
+import { Eye, EyeOff, UserPlus, ShieldAlert, GraduationCap, ArrowLeft } from 'lucide-react';
 
 export default function Register({ allowRegistration = true }) {
     const { auth } = usePage().props;
@@ -77,6 +77,22 @@ export default function Register({ allowRegistration = true }) {
     return (
         <GuestLayout>
             <Head title="Student Registration — CRT F&B Connect" />
+
+            {/* Back to Menu Navigation */}
+            <div className="mb-5 flex items-center justify-between">
+                <Link
+                    href="/"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-blue-600 bg-slate-100/90 hover:bg-blue-50 border border-slate-200/80 hover:border-blue-200 transition-all duration-200 group"
+                    title="Return to Main Menu / Landing Page"
+                >
+                    <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
+                    <span>Back to Menu</span>
+                </Link>
+
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    Student Registration
+                </span>
+            </div>
 
             <div className="mb-5 text-center">
                 <h2 className="text-2xl font-black text-slate-900 tracking-tight">Create Student Account</h2>

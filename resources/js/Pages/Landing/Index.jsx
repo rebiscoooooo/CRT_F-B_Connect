@@ -104,19 +104,19 @@ export default function Landing({ categories = [], stats = {}, previewResources 
                         {/* Real Dynamic Stats Counters */}
                         <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-10 border-t border-slate-200/80">
                             <div className="p-4 bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200 shadow-xs">
-                                <p className="text-3xl font-extrabold text-blue-600">{stats.total_students || '100+'}</p>
+                                <p className="text-3xl font-extrabold text-blue-600">{stats.total_students ?? 0}</p>
                                 <p className="text-xs font-semibold text-slate-500 mt-1">Active Students</p>
                             </div>
                             <div className="p-4 bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200 shadow-xs">
-                                <p className="text-3xl font-extrabold text-slate-900">{stats.total_resources || '25+'}</p>
+                                <p className="text-3xl font-extrabold text-slate-900">{stats.total_resources ?? 0}</p>
                                 <p className="text-xs font-semibold text-slate-500 mt-1">Total Materials</p>
                             </div>
                             <div className="p-4 bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200 shadow-xs">
-                                <p className="text-3xl font-extrabold text-blue-600">{stats.total_videos || '10+'}</p>
+                                <p className="text-3xl font-extrabold text-blue-600">{stats.total_videos ?? 0}</p>
                                 <p className="text-xs font-semibold text-slate-500 mt-1">Video Lessons</p>
                             </div>
                             <div className="p-4 bg-white/80 backdrop-blur-sm rounded-2xl border border-slate-200 shadow-xs">
-                                <p className="text-3xl font-extrabold text-slate-900">{stats.total_modules || '15+'}</p>
+                                <p className="text-3xl font-extrabold text-slate-900">{stats.total_modules ?? 0}</p>
                                 <p className="text-xs font-semibold text-slate-500 mt-1">PDF Modules</p>
                             </div>
                         </div>

@@ -1,9 +1,10 @@
-﻿# ==============================================================================
+# ==============================================================================
 # CRT F&B Connect - Hostinger / Apache Root Redirection & Security
 # ==============================================================================
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteBase /
 
     # Prevent direct HTTP access to sensitive files and folders
     RewriteRule ^(\.env|\.git|\.github|app|bootstrap|config|database|resources|routes|storage|tests|vendor)(/.*)?$ - [F,L,NC]
@@ -26,6 +27,9 @@
     # Pass X-XSRF-Token Header to Laravel
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # Route root directly to public index.php
+    RewriteRule ^$ public/index.php [L]
 
     # Route all incoming requests to the public/ directory
     RewriteCond %{REQUEST_URI} !^/public/

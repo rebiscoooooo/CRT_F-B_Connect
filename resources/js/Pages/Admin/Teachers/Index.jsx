@@ -22,6 +22,8 @@ import {
     Check,
     X,
     AlertCircle,
+    Eye,
+    Calendar,
 } from 'lucide-react';
 
 export default function TeacherIndex({ teachers = { data: [] }, filters = {}, stats = {} }) {
@@ -51,6 +53,9 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [editForm, setEditForm] = useState(null);
     const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
+
+    // Profile Preview Modal State
+    const [profileModalStaff, setProfileModalStaff] = useState(null);
 
     // Delete Modal State
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -300,20 +305,37 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                             {/* Staff Member Avatar & Name */}
                                             <td className="py-3.5 px-6">
                                                 <div className="flex items-center gap-3">
-                                                    <img
-                                                        src={staff.avatar_url}
-                                                        alt={staff.name}
-                                                        className="w-8 h-8 rounded-xl object-cover ring-2 ring-slate-100"
-                                                    />
-                                                    <div>
-                                                        <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                                                            {staff.name}
-                                                            {isSelf && (
-                                                                <span className="text-[10px] font-semibold text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded-md">
-                                                                    (You)
-                                                                </span>
-                                                            )}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setProfileModalStaff(staff)}
+                                                        className="relative group/avatar cursor-pointer shrink-0 rounded-xl overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                                                        title={`View profile for ${staff.name}`}
+                                                    >
+                                                        <img
+                                                            src={staff.avatar_url}
+                                                            alt={staff.name}
+                                                            className="w-10 h-10 rounded-xl object-cover ring-2 ring-slate-200/80 group-hover/avatar:ring-blue-500 group-hover/avatar:scale-105 transition-all shadow-2xs"
+                                                        />
+                                                        <div className="absolute inset-0 bg-blue-600/30 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
+                                                            <Eye className="w-3.5 h-3.5 text-white" />
                                                         </div>
+                                                    </button>
+                                                    <div className="min-w-0">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setProfileModalStaff(staff)}
+                                                            className="font-bold text-slate-900 hover:text-blue-600 text-left block truncate cursor-pointer transition-colors"
+                                                            title={`Click to preview profile of ${staff.name}`}
+                                                        >
+                                                            <span className="flex items-center gap-1.5">
+                                                                {staff.name}
+                                                                {isSelf && (
+                                                                    <span className="text-[10px] font-semibold text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded-md">
+                                                                        (You)
+                                                                    </span>
+                                                                )}
+                                                            </span>
+                                                        </button>
                                                         <p className="text-[10px] text-slate-400">
                                                             Joined {new Date(staff.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
                                                         </p>
@@ -375,8 +397,16 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                             <td className="py-3.5 px-6 text-right">
                                                 <div className="flex items-center justify-end gap-1.5">
                                                     <button
+                                                        onClick={() => setProfileModalStaff(staff)}
+                                                        className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
+                                                        title="View staff profile overview"
+                                                    >
+                                                        <Eye className="w-3.5 h-3.5" />
+                                                    </button>
+
+                                                    <button
                                                         onClick={() => handleEditOpen(staff)}
-                                                        className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                        className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
                                                         title="Edit details"
                                                     >
                                                         <Edit3 className="w-3.5 h-3.5" />
@@ -765,6 +795,121 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                         </button>
                     </div>
                 </div>
+            </Modal>
+            {/* Modal: Staff Profile Preview */}
+            <Modal isOpen={!!profileModalStaff} onClose={() => setProfileModalStaff(null)} title="Staff Profile Overview">
+                {profileModalStaff && (
+                    <div className="space-y-5">
+                        {/* Header Banner & Avatar */}
+                        <div className="relative rounded-2xl bg-gradient-to-r from-blue-700 via-blue-800 to-sky-700 p-6 text-white text-center overflow-hidden">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+                            <div className="relative z-10 flex flex-col items-center">
+                                <img
+                                    src={profileModalStaff.avatar_url}
+                                    alt={profileModalStaff.name}
+                                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover ring-4 ring-white/90 shadow-xl"
+                                />
+                                <h3 className="mt-3 text-lg sm:text-xl font-black text-white tracking-tight flex items-center gap-2 justify-center">
+                                    {profileModalStaff.name}
+                                    {profileModalStaff.id === currentUserId && (
+                                        <span className="text-[10px] font-semibold text-blue-200 bg-white/20 px-2 py-0.5 rounded-md">
+                                            You
+                                        </span>
+                                    )}
+                                </h3>
+                                <div className="mt-1 flex items-center gap-2 flex-wrap justify-center">
+                                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                                        profileModalStaff.role === 'admin'
+                                            ? 'bg-blue-500 text-white shadow-xs'
+                                            : 'bg-sky-500 text-white shadow-xs'
+                                    }`}>
+                                        {profileModalStaff.role === 'admin' ? (
+                                            <Shield className="w-3 h-3 text-white" />
+                                        ) : (
+                                            <GraduationCap className="w-3 h-3 text-white" />
+                                        )}
+                                        {profileModalStaff.role === 'admin' ? 'Administrator' : 'Teacher / Instructor'}
+                                    </span>
+                                    <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                                        profileModalStaff.status === 'active'
+                                            ? 'bg-emerald-500 text-white shadow-xs'
+                                            : 'bg-slate-400 text-white'
+                                    }`}>
+                                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                                        {profileModalStaff.status}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Profile Details List */}
+                        <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 space-y-3 text-xs">
+                            <div className="flex items-center gap-3 text-slate-700">
+                                <div className="w-8 h-8 rounded-lg bg-blue-100/70 text-blue-600 flex items-center justify-center shrink-0">
+                                    <Mail className="w-4 h-4" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Email Address</span>
+                                    <p className="font-semibold text-slate-900 truncate">{profileModalStaff.email}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 text-slate-700">
+                                <div className="w-8 h-8 rounded-lg bg-emerald-100/70 text-emerald-600 flex items-center justify-center shrink-0">
+                                    <Phone className="w-4 h-4" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Contact Number</span>
+                                    <p className="font-semibold text-slate-900 font-mono">{profileModalStaff.contact_number || 'Not provided'}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 text-slate-700">
+                                <div className="w-8 h-8 rounded-lg bg-indigo-100/70 text-indigo-600 flex items-center justify-center shrink-0">
+                                    <BookOpen className="w-4 h-4" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Curriculum Materials Contributed</span>
+                                    <p className="font-semibold text-slate-900">{profileModalStaff.resources_count || 0} educational materials</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 text-slate-700">
+                                <div className="w-8 h-8 rounded-lg bg-sky-100/70 text-sky-600 flex items-center justify-center shrink-0">
+                                    <Calendar className="w-4 h-4" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Account Created</span>
+                                    <p className="font-semibold text-slate-900">
+                                        {new Date(profileModalStaff.created_at).toLocaleDateString([], { month: 'long', day: 'numeric', year: 'numeric' })}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    const st = profileModalStaff;
+                                    setProfileModalStaff(null);
+                                    handleEditOpen(st);
+                                }}
+                                className="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition-all"
+                            >
+                                Edit Account Details
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setProfileModalStaff(null)}
+                                className="px-4 py-2 text-xs font-semibold text-slate-500 hover:text-slate-800"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                )}
             </Modal>
         </AppLayout>
     );
