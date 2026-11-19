@@ -39,18 +39,18 @@ export default function StatCard({ title, value, subtitle, icon: Icon, color = '
     };
 
     return (
-        <div className={`group bg-white/95 backdrop-blur-sm p-6 rounded-2xl border ${colorStyles.border} ${colorStyles.glow} shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200`}>
-            <div className="flex items-center justify-between">
-                <div>
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{title}</p>
+        <div className={`group bg-white/95 backdrop-blur-sm p-4 sm:p-6 rounded-2xl border ${colorStyles.border} ${colorStyles.glow} shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 min-w-0`}>
+            <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider truncate">{title}</p>
                     <h4 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">{value}</h4>
                     {subtitle && (
-                        <p className="mt-1 text-xs text-slate-500 font-medium">{subtitle}</p>
+                        <p className="mt-1 text-xs text-slate-500 font-medium line-clamp-1">{subtitle}</p>
                     )}
                 </div>
                 {Icon && (
-                    <div className={`p-3.5 rounded-xl ${colorStyles.bg} transition-transform group-hover:scale-110 duration-200`}>
-                        <Icon className="w-6 h-6" />
+                    <div className={`p-3 sm:p-3.5 rounded-xl ${colorStyles.bg} transition-transform group-hover:scale-110 duration-200 shrink-0`}>
+                        <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
                 )}
             </div>

@@ -144,7 +144,7 @@ export default function AppLayout({ children, title }) {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 relative flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+        <div className="min-h-screen bg-slate-50 relative flex flex-col font-sans selection:bg-blue-600 selection:text-white w-full overflow-x-hidden">
             {/* Atmospheric Background Canvas */}
             {/* Atmospheric Glassmorphic HSL Background Canvas */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
@@ -219,10 +219,10 @@ export default function AppLayout({ children, title }) {
             />
 
             {/* Main Area with dynamic margin for desktop sidebar */}
-            <div className="relative z-10 flex-1 lg:pl-64 flex flex-col min-h-screen">
+            <div className="relative z-10 flex-1 lg:pl-64 flex flex-col min-h-screen w-full min-w-0">
                 <Navbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
 
-                <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+                <main className="flex-1 p-3.5 sm:p-6 lg:p-8 max-w-7xl w-full min-w-0 mx-auto">
                     <ErrorBoundary>
                         {children}
                     </ErrorBoundary>

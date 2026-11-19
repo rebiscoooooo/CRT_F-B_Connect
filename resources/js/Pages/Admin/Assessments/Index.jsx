@@ -229,9 +229,9 @@ export default function AdminAssessmentsIndex({ submissions, statistics, resourc
             </div>
 
             {/* Submissions Table */}
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-2xs overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-2xs overflow-hidden min-w-0">
+                <div className="overflow-x-auto overscroll-x-contain touch-pan-x">
+                    <table className="w-full min-w-[640px] text-left border-collapse">
                         <thead>
                             <tr className="bg-slate-50/75 border-b border-slate-200 text-[11px] font-black uppercase tracking-wider text-slate-500">
                                 <th className="py-4 px-6">Student</th>

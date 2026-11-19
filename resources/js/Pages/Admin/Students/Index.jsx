@@ -22,7 +22,8 @@ import {
     Mail,
     Phone,
     Calendar,
-    User
+    User,
+    ArrowRight
 } from 'lucide-react';
 
 export default function StudentIndex({ students = { data: [] }, filters = {}, stats = {} }) {
@@ -131,9 +132,9 @@ export default function StudentIndex({ students = { data: [] }, filters = {}, st
             <Head title="Student Management — CRT F&B Connect" />
 
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                <div>
-                    <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8 min-w-0">
+                <div className="min-w-0">
+                    <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
                         Student Records &amp; Enrollment
                     </h1>
                     <p className="text-xs sm:text-sm text-slate-500 mt-1">
@@ -141,20 +142,20 @@ export default function StudentIndex({ students = { data: [] }, filters = {}, st
                     </p>
                 </div>
 
-                <div className="flex items-center gap-2.5">
+                <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-2.5 w-full sm:w-auto shrink-0">
                     <a
                         href="/admin/students/export"
-                        className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs transition-all"
+                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs transition-all text-center"
                     >
-                        <Download className="w-4 h-4 text-slate-500" />
-                        Export CSV
+                        <Download className="w-4 h-4 text-slate-500 shrink-0" />
+                        <span>Export CSV</span>
                     </a>
                     <button
                         onClick={() => setIsAddOpen(true)}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm shadow-blue-500/20 hover:shadow-md transition-all"
+                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm shadow-blue-500/20 hover:shadow-md transition-all cursor-pointer text-center"
                     >
-                        <UserPlus className="w-4 h-4" />
-                        Add Student Record
+                        <UserPlus className="w-4 h-4 shrink-0" />
+                        <span>Add Student</span>
                     </button>
                 </div>
             </div>
@@ -207,27 +208,27 @@ export default function StudentIndex({ students = { data: [] }, filters = {}, st
             </div>
 
             {/* Search and Filters Bar */}
-            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs mb-6">
-                <form onSubmit={handleSearch} className="flex flex-col md:flex-row items-center gap-3">
-                    <div className="relative flex-1 w-full">
-                        <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs mb-6 min-w-0">
+                <form onSubmit={handleSearch} className="flex flex-col lg:flex-row items-stretch lg:items-center gap-2.5 sm:gap-3">
+                    <div className="relative flex-1 min-w-0 w-full">
+                        <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                         <input
                             type="text"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search by student number, student name, or email..."
-                            className="w-full pl-10 pr-4 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20"
+                            className="w-full pl-10 pr-4 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition-all"
                         />
                     </div>
 
-                    <div className="flex items-center gap-2 w-full md:w-auto">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:flex md:items-center gap-2 w-full lg:w-auto">
                         <select
                             value={statusFilter}
                             onChange={(e) => {
                                 setStatusFilter(e.target.value);
                                 applyFilters({ search, status: e.target.value, sort: sortBy });
                             }}
-                            className="px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium"
+                            className="w-full md:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
                         >
                             <option value="">All Statuses</option>
                             <option value="active">Active Only</option>
@@ -241,28 +242,34 @@ export default function StudentIndex({ students = { data: [] }, filters = {}, st
                                 setSortBy(e.target.value);
                                 applyFilters({ search, status: statusFilter, sort: e.target.value });
                             }}
-                            className="px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium"
+                            className="w-full md:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
                         >
-                            <option value="latest">Registered (Newest)</option>
-                            <option value="oldest">Registered (Oldest)</option>
+                            <option value="latest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
                             <option value="name">Name (A-Z)</option>
                             <option value="student_number">Student ID Number</option>
                         </select>
 
                         <button
                             type="submit"
-                            className="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-2xs"
+                            className="col-span-2 md:col-span-1 px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-2xs cursor-pointer flex items-center justify-center gap-1.5 transition-colors"
                         >
-                            Search
+                            <Search className="w-3.5 h-3.5" />
+                            <span>Search</span>
                         </button>
                     </div>
                 </form>
             </div>
 
             {/* Students Table */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden mb-6">
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs border-collapse">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden mb-6 min-w-0">
+                {/* Horizontal scroll hint on mobile */}
+                <div className="sm:hidden px-3.5 py-2 bg-slate-50/90 border-b border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                    <span>Swipe horizontally to view full table</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-blue-500 animate-pulse" />
+                </div>
+                <div className="overflow-x-auto overscroll-x-contain touch-pan-x">
+                    <table className="w-full min-w-[620px] text-left text-xs border-collapse">
                         <thead>
                             <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
                                 <th className="py-3.5 px-4">Student ID</th>

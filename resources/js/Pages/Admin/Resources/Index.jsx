@@ -86,9 +86,9 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
             <Head title="Resources — CRT F&B Connect" />
 
             {/* Top Bar */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                <div>
-                    <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8 min-w-0">
+                <div className="min-w-0">
+                    <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
                         Educational Resources Management
                     </h1>
                     <p className="text-xs sm:text-sm text-slate-500 mt-1">
@@ -96,20 +96,20 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
                     </p>
                 </div>
 
-                <div className="flex items-center gap-2.5">
+                <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-2.5 w-full sm:w-auto shrink-0">
                     <button
                         onClick={() => setIsFolderModalOpen(true)}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs transition-all"
+                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs transition-all text-center cursor-pointer"
                     >
-                        <FolderPlus className="w-4 h-4 text-blue-600" />
-                        New Folder
+                        <FolderPlus className="w-4 h-4 text-blue-600 shrink-0" />
+                        <span>New Folder</span>
                     </button>
                     <Link
                         href="/admin/resources/create"
-                        className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm shadow-blue-500/20 hover:shadow-md transition-all"
+                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm shadow-blue-500/20 hover:shadow-md transition-all text-center"
                     >
-                        <Plus className="w-4 h-4" />
-                        Add New Resource
+                        <Plus className="w-4 h-4 shrink-0" />
+                        <span>Add Resource</span>
                     </Link>
                 </div>
             </div>
@@ -162,9 +162,9 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
             </div>
 
             {/* Search and Filters Bar */}
-            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs mb-6">
-                <form onSubmit={handleSearch} className="flex flex-col md:flex-row items-center gap-3">
-                    <div className="relative flex-1 w-full">
+            <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs mb-6 min-w-0">
+                <form onSubmit={handleSearch} className="flex flex-col lg:flex-row items-stretch lg:items-center gap-2.5 sm:gap-3">
+                    <div className="relative flex-1 min-w-0 w-full">
                         <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                         <input
                             type="text"
@@ -175,12 +175,12 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
                         />
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:items-center gap-2 w-full lg:w-auto">
                         {/* Type filter */}
                         <select
                             value={typeFilter}
                             onChange={(e) => handleTypeChange(e.target.value)}
-                            className="px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium"
+                            className="w-full lg:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
                         >
                             <option value="">All Types</option>
                             <option value="video">Video Lessons</option>
@@ -197,7 +197,7 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
                                 setVisibilityFilter(e.target.value);
                                 applyFilters({ search, category: categoryFilter, type: typeFilter, visibility: e.target.value, sort: sortBy });
                             }}
-                            className="px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium"
+                            className="w-full lg:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
                         >
                             <option value="">All Statuses</option>
                             <option value="published">Published</option>
@@ -212,7 +212,7 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
                                 setSortBy(e.target.value);
                                 applyFilters({ search, category: categoryFilter, type: typeFilter, visibility: visibilityFilter, sort: e.target.value });
                             }}
-                            className="px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium"
+                            className="col-span-2 sm:col-span-1 lg:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
                         >
                             <option value="latest">Latest First</option>
                             <option value="oldest">Oldest First</option>
@@ -223,9 +223,10 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
 
                         <button
                             type="submit"
-                            className="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-2xs transition-colors"
+                            className="col-span-2 lg:col-span-1 px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-2xs transition-colors cursor-pointer flex items-center justify-center gap-1.5"
                         >
-                            Filter
+                            <Search className="w-3.5 h-3.5 sm:hidden" />
+                            <span>Filter</span>
                         </button>
                     </div>
                 </form>

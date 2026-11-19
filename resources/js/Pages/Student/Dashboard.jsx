@@ -121,7 +121,7 @@ export default function StudentDashboard({
                         <Link
                             key={item.label}
                             href={item.href}
-                            className="p-3.5 bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-xs transition-all flex flex-col items-center text-center group"
+                            className="p-3.5 bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-xs transition-all flex flex-col items-center text-center group last:col-span-2 sm:last:col-span-1"
                         >
                             <div className={`p-2.5 rounded-xl ${item.color} group-hover:scale-110 transition-transform mb-2`}>
                                 <Icon className="w-5 h-5" />

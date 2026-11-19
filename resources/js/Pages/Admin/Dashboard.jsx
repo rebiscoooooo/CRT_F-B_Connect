@@ -47,8 +47,8 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
 
             {/* Header with Quick Actions */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                <div className="flex items-center gap-3.5">
-                    <div className="w-12 h-12 rounded-full bg-white ring-2 ring-blue-500/20 shadow-xs overflow-hidden flex items-center justify-center flex-shrink-0">
+                <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white ring-2 ring-blue-500/20 shadow-xs overflow-hidden flex items-center justify-center flex-shrink-0">
                         <img
                             src="/images/logo-badge.png"
                             alt="CRT F&B Connect"
@@ -58,44 +58,44 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                             }}
                         />
                     </div>
-                    <div>
-                        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    <div className="min-w-0 flex-1">
+                        <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
                             Administrator &amp; Instructor Overview
                         </h1>
-                        <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                        <p className="text-xs sm:text-sm text-slate-500 mt-1 truncate sm:whitespace-normal">
                             Live analytics, curriculum resources, and student enrollment records.
                         </p>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2.5">
+                <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:items-center gap-2 sm:gap-2.5 w-full sm:w-auto">
                     <Link
                         href="/admin/resources/create"
-                        className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm shadow-blue-500/20 hover:shadow-md transition-all"
+                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm shadow-blue-500/20 hover:shadow-md transition-all text-center"
                     >
-                        <Upload className="w-4 h-4" />
-                        Upload Resource
+                        <Upload className="w-4 h-4 shrink-0" />
+                        <span className="truncate">Upload Resource</span>
                     </Link>
                     <Link
                         href="/admin/students"
-                        className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs hover:shadow-xs transition-all"
+                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs hover:shadow-xs transition-all text-center"
                     >
-                        <UserPlus className="w-4 h-4" />
-                        Manage Students
+                        <UserPlus className="w-4 h-4 text-blue-600 shrink-0" />
+                        <span className="truncate">Manage Students</span>
                     </Link>
                     <Link
                         href="/admin/teachers"
-                        className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs hover:shadow-xs transition-all"
+                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs hover:shadow-xs transition-all text-center"
                     >
-                        <ShieldCheck className="w-4 h-4 text-sky-600" />
-                        Faculty &amp; Admins
+                        <ShieldCheck className="w-4 h-4 text-sky-600 shrink-0" />
+                        <span className="truncate">Faculty &amp; Admins</span>
                     </Link>
                     <Link
                         href="/admin/assessments"
-                        className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs hover:shadow-xs transition-all"
+                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs hover:shadow-xs transition-all text-center"
                     >
-                        <ClipboardCheck className="w-4 h-4 text-blue-600" />
-                        Student Assessments
+                        <ClipboardCheck className="w-4 h-4 text-blue-600 shrink-0" />
+                        <span className="truncate">Assessments</span>
                     </Link>
                 </div>
             </div>
@@ -175,7 +175,7 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
             {/* Interactive Analytics Section (Recharts) */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
                 {/* Registration Trends Chart (Area) */}
-                <div className="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs">
+                <div className="lg:col-span-7 bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-2xs min-w-0">
                     <div className="flex items-center justify-between mb-6">
                         <div>
                             <h3 className="text-base font-bold text-slate-900">Student Enrollment Trend</h3>
@@ -186,7 +186,7 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                         </span>
                     </div>
 
-                    <div className="h-64 w-full">
+                    <div className="h-64 w-full min-w-0">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={chartData.registrationTrends || []}>
                                 <defs>
@@ -222,7 +222,7 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                 </div>
 
                 {/* Resource Category Distribution (Pie / Donut) */}
-                <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs flex flex-col justify-between">
+                <div className="lg:col-span-5 bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-2xs flex flex-col justify-between min-w-0">
                     <div className="flex items-center justify-between mb-4">
                         <div>
                             <h3 className="text-base font-bold text-slate-900">Resource Distribution</h3>
@@ -230,7 +230,7 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                         </div>
                     </div>
 
-                    <div className="h-56 w-full">
+                    <div className="h-56 w-full min-w-0">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie
@@ -272,7 +272,7 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
             </div>
 
             {/* Upload Activity by Resource Type (Bar Chart) */}
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs mb-8">
+            <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-2xs mb-8 min-w-0">
                 <div className="flex items-center justify-between mb-6">
                     <div>
                         <h3 className="text-base font-bold text-slate-900">Materials Volume by Media Type</h3>
@@ -280,7 +280,7 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                     </div>
                 </div>
 
-                <div className="h-60 w-full">
+                <div className="h-60 w-full min-w-0">
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={chartData.resourceTypes || []}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
@@ -306,8 +306,8 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
             {/* Bottom 2-Column Section: Recent Uploads & Recent Students */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Recent Resources */}
-                <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
-                    <div className="flex items-center justify-between p-6 border-b border-slate-100">
+                <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden min-w-0">
+                    <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-100">
                         <div>
                             <h3 className="text-base font-bold text-slate-900">Recently Uploaded Resources</h3>
                             <p className="text-xs text-slate-500 mt-0.5">Latest materials published to the catalog</p>
@@ -364,7 +364,7 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                 </div>
 
                 {/* Recent Students & Activities */}
-                <div className="lg:col-span-5 space-y-6">
+                <div className="lg:col-span-5 space-y-6 min-w-0">
                     {/* Recent Students */}
                     <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
                         <div className="flex items-center justify-between p-6 border-b border-slate-100">

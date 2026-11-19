@@ -17,6 +17,13 @@ html {
     scroll-behavior: smooth;
 }
 
+html,
+body {
+    overflow-x: hidden;
+    max-width: 100%;
+    width: 100%;
+}
+
 @layer utilities {
     .dashboard-grid-pattern {
         background-image: radial-gradient(rgba(148, 163, 184, 0.45) 1.25px, transparent 1.25px);

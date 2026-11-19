@@ -24,6 +24,7 @@ import {
     AlertCircle,
     Eye,
     Calendar,
+    ArrowRight,
 } from 'lucide-react';
 
 export default function TeacherIndex({ teachers = { data: [] }, filters = {}, stats = {} }) {
@@ -144,13 +145,13 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
             <Head title="Faculty & Staff Management — CRT F&B Connect" />
 
             {/* Header Banner */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                <div>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8 min-w-0">
+                <div className="min-w-0">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold uppercase tracking-wider mb-2">
                         <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
                         Authorized Staff &amp; Faculty
                     </div>
-                    <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                    <h1 className="text-xl sm:text-3xl font-black text-slate-900 tracking-tight">
                         Teacher &amp; Administrator Management
                     </h1>
                     <p className="text-xs sm:text-sm text-slate-500 mt-1">
@@ -158,20 +159,20 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                     </p>
                 </div>
 
-                <div className="flex items-center gap-2.5">
+                <div className="w-full sm:w-auto shrink-0">
                     <button
                         onClick={() => setIsAddOpen(true)}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm shadow-blue-500/20 hover:shadow-md transition-all cursor-pointer"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm shadow-blue-500/20 hover:shadow-md transition-all cursor-pointer"
                     >
                         <UserPlus className="w-4 h-4" />
-                        Add Teacher / Admin
+                        <span>Add Teacher / Admin</span>
                     </button>
                 </div>
             </div>
 
             {/* Statistics Cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
-                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
+                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs">
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Total Staff</span>
                     <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-2">
                         {stats.total_staff || 0}
@@ -179,7 +180,7 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                     <p className="text-[11px] text-slate-500 mt-1">Total instructors &amp; admins</p>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs">
+                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs">
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Teachers / Chefs</span>
                     <div className="text-2xl sm:text-3xl font-black text-sky-600 mt-2">
                         {stats.teacher_count || 0}
@@ -187,7 +188,7 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                     <p className="text-[11px] text-slate-500 mt-1">Active curriculum educators</p>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs">
+                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs">
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Administrators</span>
                     <div className="text-2xl sm:text-3xl font-black text-blue-700 mt-2">
                         {stats.admin_count || 0}
@@ -195,7 +196,7 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                     <p className="text-[11px] text-slate-500 mt-1">Full system privilege holders</p>
                 </div>
 
-                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs">
+                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs">
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Active Status</span>
                     <div className="text-2xl sm:text-3xl font-black text-emerald-600 mt-2">
                         {stats.active_count || 0}
@@ -205,10 +206,10 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
             </div>
 
             {/* Filters Bar */}
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs mb-6">
-                <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3 items-center">
-                    <div className="relative flex-1 w-full">
-                        <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs mb-6 min-w-0">
+                <form onSubmit={handleSearch} className="flex flex-col lg:flex-row gap-2.5 sm:gap-3 items-stretch lg:items-center">
+                    <div className="relative flex-1 min-w-0 w-full">
+                        <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                         <input
                             type="text"
                             value={search}
@@ -218,14 +219,14 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                         />
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:items-center gap-2 w-full lg:w-auto">
                         <select
                             value={roleFilter}
                             onChange={(e) => {
                                 setRoleFilter(e.target.value);
                                 applyFilters({ search, role: e.target.value, status: statusFilter, sort: sortBy });
                             }}
-                            className="px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium"
+                            className="w-full lg:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
                         >
                             <option value="">All Roles</option>
                             <option value="teacher">Teachers / Instructors</option>
@@ -238,7 +239,7 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                 setStatusFilter(e.target.value);
                                 applyFilters({ search, role: roleFilter, status: e.target.value, sort: sortBy });
                             }}
-                            className="px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium"
+                            className="w-full lg:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
                         >
                             <option value="">All Statuses</option>
                             <option value="active">Active Only</option>
@@ -251,7 +252,7 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                 setSortBy(e.target.value);
                                 applyFilters({ search, role: roleFilter, status: statusFilter, sort: e.target.value });
                             }}
-                            className="px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium"
+                            className="col-span-2 sm:col-span-1 lg:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
                         >
                             <option value="latest">Joined (Newest)</option>
                             <option value="oldest">Joined (Oldest)</option>
@@ -261,9 +262,10 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
 
                         <button
                             type="submit"
-                            className="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-2xs"
+                            className="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-2xs cursor-pointer flex items-center justify-center gap-1"
                         >
-                            Filter
+                            <Search className="w-3.5 h-3.5 sm:hidden" />
+                            <span>Filter</span>
                         </button>
 
                         {(search || roleFilter || statusFilter) && (
@@ -280,9 +282,14 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
             </div>
 
             {/* Staff Table */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden mb-6">
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs border-collapse">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden mb-6 min-w-0">
+                {/* Horizontal scroll hint on mobile */}
+                <div className="sm:hidden px-3.5 py-2 bg-slate-50/90 border-b border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                    <span>Swipe horizontally to view full table</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-blue-500 animate-pulse" />
+                </div>
+                <div className="overflow-x-auto overscroll-x-contain touch-pan-x">
+                    <table className="w-full min-w-[700px] text-left text-xs border-collapse">
                         <thead>
                             <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
                                 <th className="py-3.5 px-6">Staff Member</th>

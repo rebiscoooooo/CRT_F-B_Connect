@@ -95,27 +95,27 @@ export default function StudentResourceIndex({ categories = [], resources = { da
             </div>
 
             {/* Search and Filters Bar */}
-            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs mb-8">
-                <form onSubmit={handleSearch} className="flex flex-col sm:flex-row items-center gap-3">
-                    <div className="relative flex-1 w-full">
-                        <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs mb-8 min-w-0">
+                <form onSubmit={handleSearch} className="flex flex-col md:flex-row items-stretch md:items-center gap-2.5 sm:gap-3">
+                    <div className="relative flex-1 min-w-0 w-full">
+                        <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                         <input
                             type="text"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search learning materials by title, keyword, or lesson..."
-                            className="w-full pl-10 pr-4 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20"
+                            className="w-full pl-10 pr-4 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition-all"
                         />
                     </div>
 
-                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:flex md:items-center gap-2 w-full md:w-auto">
                         <select
                             value={typeFilter}
                             onChange={(e) => {
                                 setTypeFilter(e.target.value);
                                 applyFilters({ search, category: categoryFilter, type: e.target.value, sort: sortBy });
                             }}
-                            className="px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium"
+                            className="w-full md:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
                         >
                             <option value="">All Formats</option>
                             <option value="video">Video Lessons</option>
@@ -131,7 +131,7 @@ export default function StudentResourceIndex({ categories = [], resources = { da
                                 setSortBy(e.target.value);
                                 applyFilters({ search, category: categoryFilter, type: typeFilter, sort: e.target.value });
                             }}
-                            className="px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium"
+                            className="w-full md:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
                         >
                             <option value="latest">Latest First</option>
                             <option value="popular">Most Popular</option>
@@ -140,9 +140,10 @@ export default function StudentResourceIndex({ categories = [], resources = { da
 
                         <button
                             type="submit"
-                            className="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-2xs"
+                            className="col-span-2 md:col-span-1 px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-2xs cursor-pointer flex items-center justify-center gap-1.5 transition-colors"
                         >
-                            Search
+                            <Search className="w-3.5 h-3.5 sm:hidden" />
+                            <span>Search</span>
                         </button>
                     </div>
                 </form>

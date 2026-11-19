@@ -41,14 +41,14 @@ export default function ActivityLogIndex({ logs = { data: [] }, filters = {} }) 
                         />
                     </div>
 
-                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto">
                         <select
                             value={actionFilter}
                             onChange={(e) => {
                                 setActionFilter(e.target.value);
                                 router.get('/admin/activity-logs', { search, action: e.target.value });
                             }}
-                            className="px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700"
+                            className="w-full sm:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700"
                         >
                             <option value="">All Actions</option>
                             <option value="created">Created</option>
@@ -70,8 +70,9 @@ export default function ActivityLogIndex({ logs = { data: [] }, filters = {} }) 
             </div>
 
             {/* Logs List Table */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden mb-6">
-                <table className="w-full text-left text-xs border-collapse">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden mb-6 min-w-0">
+                <div className="overflow-x-auto overscroll-x-contain touch-pan-x">
+                    <table className="w-full min-w-[580px] text-left text-xs border-collapse">
                     <thead>
                         <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
                             <th className="py-3.5 px-4">Action</th>
@@ -129,6 +130,7 @@ export default function ActivityLogIndex({ logs = { data: [] }, filters = {} }) 
                         )}
                     </tbody>
                 </table>
+                </div>
             </div>
 
             <Pagination links={logs.links} />
