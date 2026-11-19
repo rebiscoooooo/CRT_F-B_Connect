@@ -28,6 +28,27 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Anti-bfcache & Back-Navigation History Protection -->
+    <script>
+        (function() {
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted) {
+                    window.location.reload();
+                    return;
+                }
+                try {
+                    var entries = window.performance && window.performance.getEntriesByType ? window.performance.getEntriesByType('navigation') : null;
+                    if (entries && entries.length > 0 && entries[0].type === 'back_forward') {
+                        var isProtected = /^\/(admin|student|profile|notifications)/i.test(window.location.pathname);
+                        if (isProtected && sessionStorage.getItem('crt_authenticated') !== 'true') {
+                            window.location.replace('/login');
+                        }
+                    }
+                } catch (e) {}
+            });
+        })();
+    </script>
+
     <!-- Scripts and Styles -->
     @routes
     @viteReactRefresh

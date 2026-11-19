@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import ApplicationLogo from './ApplicationLogo';
 import PwaInstallButton from './PwaInstallButton';
+import { secureLogout } from '../utils/auth';
 import {
     LayoutDashboard,
     FolderKanban,
@@ -189,15 +190,14 @@ export default function Sidebar({ isOpen, onClose }) {
                 {/* Footer Sign Out & PWA Install */}
                 <div className="p-3.5 border-t border-slate-100 bg-slate-50/40 space-y-2">
                     <PwaInstallButton className="w-full justify-center" text="Install Application" />
-                    <Link
-                        href="/logout"
-                        method="post"
-                        as="button"
+                    <button
+                        type="button"
+                        onClick={() => secureLogout()}
                         className="w-full group flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-rose-600 bg-white hover:bg-rose-50/70 border border-slate-200/70 hover:border-rose-200 shadow-2xs hover:shadow-xs transition-all duration-150"
                     >
                         <LogOut className="w-4 h-4 text-slate-400 group-hover:text-rose-500 group-hover:-translate-x-0.5 transition-all" />
                         <span>Sign Out</span>
-                    </Link>
+                    </button>
                     <p className="text-[10px] text-center text-slate-400 mt-2 font-medium">
                         CRT F&amp;B Connect • LMS
                     </p>

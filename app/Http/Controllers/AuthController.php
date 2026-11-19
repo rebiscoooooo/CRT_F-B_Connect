@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class AuthController extends Controller
 {
@@ -391,7 +392,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout(Request $request): RedirectResponse
+    public function logout(Request $request): SymfonyResponse|RedirectResponse
     {
         $userId = Auth::id();
         if ($userId) {
@@ -402,6 +403,15 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('info', 'You have been logged out safely.');
+        $response = $request->inertia()
+            ? Inertia::location(route('login'))
+            : redirect()->route('login')->with('info', 'You have been logged out safely.');
+
+        $response->headers->set('Clear-Site-Data', '"cache"');
+        $response->headers->set('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', 'Sun, 02 Jan 1990 00:00:00 GMT');
+
+        return $response;
     }
 }

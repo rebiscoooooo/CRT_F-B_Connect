@@ -23,6 +23,7 @@ class SettingController extends Controller
             'contact_phone' => SystemSetting::get('contact_phone', '+63 (044) 463-0000'),
             'allow_registration' => SystemSetting::get('allow_registration', '1'),
             'system_announcement' => SystemSetting::get('system_announcement', ''),
+            'session_timeout' => SystemSetting::get('session_timeout', '30'),
         ];
 
         return Inertia::render('Admin/Settings/Index', [
@@ -40,6 +41,7 @@ class SettingController extends Controller
             'contact_phone' => ['nullable', 'string', 'max:50'],
             'allow_registration' => ['required', 'in:0,1'],
             'system_announcement' => ['nullable', 'string', 'max:2000'],
+            'session_timeout' => ['required', 'integer', 'min:5', 'max:240'],
         ]);
 
         foreach ($validated as $key => $value) {

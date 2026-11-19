@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import { Bell, Menu, X, User as UserIcon, LogOut, ChevronDown, CheckCheck, ExternalLink } from 'lucide-react';
 import ApplicationLogo from './ApplicationLogo';
-import PwaInstallButton from './PwaInstallButton';
+import { secureLogout } from '../utils/auth';
 
 export default function Navbar({ onToggleSidebar }) {
     const { auth, notifications, appName } = usePage().props;
@@ -55,8 +55,6 @@ export default function Navbar({ onToggleSidebar }) {
 
             {/* Right: Notifications & User profile */}
             <div className="flex items-center gap-2 sm:gap-3">
-                <PwaInstallButton className="hidden md:inline-flex" />
-
                 {/* Notifications Dropdown */}
                 <div className="relative" ref={notifRef}>
                     <button
@@ -73,99 +71,80 @@ export default function Navbar({ onToggleSidebar }) {
                     </button>
 
                     {isNotificationOpen && (
-                        <>
-                            {/* Mobile overlay backdrop */}
-                            <div
-                                className="fixed inset-0 z-40 bg-slate-900/20 backdrop-blur-2xs sm:hidden"
-                                onClick={() => setIsNotificationOpen(false)}
-                            />
-
-                            <div className="fixed sm:absolute left-3 right-3 sm:left-auto sm:right-0 top-18 sm:top-full mt-1 sm:mt-2 w-auto sm:w-96 max-w-[calc(100vw-1.5rem)] sm:max-w-md bg-white rounded-2xl shadow-2xl border border-slate-200/90 py-3 z-50 animate-in fade-in zoom-in-95 duration-150">
-                                <div className="flex items-center justify-between px-4 pb-2 border-b border-slate-100">
-                                    <div className="flex items-center gap-2">
-                                        <h4 className="text-sm font-bold text-slate-900">Notifications</h4>
-                                        {unreadCount > 0 && (
-                                            <span className="px-2 py-0.5 text-[10px] font-semibold bg-blue-50 text-blue-600 rounded-full">
-                                                {unreadCount} new
-                                            </span>
-                                        )}
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        {unreadCount > 0 && (
-                                            <Link
-                                                href="/notifications/read-all"
-                                                method="post"
-                                                as="button"
-                                                onClick={() => setIsNotificationOpen(false)}
-                                                className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1 cursor-pointer"
-                                            >
-                                                <CheckCheck className="w-3.5 h-3.5" />
-                                                Mark all read
-                                            </Link>
-                                        )}
-                                        <button
-                                            type="button"
-                                            onClick={() => setIsNotificationOpen(false)}
-                                            className="p-1 text-slate-400 hover:text-slate-600 rounded-lg sm:hidden"
-                                            aria-label="Close notifications"
-                                        >
-                                            <X className="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="max-h-[60vh] sm:max-h-72 overflow-y-auto divide-y divide-slate-50 overscroll-contain">
-                                    {recentNotifications.length > 0 ? (
-                                        recentNotifications.map((notif) => (
-                                            <div
-                                                key={notif.id}
-                                                className={`p-3 text-xs transition-colors hover:bg-slate-50/80 ${
-                                                    !notif.read_at ? 'bg-blue-50/40' : ''
-                                                }`}
-                                            >
-                                                <div className="flex items-start justify-between gap-2">
-                                                    <p className="font-semibold text-slate-800 break-words">{notif.title}</p>
-                                                    {!notif.read_at && (
-                                                        <span className="w-2 h-2 rounded-full bg-blue-600 flex-shrink-0 mt-1" />
-                                                    )}
-                                                </div>
-                                                <p className="text-slate-500 mt-1 leading-relaxed line-clamp-2 break-words">{notif.message}</p>
-                                                <div className="flex items-center justify-between mt-2 pt-1">
-                                                    <span className="text-[10px] text-slate-400">
-                                                        {new Date(notif.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                    </span>
-                                                    {!notif.read_at && (
-                                                        <Link
-                                                            href={`/notifications/${notif.id}/read`}
-                                                            method="post"
-                                                            as="button"
-                                                            className="text-[10px] font-semibold text-blue-600 hover:underline px-1 py-0.5"
-                                                        >
-                                                            Mark as read
-                                                        </Link>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <div className="p-6 text-center text-xs text-slate-400">
-                                            No notifications yet.
-                                        </div>
+                        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-slate-100 py-3 z-50 animate-in fade-in zoom-in-95 duration-150">
+                            <div className="flex items-center justify-between px-4 pb-2 border-b border-slate-100">
+                                <div className="flex items-center gap-2">
+                                    <h4 className="text-sm font-bold text-slate-900">Notifications</h4>
+                                    {unreadCount > 0 && (
+                                        <span className="px-2 py-0.5 text-[10px] font-semibold bg-blue-50 text-blue-600 rounded-full">
+                                            {unreadCount} new
+                                        </span>
                                     )}
                                 </div>
-
-                                <div className="pt-2 px-4 border-t border-slate-100 text-center">
+                                {unreadCount > 0 && (
                                     <Link
-                                        href="/notifications"
+                                        href="/notifications/read-all"
+                                        method="post"
+                                        as="button"
                                         onClick={() => setIsNotificationOpen(false)}
-                                        className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline inline-flex items-center gap-1"
+                                        className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1"
                                     >
-                                        View all notifications
-                                        <ExternalLink className="w-3 h-3" />
+                                        <CheckCheck className="w-3.5 h-3.5" />
+                                        Mark all read
                                     </Link>
-                                </div>
+                                )}
                             </div>
-                        </>
+
+                            <div className="max-h-72 overflow-y-auto divide-y divide-slate-50">
+                                {recentNotifications.length > 0 ? (
+                                    recentNotifications.map((notif) => (
+                                        <div
+                                            key={notif.id}
+                                            className={`p-3 text-xs transition-colors hover:bg-slate-50/80 ${!notif.read_at ? 'bg-blue-50/40' : ''
+                                                }`}
+                                        >
+                                            <div className="flex items-start justify-between gap-2">
+                                                <p className="font-semibold text-slate-800">{notif.title}</p>
+                                                {!notif.read_at && (
+                                                    <span className="w-2 h-2 rounded-full bg-blue-600 flex-shrink-0 mt-1" />
+                                                )}
+                                            </div>
+                                            <p className="text-slate-500 mt-1 leading-relaxed line-clamp-2">{notif.message}</p>
+                                            <div className="flex items-center justify-between mt-2 pt-1">
+                                                <span className="text-[10px] text-slate-400">
+                                                    {new Date(notif.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                </span>
+                                                {!notif.read_at && (
+                                                    <Link
+                                                        href={`/notifications/${notif.id}/read`}
+                                                        method="post"
+                                                        as="button"
+                                                        className="text-[10px] font-semibold text-blue-600 hover:underline"
+                                                    >
+                                                        Mark as read
+                                                    </Link>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="p-6 text-center text-xs text-slate-400">
+                                        No notifications yet.
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="pt-2 px-4 border-t border-slate-100 text-center">
+                                <Link
+                                    href="/notifications"
+                                    onClick={() => setIsNotificationOpen(false)}
+                                    className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline inline-flex items-center gap-1"
+                                >
+                                    View all notifications
+                                    <ExternalLink className="w-3 h-3" />
+                                </Link>
+                            </div>
+                        </div>
                     )}
                 </div>
 
@@ -219,16 +198,17 @@ export default function Navbar({ onToggleSidebar }) {
                                 </div>
 
                                 <div className="pt-1 border-t border-slate-100">
-                                    <Link
-                                        href="/logout"
-                                        method="post"
-                                        as="button"
-                                        onClick={() => setIsProfileOpen(false)}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setIsProfileOpen(false);
+                                            secureLogout();
+                                        }}
                                         className="w-full flex items-center gap-2 px-4 py-2 text-xs font-medium text-rose-600 hover:bg-rose-50 transition-colors text-left"
                                     >
                                         <LogOut className="w-4 h-4" />
                                         Sign out
-                                    </Link>
+                                    </button>
                                 </div>
                             </div>
                         )}

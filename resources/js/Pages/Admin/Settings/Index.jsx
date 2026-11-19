@@ -1,7 +1,7 @@
 import React from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
-import { Settings, Save, BellRing, Building, Mail, ShieldCheck } from 'lucide-react';
+import { Settings, Save, BellRing, Building, Mail, ShieldCheck, Clock } from 'lucide-react';
 
 export default function SettingIndex({ settings = {} }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -12,6 +12,7 @@ export default function SettingIndex({ settings = {} }) {
         contact_phone: settings.contact_phone || '+63 (044) 463-0000',
         allow_registration: String(settings.allow_registration ?? '1'),
         system_announcement: settings.system_announcement || '',
+        session_timeout: String(settings.session_timeout ?? '30'),
     });
 
     const submit = (e) => {
@@ -156,6 +157,43 @@ export default function SettingIndex({ settings = {} }) {
                                     <option value="1">Enabled (Students can register online)</option>
                                     <option value="0">Disabled (Registration closed)</option>
                                 </select>
+                            </div>
+                        </div>
+
+                        {/* Session Security & Auto Inactivity Timeout */}
+                        <div className="pt-4 border-t border-slate-100">
+                            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2 mb-4">
+                                <Clock className="w-4 h-4 text-blue-600" />
+                                Session Security &amp; Auto-Logout Controls
+                            </h3>
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                                        Idle Inactivity Timeout
+                                    </label>
+                                    <select
+                                        value={data.session_timeout}
+                                        onChange={(e) => setData('session_timeout', e.target.value)}
+                                        className="w-full sm:w-72 px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                    >
+                                        <option value="15">15 Minutes of Inactivity</option>
+                                        <option value="30">30 Minutes (Recommended)</option>
+                                        <option value="60">60 Minutes (1 Hour)</option>
+                                        <option value="120">120 Minutes (2 Hours)</option>
+                                    </select>
+                                    <p className="text-[11px] text-slate-500 mt-1">
+                                        Automatically terminates the session and safely logs out inactive users if a workstation, tablet, or smartphone is left unattended.
+                                    </p>
+                                </div>
+                                <div className="p-3.5 bg-blue-50/50 rounded-xl border border-blue-100/70 text-xs text-blue-900 flex items-start gap-2.5">
+                                    <ShieldCheck className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                                    <div>
+                                        <p className="font-semibold">Hardware Back / Undo Button Protection</p>
+                                        <p className="text-[11px] text-blue-800/80 mt-0.5">
+                                            Anti-cache headers and client session guards are active. When any user signs out, clicking the device's back button will immediately redirect to the login screen and block access to cached dashboard data.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

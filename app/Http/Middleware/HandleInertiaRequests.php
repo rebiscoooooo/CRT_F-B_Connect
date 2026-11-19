@@ -77,10 +77,12 @@ class HandleInertiaRequests extends Middleware
                 'site_name' => SystemSetting::get('site_name', 'CRT F&B Connect'),
                 'department_name' => SystemSetting::get('department_name', 'Food & Beverage Services Management'),
                 'institution' => SystemSetting::get('institution', 'College of Research & Technology'),
+                'session_timeout' => (int) SystemSetting::get('session_timeout', '30'),
             ] : [
                 'site_name' => 'CRT F&B Connect',
                 'department_name' => 'Food & Beverage Services Management',
                 'institution' => 'College of Research & Technology',
+                'session_timeout' => 30,
             ],
         ];
     }

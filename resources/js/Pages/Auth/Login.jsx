@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, Link, Head, usePage, router } from '@inertiajs/react';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Eye, EyeOff, LogIn, Lock, Mail, ShieldAlert, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, LogIn, Lock, Mail, ShieldAlert, ArrowLeft, Clock } from 'lucide-react';
 
 export default function Login() {
     const { auth } = usePage().props;
     const [showPassword, setShowPassword] = useState(false);
+    const isTimeout = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('timeout') === '1';
+
+    // Clear any stale local auth state on login screen
+    useEffect(() => {
+        try {
+            sessionStorage.removeItem('crt_authenticated');
+            localStorage.removeItem('crt_session_active');
+            localStorage.removeItem('crt_last_active');
+        } catch (e) {}
+    }, []);
 
     // If already logged in, automatically return to active session instead of showing login
     useEffect(() => {
@@ -69,6 +79,13 @@ export default function Login() {
                 <h2 className="text-2xl font-black text-slate-900 tracking-tight">Welcome Back</h2>
                 <p className="text-xs text-slate-500 mt-1">Sign in to your classroom learning account</p>
             </div>
+
+            {isTimeout && (
+                <div className="mb-4 p-3 bg-amber-50 rounded-xl border border-amber-200/80 text-xs text-amber-800 flex items-center gap-2.5 animate-in fade-in duration-200">
+                    <Clock className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                    <span>Your session has timed out due to inactivity. Please sign in again.</span>
+                </div>
+            )}
 
             <form onSubmit={submit} className="space-y-4">
                 {/* Email or Student Number */}

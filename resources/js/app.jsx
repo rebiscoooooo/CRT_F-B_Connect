@@ -2,11 +2,34 @@ import './bootstrap';
 import '../css/app.css';
 
 import { createRoot } from 'react-dom/client';
-import { createInertiaApp } from '@inertiajs/react';
+import { createInertiaApp, router } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import PwaInstallPrompt from './Components/PwaInstallPrompt';
 
 const appName = 'CRT F&B Connect';
+
+// Hardware Undo / Device Back-Button Guard for Authenticated Pages
+if (typeof window !== 'undefined') {
+    window.addEventListener('popstate', () => {
+        const path = window.location.pathname;
+        const isProtectedPath = /^\/(admin|student|profile|notifications)/i.test(path);
+        const isAuthenticated = sessionStorage.getItem('crt_authenticated') === 'true';
+
+        if (isProtectedPath && !isAuthenticated) {
+            window.location.replace('/login');
+        }
+    });
+
+    router.on('navigate', (event) => {
+        const url = event?.detail?.page?.url || '';
+        const isProtectedUrl = /^\/(admin|student|profile|notifications)/i.test(url);
+        const isAuthenticated = sessionStorage.getItem('crt_authenticated') === 'true';
+
+        if (isProtectedUrl && !isAuthenticated) {
+            window.location.replace('/login');
+        }
+    });
+}
 
 // Register PWA Service Worker
 if (typeof window !== 'undefined' && 'serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
