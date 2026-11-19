@@ -103,6 +103,7 @@ Route::middleware(['auth', 'active'])->group(function () {
         Route::get('/assessments/{submission}', [AdminAssessmentController::class, 'show'])->name('assessments.show');
         Route::delete('/assessments/{submission}', [AdminAssessmentController::class, 'destroySubmission'])->name('assessments.destroySubmission');
         Route::post('/resources/{resource}/assessment', [AdminAssessmentController::class, 'saveAssessment'])->name('resources.assessment.save');
+        Route::delete('/resources/{resource}/assessment', [AdminAssessmentController::class, 'destroyAssessment'])->name('resources.assessment.destroy');
         Route::post('/resources/{resource}/assessment/smart-generate', [AdminAssessmentController::class, 'generateSmartAssessment'])->name('resources.assessment.generate');
         Route::post('/resources/{resource}/assessment/toggle-status', [AdminAssessmentController::class, 'togglePublishStatus'])->name('resources.assessment.toggleStatus');
     });

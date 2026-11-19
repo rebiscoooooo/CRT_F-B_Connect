@@ -234,17 +234,22 @@ class AssessmentController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'passing_percentage' => ['required', 'integer', 'min:1', 'max:100'],
-            'time_limit_minutes' => ['nullable', 'integer', 'min:1', 'max:180'],
+            'time_limit_minutes' => ['nullable', 'integer', 'min:0', 'max:180'],
             'is_published' => ['required', 'boolean'],
             'questions' => ['required', 'array', 'min:1'],
             'questions.*.question_text' => ['required', 'string'],
+            'questions.*.question_type' => ['nullable', 'string'],
             'questions.*.options' => ['required', 'array', 'min:2'],
             'questions.*.options.*.key' => ['required', 'string'],
             'questions.*.options.*.text' => ['required', 'string'],
             'questions.*.correct_answer' => ['required', 'string'],
-            'questions.*.points' => ['required', 'integer', 'min:1'],
+            'questions.*.points' => ['nullable', 'integer', 'min:1'],
             'questions.*.explanation' => ['nullable', 'string'],
         ]);
+
+        $timeLimit = ! empty($validated['time_limit_minutes']) && (int) $validated['time_limit_minutes'] > 0
+            ? (int) $validated['time_limit_minutes']
+            : null;
 
         $assessment = Assessment::updateOrCreate(
             ['resource_id' => $resource->id],
@@ -252,7 +257,7 @@ class AssessmentController extends Controller
                 'title' => $validated['title'],
                 'description' => $validated['description'] ?? null,
                 'passing_percentage' => $validated['passing_percentage'],
-                'time_limit_minutes' => $validated['time_limit_minutes'] ?? null,
+                'time_limit_minutes' => $timeLimit,
                 'is_published' => $validated['is_published'],
                 'created_by' => Auth::id(),
             ]
@@ -265,24 +270,51 @@ class AssessmentController extends Controller
             AssessmentQuestion::create([
                 'assessment_id' => $assessment->id,
                 'question_text' => $q['question_text'],
-                'question_type' => 'multiple_choice',
+                'question_type' => $q['question_type'] ?? 'multiple_choice',
                 'options' => $q['options'],
                 'correct_answer' => $q['correct_answer'],
-                'points' => $q['points'] ?? 1,
+                'points' => (int) ($q['points'] ?? 1),
                 'order' => $index + 1,
                 'explanation' => $q['explanation'] ?? null,
             ]);
         }
 
+        $questionCount = count($validated['questions']);
+
         ActivityLog::record(
             'assessment_saved',
-            "Administrator updated lesson assessment for \"{$resource->title}\"",
+            "Administrator saved {$questionCount} question(s) & answer key(s) for \"{$resource->title}\"",
             Auth::id(),
             Assessment::class,
             $assessment->id
         );
 
-        return back()->with('success', 'Lesson assessment updated successfully.');
+        return back()->with('success', "Lesson assessment saved successfully with {$questionCount} question(s).");
+    }
+
+    /**
+     * Delete/reset an assessment for a given resource.
+     */
+    public function destroyAssessment(Resource $resource): RedirectResponse
+    {
+        $assessment = $resource->assessment()->first();
+
+        if ($assessment) {
+            $assessmentId = $assessment->id;
+            $assessment->questions()->delete();
+            $assessment->submissions()->delete();
+            $assessment->delete();
+
+            ActivityLog::record(
+                'assessment_deleted',
+                "Administrator removed lesson assessment for \"{$resource->title}\"",
+                Auth::id(),
+                Assessment::class,
+                $assessmentId
+            );
+        }
+
+        return back()->with('success', 'Lesson assessment was removed successfully.');
     }
 
     /**

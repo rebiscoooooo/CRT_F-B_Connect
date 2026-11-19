@@ -6,6 +6,8 @@ import ImageViewer from '@/Components/ImageViewer';
 import PdfViewer from '@/Components/PdfViewer';
 import TextLessonViewer from '@/Components/TextLessonViewer';
 import Modal from '@/Components/Modal';
+import ManualAssessmentModal from '@/Components/ManualAssessmentModal';
+import ReviewerFlashcards from '@/Components/ReviewerFlashcards';
 import {
     ChevronRight,
     ArrowLeft,
@@ -33,6 +35,8 @@ import {
     ChevronUp,
     CheckCircle2,
     Clock,
+    Layers,
+    BookOpen,
 } from 'lucide-react';
 
 export default function ResourceShow({ resource, relatedResources = [], folders = [], assessment = null, studentCount = 0 }) {
@@ -44,8 +48,11 @@ export default function ResourceShow({ resource, relatedResources = [], folders 
     const [announceMessage, setAnnounceMessage] = useState('');
     const [isAnnouncing, setIsAnnouncing] = useState(false);
 
-    // Smart Assessment Quiz State
+    // Smart Assessment Quiz & Manual Reviewer State
     const [isSmartGenerateOpen, setIsSmartGenerateOpen] = useState(false);
+    const [isManualModalOpen, setIsManualModalOpen] = useState(false);
+    const [isDeleteAssessmentOpen, setIsDeleteAssessmentOpen] = useState(false);
+    const [assessmentViewTab, setAssessmentViewTab] = useState('list'); // 'list' | 'flashcards'
     const [isGenerating, setIsGenerating] = useState(false);
     const [showQuestionsPreview, setShowQuestionsPreview] = useState(false);
     const [genPassingPercentage, setGenPassingPercentage] = useState(assessment?.passing_percentage || 75);
@@ -72,6 +79,13 @@ export default function ResourceShow({ resource, relatedResources = [], folders 
     const handleToggleAssessmentStatus = () => {
         router.post(`/admin/resources/${resource.id}/assessment/toggle-status`, {}, {
             preserveScroll: true,
+        });
+    };
+
+    const handleDeleteAssessment = () => {
+        router.delete(`/admin/resources/${resource.id}/assessment`, {
+            preserveScroll: true,
+            onSuccess: () => setIsDeleteAssessmentOpen(false),
         });
     };
 
@@ -287,9 +301,19 @@ export default function ResourceShow({ resource, relatedResources = [], folders 
                                     onClick={() => setIsSmartGenerateOpen(true)}
                                     disabled={isGenerating}
                                     className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-xs disabled:opacity-50 cursor-pointer"
+                                    title="Generate or regenerate questions using Smart AI"
                                 >
                                     <Sparkles className="w-3.5 h-3.5 text-indigo-200" />
-                                    {assessment ? 'Regenerate 10 Questions' : 'Smart Generate 10 Questions'}
+                                    {assessment ? 'Regenerate (AI)' : 'Smart Generate (AI)'}
+                                </button>
+
+                                <button
+                                    onClick={() => setIsManualModalOpen(true)}
+                                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
+                                    title="Manually input questions, answer keys, or reviewer flashcards"
+                                >
+                                    <Layers className="w-3.5 h-3.5 text-amber-400" />
+                                    {assessment ? 'Edit Questions Manually' : 'Manual Input / Flashcards'}
                                 </button>
 
                                 {assessment && (
@@ -308,6 +332,14 @@ export default function ResourceShow({ resource, relatedResources = [], folders 
                                         >
                                             Submissions ({assessment.submissions?.length || 0})
                                         </Link>
+
+                                        <button
+                                            onClick={() => setIsDeleteAssessmentOpen(true)}
+                                            className="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                                            title="Remove or reset this quiz"
+                                        >
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                        </button>
                                     </>
                                 )}
                             </div>
@@ -339,80 +371,126 @@ export default function ResourceShow({ resource, relatedResources = [], folders 
 
                                 {/* Collapsible 10 Questions Preview Accordion */}
                                 <div className="rounded-2xl border border-slate-200 bg-slate-50/50 overflow-hidden">
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowQuestionsPreview(!showQuestionsPreview)}
-                                        className="w-full p-4 flex items-center justify-between text-left hover:bg-slate-100/70 transition-colors cursor-pointer"
-                                    >
-                                        <div className="flex items-center gap-2">
-                                            <ClipboardCheck className="w-4 h-4 text-indigo-600" />
+                                    <div className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white border-b border-slate-100">
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowQuestionsPreview(!showQuestionsPreview)}
+                                            className="flex items-center gap-2 text-left cursor-pointer group"
+                                        >
+                                            <ClipboardCheck className="w-4 h-4 text-indigo-600 group-hover:scale-110 transition-transform" />
                                             <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
                                                 Review All {assessment.questions?.length || 0} Questions &amp; Answer Keys
                                             </span>
+                                            <span className="text-xs text-slate-400">
+                                                {showQuestionsPreview ? <ChevronUp className="w-4 h-4 inline" /> : <ChevronDown className="w-4 h-4 inline" />}
+                                            </span>
+                                        </button>
+
+                                        <div className="flex items-center gap-2 flex-wrap">
+                                            {showQuestionsPreview && (
+                                                <div className="inline-flex p-0.5 rounded-lg bg-slate-100 border border-slate-200 text-[11px] font-bold">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setAssessmentViewTab('list')}
+                                                        className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
+                                                            assessmentViewTab === 'list'
+                                                                ? 'bg-white text-slate-900 shadow-2xs font-extrabold'
+                                                                : 'text-slate-500 hover:text-slate-900'
+                                                        }`}
+                                                    >
+                                                        List View
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setAssessmentViewTab('flashcards')}
+                                                        className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
+                                                            assessmentViewTab === 'flashcards'
+                                                                ? 'bg-white text-indigo-700 shadow-2xs font-extrabold'
+                                                                : 'text-slate-500 hover:text-slate-900'
+                                                        }`}
+                                                    >
+                                                        Flashcard Preview
+                                                    </button>
+                                                </div>
+                                            )}
+
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsManualModalOpen(true)}
+                                                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-colors cursor-pointer shadow-2xs"
+                                            >
+                                                <Edit3 className="w-3.5 h-3.5 text-amber-400" />
+                                                Edit Cards
+                                            </button>
                                         </div>
-                                        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
-                                            <span>{showQuestionsPreview ? 'Hide Details' : 'View Questions'}</span>
-                                            {showQuestionsPreview ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                                        </div>
-                                    </button>
+                                    </div>
 
                                     {showQuestionsPreview && (
-                                        <div className="p-4 sm:p-6 border-t border-slate-200 bg-white space-y-5">
-                                            {assessment.questions?.map((q, idx) => (
-                                                <div key={q.id || idx} className="p-4 rounded-2xl border border-slate-200/80 bg-slate-50/40 space-y-3">
-                                                    <div className="flex items-start justify-between gap-3">
-                                                        <div className="flex items-start gap-2.5">
-                                                            <span className="w-6 h-6 rounded-lg bg-indigo-100 text-indigo-800 font-black text-xs flex items-center justify-center shrink-0">
-                                                                {q.order || idx + 1}
-                                                            </span>
-                                                            <h4 className="font-bold text-slate-900 text-xs sm:text-sm leading-snug">
-                                                                {q.question_text}
-                                                            </h4>
-                                                        </div>
-                                                        <span className="text-[11px] font-semibold text-slate-400 shrink-0">
-                                                            {q.points || 1} pt
-                                                        </span>
-                                                    </div>
-
-                                                    {/* Options Grid */}
-                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-                                                        {q.options?.map((opt) => {
-                                                            const isCorrect = String(opt.key).toUpperCase() === String(q.correct_answer).toUpperCase();
-                                                            return (
-                                                                <div
-                                                                    key={opt.key}
-                                                                    className={`p-2.5 rounded-xl border text-xs flex items-start gap-2 transition-all ${
-                                                                        isCorrect
-                                                                            ? 'bg-emerald-50 border-emerald-300 text-emerald-950 font-bold ring-1 ring-emerald-400/40'
-                                                                            : 'bg-white border-slate-200 text-slate-600'
-                                                                    }`}
-                                                                >
-                                                                    <span className={`w-5 h-5 rounded-md text-[11px] font-bold flex items-center justify-center shrink-0 ${
-                                                                        isCorrect ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-500'
-                                                                    }`}>
-                                                                        {opt.key}
-                                                                    </span>
-                                                                    <span className="leading-snug">{opt.text}</span>
-                                                                    {isCorrect && (
-                                                                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 ml-auto mt-0.5" />
-                                                                    )}
-                                                                </div>
-                                                            );
-                                                        })}
-                                                    </div>
-
-                                                    {/* Pedagogical Explanation */}
-                                                    {q.explanation && (
-                                                        <div className="p-2.5 rounded-xl bg-indigo-50/60 border border-indigo-100 text-[11px] text-indigo-900 flex items-start gap-2">
-                                                            <Sparkles className="w-3.5 h-3.5 text-indigo-600 shrink-0 mt-0.5" />
-                                                            <div>
-                                                                <strong className="font-bold">Pedagogical Rationale: </strong>
-                                                                {q.explanation}
-                                                            </div>
-                                                        </div>
-                                                    )}
+                                        <div className="p-4 sm:p-6 bg-white space-y-5">
+                                            {assessmentViewTab === 'flashcards' ? (
+                                                <div className="max-w-2xl mx-auto py-2">
+                                                    <ReviewerFlashcards
+                                                        questions={assessment.questions}
+                                                        title={assessment.title}
+                                                    />
                                                 </div>
-                                            ))}
+                                            ) : (
+                                                assessment.questions?.map((q, idx) => (
+                                                    <div key={q.id || idx} className="p-4 rounded-2xl border border-slate-200/80 bg-slate-50/40 space-y-3">
+                                                        <div className="flex items-start justify-between gap-3">
+                                                            <div className="flex items-start gap-2.5">
+                                                                <span className="w-6 h-6 rounded-lg bg-indigo-100 text-indigo-800 font-black text-xs flex items-center justify-center shrink-0">
+                                                                    {q.order || idx + 1}
+                                                                </span>
+                                                                <h4 className="font-bold text-slate-900 text-xs sm:text-sm leading-snug">
+                                                                    {q.question_text}
+                                                                </h4>
+                                                            </div>
+                                                            <span className="text-[11px] font-semibold text-slate-400 shrink-0">
+                                                                {q.points || 1} pt
+                                                            </span>
+                                                        </div>
+
+                                                        {/* Options Grid */}
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                                                            {q.options?.map((opt) => {
+                                                                const isCorrect = String(opt.key).toUpperCase() === String(q.correct_answer).toUpperCase();
+                                                                return (
+                                                                    <div
+                                                                        key={opt.key}
+                                                                        className={`p-2.5 rounded-xl border text-xs flex items-start gap-2 transition-all ${
+                                                                            isCorrect
+                                                                                ? 'bg-emerald-50 border-emerald-300 text-emerald-950 font-bold ring-1 ring-emerald-400/40'
+                                                                                : 'bg-white border-slate-200 text-slate-600'
+                                                                        }`}
+                                                                    >
+                                                                        <span className={`w-5 h-5 rounded-md text-[11px] font-bold flex items-center justify-center shrink-0 ${
+                                                                            isCorrect ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-500'
+                                                                        }`}>
+                                                                            {opt.key}
+                                                                        </span>
+                                                                        <span className="leading-snug">{opt.text}</span>
+                                                                        {isCorrect && (
+                                                                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 ml-auto mt-0.5" />
+                                                                        )}
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+
+                                                        {/* Pedagogical Explanation */}
+                                                        {q.explanation && (
+                                                            <div className="p-2.5 rounded-xl bg-indigo-50/60 border border-indigo-100 text-[11px] text-indigo-900 flex items-start gap-2">
+                                                                <Sparkles className="w-3.5 h-3.5 text-indigo-600 shrink-0 mt-0.5" />
+                                                                <div>
+                                                                    <strong className="font-bold">Pedagogical Rationale: </strong>
+                                                                    {q.explanation}
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))
+                                            )}
                                         </div>
                                     )}
                                 </div>
@@ -480,7 +558,7 @@ export default function ResourceShow({ resource, relatedResources = [], folders 
                                 </div>
                             </div>
                         ) : (
-                            <div className="p-8 sm:p-12 text-center space-y-4">
+                            <div className="p-8 sm:p-12 text-center space-y-5">
                                 <div className="w-14 h-14 rounded-3xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center mx-auto shadow-xs">
                                     <Sparkles className="w-7 h-7" />
                                 </div>
@@ -489,16 +567,25 @@ export default function ResourceShow({ resource, relatedResources = [], folders 
                                         No Assessment Attached to this Lesson Yet
                                     </h4>
                                     <p className="text-xs text-slate-500">
-                                        The Smart Assessment Engine will synthesize 10 multiple-choice questions tailored to "{resource.title}" with answer keys and pedagogical rationales.
+                                        Choose how you want to create questions for students to practice on: synthesize automatically with AI, or manually input custom questions and answer keys just like reviewer flashcards.
                                     </p>
                                 </div>
-                                <button
-                                    onClick={() => setIsSmartGenerateOpen(true)}
-                                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-md shadow-indigo-500/20 cursor-pointer"
-                                >
-                                    <Sparkles className="w-4 h-4 text-indigo-200" />
-                                    Generate 10-Question Smart Assessment
-                                </button>
+                                <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
+                                    <button
+                                        onClick={() => setIsSmartGenerateOpen(true)}
+                                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-md shadow-indigo-500/20 cursor-pointer"
+                                    >
+                                        <Sparkles className="w-4 h-4 text-indigo-200" />
+                                        Smart Generate 10 Questions (AI)
+                                    </button>
+                                    <button
+                                        onClick={() => setIsManualModalOpen(true)}
+                                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-md shadow-slate-900/20 cursor-pointer"
+                                    >
+                                        <Layers className="w-4 h-4 text-amber-400" />
+                                        Manual Input (Reviewer Cards / Q&amp;A)
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -816,6 +903,39 @@ export default function ResourceShow({ resource, relatedResources = [], folders 
                         </button>
                     </div>
                 </form>
+            </Modal>
+
+            {/* Manual Assessment & Reviewer Flashcard Modal */}
+            <ManualAssessmentModal
+                isOpen={isManualModalOpen}
+                onClose={() => setIsManualModalOpen(false)}
+                resource={resource}
+                initialAssessment={assessment}
+            />
+
+            {/* Delete Assessment Confirmation Modal */}
+            <Modal isOpen={isDeleteAssessmentOpen} onClose={() => setIsDeleteAssessmentOpen(false)} title="Reset Lesson Assessment">
+                <div className="space-y-4">
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                        Are you sure you want to delete and reset the assessment for <strong className="text-slate-900">{resource.title}</strong>? All questions, answer keys, and student submission attempts associated with this lesson will be permanently removed.
+                    </p>
+                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+                        <button
+                            type="button"
+                            onClick={() => setIsDeleteAssessmentOpen(false)}
+                            className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleDeleteAssessment}
+                            className="px-5 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl"
+                        >
+                            Delete Assessment
+                        </button>
+                    </div>
+                </div>
             </Modal>
         </AppLayout>
     );

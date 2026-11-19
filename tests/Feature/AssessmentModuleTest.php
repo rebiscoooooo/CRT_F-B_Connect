@@ -292,4 +292,75 @@ class AssessmentModuleTest extends TestCase
 
         $response->assertRedirect(route('student.dashboard'));
     }
+
+    public function test_admin_can_manually_create_or_update_assessment_with_questions_and_answer_keys(): void
+    {
+        $payload = [
+            'title' => 'Espresso Manual Reviewer Quiz',
+            'description' => 'Manual flashcard reviewer questions for testing extraction precision.',
+            'passing_percentage' => 80,
+            'time_limit_minutes' => 15,
+            'is_published' => true,
+            'questions' => [
+                [
+                    'question_text' => 'What is the optimal brew ratio for traditional Italian espresso?',
+                    'question_type' => 'multiple_choice',
+                    'options' => [
+                        ['key' => 'A', 'text' => '1:1 (Ristretto)'],
+                        ['key' => 'B', 'text' => '1:2 (Normale)'],
+                        ['key' => 'C', 'text' => '1:3 (Lungo)'],
+                        ['key' => 'D', 'text' => '1:5'],
+                    ],
+                    'correct_answer' => 'B',
+                    'points' => 1,
+                    'explanation' => '1:2 brew ratio is the standard Normale extraction benchmark.',
+                ],
+                [
+                    'question_text' => 'Tamping pressure must be perfectly level to prevent channeling.',
+                    'question_type' => 'true_false',
+                    'options' => [
+                        ['key' => 'A', 'text' => 'True'],
+                        ['key' => 'B', 'text' => 'False'],
+                    ],
+                    'correct_answer' => 'A',
+                    'points' => 1,
+                    'explanation' => 'Uneven tamping causes water to flow through path of least resistance (channeling).',
+                ],
+            ],
+        ];
+
+        $response = $this->actingAs($this->admin)->post("/admin/resources/{$this->resource->id}/assessment", $payload);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('assessments', [
+            'resource_id' => $this->resource->id,
+            'title' => 'Espresso Manual Reviewer Quiz',
+            'passing_percentage' => 80,
+            'time_limit_minutes' => 15,
+            'is_published' => true,
+        ]);
+
+        $this->assertDatabaseHas('assessment_questions', [
+            'question_text' => 'What is the optimal brew ratio for traditional Italian espresso?',
+            'correct_answer' => 'B',
+        ]);
+
+        $this->assertDatabaseHas('assessment_questions', [
+            'question_text' => 'Tamping pressure must be perfectly level to prevent channeling.',
+            'correct_answer' => 'A',
+        ]);
+    }
+
+    public function test_admin_can_destroy_assessment(): void
+    {
+        $response = $this->actingAs($this->admin)->delete("/admin/resources/{$this->resource->id}/assessment");
+
+        $response->assertRedirect();
+        $this->assertDatabaseMissing('assessments', [
+            'id' => $this->assessment->id,
+        ]);
+        $this->assertDatabaseMissing('assessment_questions', [
+            'assessment_id' => $this->assessment->id,
+        ]);
+    }
 }

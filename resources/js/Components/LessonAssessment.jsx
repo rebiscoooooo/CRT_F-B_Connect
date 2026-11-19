@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { router } from '@inertiajs/react';
+import ReviewerFlashcards from '@/Components/ReviewerFlashcards';
 import {
     CheckCircle2,
     XCircle,
@@ -14,6 +15,7 @@ import {
     X,
     ChevronDown,
     Sparkles,
+    Layers,
 } from 'lucide-react';
 
 export default function LessonAssessment({ resource, assessment, initialSubmission }) {
@@ -22,6 +24,7 @@ export default function LessonAssessment({ resource, assessment, initialSubmissi
     const [answers, setAnswers] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [activeMode, setActiveMode] = useState('quiz'); // 'quiz' | 'flashcards'
 
     if (!assessment || !assessment.questions || assessment.questions.length === 0) {
         return null;
@@ -125,9 +128,66 @@ export default function LessonAssessment({ resource, assessment, initialSubmissi
                 </div>
             </div>
 
-            {/* Body: Result view or Quiz form */}
+            {/* Reviewer / Exam Mode Switcher Tabs */}
+            <div className="bg-slate-50 border-b border-slate-200 px-6 sm:px-8 py-3 flex items-center justify-between gap-3 flex-wrap">
+                <div className="inline-flex p-1 rounded-xl bg-slate-200/80 border border-slate-300/60 text-xs font-bold">
+                    <button
+                        type="button"
+                        onClick={() => setActiveMode('flashcards')}
+                        className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg transition-all cursor-pointer ${
+                            activeMode === 'flashcards'
+                                ? 'bg-white text-indigo-700 shadow-xs font-extrabold'
+                                : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                    >
+                        <Layers className="w-3.5 h-3.5 text-indigo-600" />
+                        Reviewer Flashcards (Practice)
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setActiveMode('quiz')}
+                        className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg transition-all cursor-pointer ${
+                            activeMode === 'quiz'
+                                ? 'bg-white text-blue-700 shadow-xs font-extrabold'
+                                : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                    >
+                        <BookOpen className="w-3.5 h-3.5 text-blue-600" />
+                        {hasSubmitted ? 'Quiz Results & Review' : 'Take Knowledge Quiz'}
+                    </button>
+                </div>
+
+                <span className="text-[11px] font-semibold text-slate-500">
+                    {activeMode === 'flashcards'
+                        ? 'Practice and flip cards freely before testing your score.'
+                        : hasSubmitted
+                        ? 'Graded assessment submission.'
+                        : 'Answer all questions to submit for grading.'}
+                </span>
+            </div>
+
+            {/* Body: Flashcards Reviewer or Quiz form */}
             <div className="p-6 sm:p-8">
-                {hasSubmitted ? (
+                {activeMode === 'flashcards' ? (
+                    <div className="max-w-3xl mx-auto space-y-6">
+                        <ReviewerFlashcards questions={questions} title={assessment.title} />
+
+                        <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div className="text-xs text-blue-950">
+                                <strong className="font-bold">Finished reviewing the flashcards?</strong>
+                                <p className="text-blue-800 text-[11px]">Take the official lesson assessment to record your grade.</p>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setActiveMode('quiz')}
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs shrink-0 cursor-pointer"
+                            >
+                                <BookOpen className="w-3.5 h-3.5" />
+                                {hasSubmitted ? 'View Graded Results' : 'Take Knowledge Quiz Now'}
+                            </button>
+                        </div>
+                    </div>
+                ) : hasSubmitted ? (
                     /* SUBMISSION RESULT VIEW */
                     <div className="space-y-6">
                         <div className={`p-6 sm:p-7 rounded-2xl border ${

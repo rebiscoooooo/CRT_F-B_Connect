@@ -552,7 +552,7 @@ export default function ResourceCreate({ categories = [], folders = [], studentC
                                             </span>
                                         </div>
                                         <p className="text-[11px] text-slate-500 mt-0.5">
-                                            Automatically synthesizes a comprehensive 10-question multiple-choice quiz based on this uploaded material, complete with answer keys and pedagogical explanations.
+                                            Automatically synthesizes a comprehensive 10-question multiple-choice quiz based on this uploaded material, complete with answer keys and pedagogical explanations. (Leave unchecked if you prefer to manually author custom questions &amp; reviewer flashcards).
                                         </p>
                                     </div>
                                 </label>
