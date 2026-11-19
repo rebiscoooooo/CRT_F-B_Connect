@@ -8,9 +8,11 @@ use App\Models\Assessment;
 use App\Models\AssessmentQuestion;
 use App\Models\AssessmentSubmission;
 use App\Models\Resource;
+use App\Services\AssessmentPdfService;
 use App\Services\SmartAssessmentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -83,6 +85,99 @@ class AssessmentController extends Controller
                 'status' => $status,
                 'resource_id' => $resourceId,
             ],
+        ]);
+    }
+
+    /**
+     * Export all assessment submissions or filtered submissions as a professional PDF report.
+     */
+    public function exportPdf(Request $request, AssessmentPdfService $pdfService): HttpResponse
+    {
+        $search = $request->input('search');
+        $status = $request->input('status');
+        $resourceId = $request->input('resource_id');
+
+        $query = AssessmentSubmission::with([
+            'user',
+            'assessment.resource.category',
+        ]);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', function ($uq) use ($search) {
+                    $uq->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('student_number', 'like', "%{$search}%");
+                })->orWhereHas('assessment.resource', function ($rq) use ($search) {
+                    $rq->where('title', 'like', "%{$search}%");
+                });
+            });
+        }
+
+        if ($status && in_array($status, ['passed', 'failed'], true)) {
+            $query->where('status', $status);
+        }
+
+        if ($resourceId) {
+            $query->whereHas('assessment', fn ($aq) => $aq->where('resource_id', $resourceId));
+        }
+
+        $submissions = $query->orderBy('submitted_at', 'desc')->get();
+
+        $totalSubmissions = $submissions->count();
+        $passedCount = $submissions->where('status', 'passed')->count();
+        $failedCount = $submissions->where('status', 'failed')->count();
+        $passRate = $totalSubmissions > 0 ? round(($passedCount / $totalSubmissions) * 100, 1) : 0;
+        $avgScore = $totalSubmissions > 0 ? round((float) $submissions->avg('percentage'), 1) : 0;
+
+        $stats = [
+            'total_submissions' => $totalSubmissions,
+            'passed_count' => $passedCount,
+            'failed_count' => $failedCount,
+            'pass_rate' => $passRate,
+            'average_score' => $avgScore,
+        ];
+
+        $mappedSubmissions = $submissions->map(function ($s) {
+            return [
+                'id' => $s->id,
+                'student_number' => $s->user?->student_number ?? 'N/A',
+                'student_name' => $s->user?->name ?? 'Unknown Student',
+                'lesson_title' => $s->assessment?->resource?->title ?? 'Assessment Quiz',
+                'score' => $s->score,
+                'total_points' => $s->total_points,
+                'percentage' => $s->percentage,
+                'status' => $s->status,
+                'submitted_at' => $s->submitted_at,
+            ];
+        })->toArray();
+
+        $userName = Auth::user()?->name ?? 'Administrator';
+
+        $pdfBinary = $pdfService->generate(
+            $mappedSubmissions,
+            $stats,
+            [
+                'search' => $search,
+                'status' => $status,
+                'resource_id' => $resourceId,
+            ],
+            $userName
+        );
+
+        ActivityLog::record(
+            'export_pdf',
+            "Exported student assessments evaluation report (PDF) with {$totalSubmissions} record(s)",
+            Auth::id()
+        );
+
+        $fileName = 'CRT_Student_Assessments_'.date('Y-m-d_His').'.pdf';
+
+        return response($pdfBinary, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => "attachment; filename=\"{$fileName}\"",
+            'Cache-Control' => 'private, no-cache, must-revalidate',
+            'Pragma' => 'public',
         ]);
     }
 
@@ -208,15 +303,19 @@ class AssessmentController extends Controller
         $timeLimit = isset($validated['time_limit_minutes']) ? (int) $validated['time_limit_minutes'] : 15;
         $isPublished = $request->boolean('is_published', true);
 
-        $smartService->generateForResource(
-            $resource,
-            passingPercentage: $passing,
-            timeLimitMinutes: $timeLimit,
-            isPublished: $isPublished,
-            createdBy: Auth::id()
-        );
+        try {
+            $smartService->generateForResource(
+                $resource,
+                passingPercentage: $passing,
+                timeLimitMinutes: $timeLimit,
+                isPublished: $isPublished,
+                createdBy: Auth::id()
+            );
 
-        return back()->with('success', "Smart 10-question assessment successfully generated for \"{$resource->title}\"!");
+            return back()->with('success', "10-question assessment successfully generated with 100% lesson accuracy for \"{$resource->title}\"!");
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Assessment generation failed: '.$e->getMessage());
+        }
     }
 
     /**

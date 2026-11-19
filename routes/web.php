@@ -99,6 +99,7 @@ Route::middleware(['auth', 'active'])->group(function () {
 
         // Student Assessments & Exam Results
         Route::get('/assessments', [AdminAssessmentController::class, 'index'])->name('assessments.index');
+        Route::get('/assessments/export-pdf', [AdminAssessmentController::class, 'exportPdf'])->name('assessments.exportPdf');
         Route::get('/assessments/{submission}', [AdminAssessmentController::class, 'show'])->name('assessments.show');
         Route::delete('/assessments/{submission}', [AdminAssessmentController::class, 'destroySubmission'])->name('assessments.destroySubmission');
         Route::post('/resources/{resource}/assessment', [AdminAssessmentController::class, 'saveAssessment'])->name('resources.assessment.save');

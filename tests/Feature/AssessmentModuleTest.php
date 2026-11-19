@@ -261,4 +261,35 @@ class AssessmentModuleTest extends TestCase
 
         $response->assertRedirect(route('student.dashboard'));
     }
+
+    public function test_admin_can_export_assessments_to_pdf(): void
+    {
+        AssessmentSubmission::create([
+            'assessment_id' => $this->assessment->id,
+            'user_id' => $this->student->id,
+            'score' => 2,
+            'total_points' => 2,
+            'percentage' => 100.0,
+            'status' => 'passed',
+            'answers' => ['1' => 'B', '2' => 'A'],
+            'submitted_at' => now(),
+        ]);
+
+        $response = $this->actingAs($this->admin)->get('/admin/assessments/export-pdf');
+
+        $response->assertOk();
+        $this->assertEquals('application/pdf', $response->headers->get('Content-Type'));
+        $this->assertStringContainsString('attachment; filename="CRT_Student_Assessments_', (string) $response->headers->get('Content-Disposition'));
+
+        $content = $response->getContent();
+        $this->assertStringStartsWith('%PDF-1.4', $content);
+        $this->assertStringEndsWith('%%EOF', trim($content));
+    }
+
+    public function test_students_cannot_export_assessments_pdf(): void
+    {
+        $response = $this->actingAs($this->student)->get('/admin/assessments/export-pdf');
+
+        $response->assertRedirect(route('student.dashboard'));
+    }
 }

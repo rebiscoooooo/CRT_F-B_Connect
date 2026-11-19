@@ -20,6 +20,7 @@ import {
     ChevronRight,
     TrendingUp,
     Users,
+    FileDown,
 } from 'lucide-react';
 
 export default function AdminAssessmentsIndex({ submissions, statistics, resources = [], filters = {} }) {
@@ -82,13 +83,26 @@ export default function AdminAssessmentsIndex({ submissions, statistics, resourc
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
+                        <a
+                            href={`/admin/assessments/export-pdf?${new URLSearchParams({
+                                ...(search ? { search } : {}),
+                                ...(status ? { status } : {}),
+                                ...(resourceId ? { resource_id: resourceId } : {}),
+                            }).toString()}`}
+                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-xs font-bold text-white shadow-sm transition-all duration-200 cursor-pointer active:scale-95"
+                            title="Export all student assessment results and records as a PDF document"
+                        >
+                            <FileDown className="w-4 h-4" />
+                            <span>Export PDF</span>
+                        </a>
+
                         <Link
                             href="/admin/resources"
                             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 shadow-2xs transition-colors"
                         >
                             <BookOpen className="w-3.5 h-3.5 text-blue-600" />
-                            Manage Lesson Materials
+                            <span>Manage Lessons</span>
                         </Link>
                     </div>
                 </div>

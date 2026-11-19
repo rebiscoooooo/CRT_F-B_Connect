@@ -8,6 +8,7 @@ use App\Models\AssessmentQuestion;
 use App\Models\Resource;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class SmartAssessmentService
@@ -74,7 +75,7 @@ class SmartAssessmentService
     }
 
     /**
-     * Try generating 10 questions using the Google Gemini API.
+     * Try generating 10 questions using Google Gemini API with multimodal document grounding.
      *
      * @return array<int, array{question_text: string, options: array, correct_answer: string, points: int, explanation: string}>|null
      */
@@ -85,30 +86,71 @@ class SmartAssessmentService
             return null;
         }
 
-        $model = config('services.gemini.model', 'gemini-2.5-flash');
+        // Prioritized list of models: ultra-fast flash-lite models followed by previews and standard flash
+        $configuredModel = config('services.gemini.model');
+        $candidateModels = array_values(array_unique(array_filter([
+            $configuredModel,
+            'gemini-3.5-flash-lite',
+            'gemini-3.1-flash-lite',
+            'gemini-3-flash-preview',
+            'gemini-3.8-flash',
+        ])));
 
-        // Extract context from resource
+        // Build multimodal payload parts
+        $parts = [];
+
+        // Check if an attached PDF or illustration exists and attach as inline_data
+        if (! empty($resource->file_path)) {
+            try {
+                $storage = Storage::disk('public');
+                if ($storage->exists($resource->file_path)) {
+                    $fullPath = $storage->path($resource->file_path);
+                    $fileSize = file_exists($fullPath) ? filesize($fullPath) : 0;
+                    $ext = strtolower(pathinfo($resource->file_path, PATHINFO_EXTENSION));
+
+                    // For files <= 18MB, send directly to Gemini via inline_data
+                    if ($fileSize > 0 && $fileSize <= 18 * 1024 * 1024) {
+                        if ($ext === 'pdf' || $resource->resource_type === 'pdf' || str_contains((string) $resource->mime_type, 'pdf')) {
+                            $parts[] = [
+                                'inline_data' => [
+                                    'mime_type' => 'application/pdf',
+                                    'data' => base64_encode(file_get_contents($fullPath)),
+                                ],
+                            ];
+                        } elseif (in_array($ext, ['png', 'jpg', 'jpeg', 'webp']) || $resource->resource_type === 'illustration') {
+                            $mime = match ($ext) {
+                                'png' => 'image/png',
+                                'webp' => 'image/webp',
+                                default => 'image/jpeg',
+                            };
+                            $parts[] = [
+                                'inline_data' => [
+                                    'mime_type' => $mime,
+                                    'data' => base64_encode(file_get_contents($fullPath)),
+                                ],
+                            ];
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {
+                Log::warning("Could not attach file payload for resource {$resource->id}: {$e->getMessage()}");
+            }
+        }
+
+        // Extract textual context from resource
         $contextText = $this->extractResourceText($resource);
 
         $prompt = <<<EOT
-You are an expert hospitality and culinary educator specializing in Food and Beverage Services (TESDA NC II / Hotel and Restaurant Management).
-Generate exactly 10 rigorous, practical, high-quality multiple-choice questions with answer keys and explanations based on the following learning material:
-
-RESOURCE DETAILS:
-- Title: {$resource->title}
-- Material Type: {$resource->resource_type}
-- Category: {$resource->category?->name}
-- Curriculum Folder: {$resource->folder?->name}
-- Description & Objectives: {$resource->description}
-- Additional Lesson Content:
-{$contextText}
-
-REQUIREMENTS:
-1. Generate EXACTLY 10 distinct multiple-choice questions directly assessing the core concepts, safety protocols, sequence of service, equipment handling, and competencies of this lesson.
-2. Provide 4 realistic options per question (keys: "A", "B", "C", "D") with plausible industry distractors.
-3. Distribute the correct answers across A, B, C, and D.
-4. Provide a clear pedagogical explanation (1-2 sentences) for each question explaining why the correct answer is standard procedure.
-5. Return ONLY a valid JSON array of 10 objects conforming to this schema:
+You are an expert academic curriculum evaluator.
+STRICT FACTUAL GROUNDING MANDATE (ZERO HALLUCINATION):
+1. You MUST generate questions and answer keys that are 100% strictly derived from, explicitly mentioned in, and verified by this lesson material (the attached document, image diagram, or lesson notes below).
+2. DO NOT invent, extrapolate, assume, or introduce outside facts, concepts, or procedures that are not explicitly present in the provided lesson.
+3. Every question must test specific facts, rules, procedures, definitions, equipment, steps, or code presented in this exact lesson.
+4. Generate EXACTLY 10 distinct multiple-choice questions.
+5. Each question must provide 4 realistic options (keys: "A", "B", "C", "D"), with only ONE correct answer verified directly by the lesson.
+6. Distribute the correct answers across A, B, C, and D.
+7. Provide a clear pedagogical explanation (1-2 sentences) directly citing or referencing where this is stated in the lesson material.
+8. Return ONLY a valid JSON array of 10 objects conforming to this schema:
 [
   {
     "question_text": "Question statement here?",
@@ -120,52 +162,61 @@ REQUIREMENTS:
     ],
     "correct_answer": "B",
     "points": 1,
-    "explanation": "Why B is correct..."
+    "explanation": "Citation/explanation why B is correct based on the lesson..."
   }
 ]
+
+RESOURCE DETAILS:
+- Title: {$resource->title}
+- Material Type: {$resource->resource_type}
+- Category: {$resource->category?->name}
+- Curriculum Folder: {$resource->folder?->name}
+- External Link/Video Reference: {$resource->external_url}
+- Description & Objectives: {$resource->description}
+- Additional Lesson Content / Text Notes:
+{$contextText}
 EOT;
 
-        try {
-            $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}";
+        $parts[] = ['text' => $prompt];
 
-            $response = Http::timeout(25)->post($endpoint, [
-                'contents' => [
-                    [
-                        'parts' => [
-                            ['text' => $prompt],
+        foreach ($candidateModels as $model) {
+            try {
+                $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}";
+
+                $response = Http::timeout(45)->post($endpoint, [
+                    'contents' => [
+                        [
+                            'parts' => $parts,
                         ],
                     ],
-                ],
-                'generationConfig' => [
-                    'response_mime_type' => 'application/json',
-                    'temperature' => 0.4,
-                ],
-            ]);
-
-            if ($response->successful()) {
-                $body = $response->json();
-                $rawText = $body['candidates'][0]['content']['parts'][0]['text'] ?? null;
-
-                if ($rawText) {
-                    $decoded = json_decode($rawText, true);
-
-                    // If wrapped in an object like {"questions": [...]}
-                    if (isset($decoded['questions']) && is_array($decoded['questions'])) {
-                        $decoded = $decoded['questions'];
-                    }
-
-                    if (is_array($decoded) && count($decoded) >= 10) {
-                        return $this->validateAndFormatQuestions($decoded);
-                    }
-                }
-            } else {
-                Log::warning('Gemini API request failed for smart assessment', [
-                    'status' => $response->status(),
-                    'body' => $response->body(),
+                    'generationConfig' => [
+                        'response_mime_type' => 'application/json',
+                        'temperature' => 0.2,
+                    ],
                 ]);
+
+                if ($response->successful()) {
+                    $body = $response->json();
+                    $rawText = $body['candidates'][0]['content']['parts'][0]['text'] ?? null;
+
+                    if ($rawText) {
+                        $decoded = json_decode($rawText, true);
+
+                        // If wrapped in an object like {"questions": [...]}
+                        if (isset($decoded['questions']) && is_array($decoded['questions'])) {
+                            $decoded = $decoded['questions'];
+                        }
+
+                        if (is_array($decoded) && count($decoded) >= 10) {
+                            return $this->validateAndFormatQuestions($decoded);
+                        }
+                    }
+                } else {
+                    Log::warning("Gemini model {$model} returned status {$response->status()}: ".substr($response->body(), 0, 150));
+                }
+            } catch (\Throwable $e) {
+                Log::warning("Gemini model {$model} threw exception: {$e->getMessage()}");
             }
-        } catch (\Throwable $e) {
-            Log::warning('Gemini API call threw exception: '.$e->getMessage());
         }
 
         return null;
