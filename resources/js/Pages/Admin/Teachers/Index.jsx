@@ -476,6 +476,14 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
             {/* Modal: Add Teacher / Admin */}
             <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Add Teacher / Administrator">
                 <form onSubmit={handleAddSubmit} className="space-y-4">
+                    {/* Automated Email Notice */}
+                    <div className="p-3 bg-blue-50/80 border border-blue-200/80 rounded-2xl flex items-start gap-2.5">
+                        <Mail className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                        <div className="text-[11px] text-blue-900 leading-normal">
+                            <span className="font-bold">Automated Email Notification:</span> An onboarding email with login credentials (email and temporary password) will be automatically sent to the registered email address upon submission.
+                        </div>
+                    </div>
+
                     {/* Role Selection */}
                     <div>
                         <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">

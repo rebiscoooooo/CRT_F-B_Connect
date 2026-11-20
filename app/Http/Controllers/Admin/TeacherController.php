@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\StaffAccountRegisteredMail;
 use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -104,6 +107,12 @@ class TeacherController extends Controller
 
         $roleTitle = $user->role === 'admin' ? 'Administrator' : 'Teacher / Instructor';
 
+        try {
+            Mail::to($user->email)->send(new StaffAccountRegisteredMail($user, $validated['password'], Auth::user()));
+        } catch (\Throwable $e) {
+            Log::warning("Failed sending staff registration email to {$user->email}: ".$e->getMessage());
+        }
+
         ActivityLog::record(
             'created',
             "Added {$roleTitle} account for {$user->name} ({$user->email})",
@@ -112,7 +121,7 @@ class TeacherController extends Controller
             $user->id
         );
 
-        return back()->with('success', "{$roleTitle} \"{$user->name}\" registered successfully!");
+        return back()->with('success', "{$roleTitle} \"{$user->name}\" registered successfully! Login credentials have been emailed to {$user->email}.");
     }
 
     /**

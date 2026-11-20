@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Mail\StaffAccountRegisteredMail;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class TeacherManagementTest extends TestCase
@@ -59,6 +61,8 @@ class TeacherManagementTest extends TestCase
 
     public function test_admin_can_create_new_teacher_account(): void
     {
+        Mail::fake();
+
         $response = $this->actingAs($this->admin)->post('/admin/teachers', [
             'first_name' => 'Rolando',
             'middle_name' => 'Cruz',
@@ -86,10 +90,19 @@ class TeacherManagementTest extends TestCase
             'user_id' => $this->admin->id,
             'action' => 'created',
         ]);
+
+        Mail::assertSent(StaffAccountRegisteredMail::class, function ($mail) use ($createdUser) {
+            return $mail->hasTo('rolando.villanueva@crt.edu.ph')
+                && $mail->user->id === $createdUser->id
+                && $mail->plainPassword === 'SecurePass2026'
+                && $mail->creator->id === $this->admin->id;
+        });
     }
 
     public function test_admin_can_create_another_admin_account(): void
     {
+        Mail::fake();
+
         $response = $this->actingAs($this->admin)->post('/admin/teachers', [
             'first_name' => 'Beatriz',
             'middle_name' => null,
@@ -107,6 +120,31 @@ class TeacherManagementTest extends TestCase
             'role' => 'admin',
             'status' => 'active',
         ]);
+
+        Mail::assertSent(StaffAccountRegisteredMail::class, function ($mail) {
+            return $mail->hasTo('beatriz.navarro@crt.edu.ph')
+                && $mail->plainPassword === 'AdminMaster2026'
+                && $mail->user->role === 'admin';
+        });
+    }
+
+    public function test_staff_account_registered_mail_renders_correctly(): void
+    {
+        $teacher = User::factory()->create([
+            'role' => 'teacher',
+            'status' => 'active',
+            'name' => 'Chef Rolando Villanueva',
+            'email' => 'rolando.test@crt.edu.ph',
+        ]);
+
+        $mail = new StaffAccountRegisteredMail($teacher, 'TemporaryPass123', $this->admin);
+        $rendered = $mail->render();
+
+        $this->assertStringContainsString('Chef Rolando Villanueva', $rendered);
+        $this->assertStringContainsString('rolando.test@crt.edu.ph', $rendered);
+        $this->assertStringContainsString('TemporaryPass123', $rendered);
+        $this->assertStringContainsString('Instructor / Faculty', $rendered);
+        $this->assertStringContainsString('Sign In to Staff Portal', $rendered);
     }
 
     public function test_admin_can_update_teacher_details(): void

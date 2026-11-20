@@ -40,7 +40,7 @@ export default function GuestLayout({ children }) {
             </div>
 
             <div className="mt-8 text-center text-xs text-slate-400 z-10">
-                <p>College of Research and Technology • Food and Beverage Department</p>
+                <p>College of Research and Technology • Bachelor of Technical Vocational Teachers Education (BTVTE)</p>
             </div>
 
             <Toast />
