@@ -7,8 +7,12 @@ use App\Models\SystemNotification;
 use App\Models\SystemSetting;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
+use Inertia\Response;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller
@@ -106,7 +110,7 @@ class SocialAuthController extends Controller
                 : redirect()->intended(route('student.dashboard'))->with('success', "Signed in to your existing account ({$user->email}). Welcome back, {$user->name}!");
         }
 
-        // --- New user via Google: register as a pending student ---
+        // --- New user via Google: complete profile before submitting for approval ---
         $allowRegistration = SystemSetting::get('allow_registration', '1') === '1';
         if (! $allowRegistration) {
             return redirect()->route('login')->withErrors([
@@ -121,29 +125,95 @@ class SocialAuthController extends Controller
 
         $nameParts = explode(' ', $rawName, 2);
         $firstName = $nameParts[0] ?? $rawName;
-        $lastName = $nameParts[1] ?? 'Student';
+        $lastName = $nameParts[1] ?? '';
 
-        // Generate a provisional student ID
-        $provisionalStudentNumber = 'CRT-'.date('Y').'-'.str_pad((string) random_int(1000, 9999), 4, '0', STR_PAD_LEFT);
-        while (User::where('student_number', $provisionalStudentNumber)->exists()) {
-            $provisionalStudentNumber = 'CRT-'.date('Y').'-'.str_pad((string) random_int(1000, 9999), 4, '0', STR_PAD_LEFT);
-        }
-
-        $user = User::create([
-            'student_number' => $provisionalStudentNumber,
+        request()->session()->put('google_signup_profile', [
+            'google_id' => $googleUser->getId(),
+            'email' => $googleUser->getEmail(),
+            'name' => $rawName,
             'first_name' => $firstName,
             'last_name' => $lastName,
-            'name' => $rawName,
-            'email' => $googleUser->getEmail(),
-            'google_id' => $googleUser->getId(),
-            'google_avatar' => $googleUser->getAvatar(),
-            'password' => null, // Google-auth users do not require initial password
-            'role' => 'student',
-            'status' => 'pending',
-            'email_verified_at' => now(), // Google already verified their email address
+            'avatar' => $googleUser->getAvatar(),
         ]);
 
-        ActivityLog::record('register', "Student {$user->name} registered via Google (ID: {$user->student_number}, awaiting approval)", $user->id, User::class, $user->id);
+        return redirect()->route('auth.google.complete');
+    }
+
+    /**
+     * Show profile completion form for a new Google user.
+     */
+    public function showCompleteProfile(Request $request): Response|RedirectResponse
+    {
+        $googleProfile = $request->session()->get('google_signup_profile');
+
+        if (! $googleProfile) {
+            return redirect()->route('register')->with('info', 'Please click "Continue with Google" to complete your registration.');
+        }
+
+        return Inertia::render('Auth/CompleteGoogleProfile', [
+            'googleProfile' => $googleProfile,
+        ]);
+    }
+
+    /**
+     * Finalize profile completion and create student account for approval.
+     */
+    public function completeProfile(Request $request): RedirectResponse
+    {
+        $googleProfile = $request->session()->get('google_signup_profile');
+
+        if (! $googleProfile) {
+            return redirect()->route('register')->withErrors([
+                'login' => 'Your Google session has expired. Please sign up with Google again.',
+            ]);
+        }
+
+        $validated = $request->validate([
+            'student_number' => ['required', 'string', 'max:50', 'unique:users,student_number'],
+            'first_name' => ['required', 'string', 'max:100'],
+            'middle_name' => ['nullable', 'string', 'max:100'],
+            'last_name' => ['required', 'string', 'max:100'],
+            'contact_number' => ['nullable', 'string', 'max:30'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'terms' => ['accepted'],
+        ], [
+            'terms.accepted' => 'You must agree to the Terms of Service and student conduct policies.',
+        ]);
+
+        // Safety check if email was registered concurrently
+        if (User::where('email', $googleProfile['email'])->exists()) {
+            $request->session()->forget('google_signup_profile');
+
+            return redirect()->route('login')->withErrors([
+                'login' => 'An account with this email address is already registered. Please sign in.',
+            ]);
+        }
+
+        $fullName = trim($validated['first_name'].' '.($validated['middle_name'] ? $validated['middle_name'].' ' : '').$validated['last_name']);
+
+        $user = User::create([
+            'student_number' => $validated['student_number'],
+            'first_name' => $validated['first_name'],
+            'middle_name' => $validated['middle_name'] ?? null,
+            'last_name' => $validated['last_name'],
+            'name' => $fullName,
+            'email' => $googleProfile['email'],
+            'contact_number' => $validated['contact_number'] ?? null,
+            'password' => Hash::make($validated['password']),
+            'google_id' => $googleProfile['google_id'],
+            'google_avatar' => $googleProfile['avatar'] ?? null,
+            'role' => 'student',
+            'status' => 'pending',
+            'email_verified_at' => now(), // Verified by Google
+        ]);
+
+        ActivityLog::record(
+            'register',
+            "Student {$user->name} registered with ID {$user->student_number} via Google (Profile completed, awaiting approval)",
+            $user->id,
+            User::class,
+            $user->id
+        );
 
         // Notify all admins and teachers
         $admins = User::whereIn('role', ['admin', 'teacher'])->get();
@@ -151,14 +221,25 @@ class SocialAuthController extends Controller
             SystemNotification::create([
                 'user_id' => $admin->id,
                 'title' => 'New Student Awaiting Approval',
-                'message' => "Student {$user->name} ({$user->student_number}) registered via Google sign-in and is waiting for account approval.",
+                'message' => "Student {$user->name} ({$user->student_number}) registered via Google with completed profile and is awaiting approval.",
                 'type' => 'student',
                 'link' => '/admin/students?status=pending',
             ]);
         }
 
-        request()->session()->put('pending_approval_user_id', $user->id);
+        $request->session()->forget('google_signup_profile');
+        $request->session()->put('pending_approval_user_id', $user->id);
 
-        return redirect()->route('approval.pending')->with('success', 'Account created with Google! Your student account is now awaiting teacher approval.');
+        return redirect()->route('approval.pending')->with('success', 'Profile completed! Your student account is now awaiting teacher approval.');
+    }
+
+    /**
+     * Cancel Google profile completion.
+     */
+    public function cancelGoogleProfile(Request $request): RedirectResponse
+    {
+        $request->session()->forget('google_signup_profile');
+
+        return redirect()->route('register');
     }
 }

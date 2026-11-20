@@ -24,6 +24,9 @@ Route::get('/', [LandingController::class, 'index'])->name('home');
 // Google OAuth
 Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+Route::get('/auth/google/complete-profile', [SocialAuthController::class, 'showCompleteProfile'])->name('auth.google.complete');
+Route::post('/auth/google/complete-profile', [SocialAuthController::class, 'completeProfile'])->name('auth.google.complete.submit');
+Route::post('/auth/google/cancel', [SocialAuthController::class, 'cancelGoogleProfile'])->name('auth.google.cancel');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
