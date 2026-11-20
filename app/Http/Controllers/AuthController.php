@@ -165,6 +165,56 @@ class AuthController extends Controller
             return back()->with('error', 'Student registration is currently closed. Please contact administration.');
         }
 
+        $email = strtolower(trim((string) $request->input('email')));
+        $existingUser = $email !== '' ? User::whereRaw('LOWER(email) = ?', [$email])->first() : null;
+
+        // Rule: If user is already registered in the system, don't overwrite entry;
+        // instead, sign in their account using the email registered if credentials match.
+        if ($existingUser && $request->filled('password')) {
+            if ($existingUser->password && Hash::check((string) $request->input('password'), $existingUser->password)) {
+                // If inactive
+                if (! $existingUser->isActive()) {
+                    if ($existingUser->isStudent() && $existingUser->isPending()) {
+                        $request->session()->put('pending_approval_user_id', $existingUser->id);
+
+                        return redirect()->route('approval.pending')->with('info', "Account recognized for {$existingUser->email}. Your registration is currently awaiting instructor approval.");
+                    }
+
+                    throw ValidationException::withMessages([
+                        'email' => 'Your account is deactivated. Please contact your instructor or administrator.',
+                    ]);
+                }
+
+                // Check email verification for students
+                if ($existingUser->isStudent() && $existingUser->email_verified_at === null) {
+                    $otp = str_pad((string) random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
+                    $existingUser->update([
+                        'otp_code' => $otp,
+                        'otp_expires_at' => now()->addMinutes(10),
+                    ]);
+
+                    try {
+                        Mail::to($existingUser->email)->send(new StudentOtpVerificationMail($existingUser, $otp));
+                    } catch (\Throwable $e) {
+                        Log::warning('Failed sending OTP email during registered sign-in: '.$e->getMessage());
+                    }
+
+                    $request->session()->put('pending_user_id', $existingUser->id);
+
+                    return redirect()->route('verification.otp')->with('info', "Account already registered. Please verify your email with the 6-digit code sent to {$existingUser->email}.");
+                }
+
+                // Credentials match! Sign them in directly to their existing account without overwriting entry
+                Auth::login($existingUser, true);
+                $request->session()->regenerate();
+                ActivityLog::record('login', 'User signed into existing registered account via registration form', $existingUser->id, User::class, $existingUser->id);
+
+                return $existingUser->isAdmin()
+                    ? redirect()->intended(route('admin.dashboard'))->with('success', "Account already exists! Signed in successfully as {$existingUser->name}.")
+                    : redirect()->intended(route('student.dashboard'))->with('success', "Account already exists! Signed in successfully as {$existingUser->name}.");
+            }
+        }
+
         $validated = $request->validate([
             'student_number' => ['required', 'string', 'max:50', 'unique:users,student_number'],
             'first_name' => ['required', 'string', 'max:100'],

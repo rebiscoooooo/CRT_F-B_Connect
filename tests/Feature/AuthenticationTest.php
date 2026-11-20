@@ -142,4 +142,38 @@ class AuthenticationTest extends TestCase
         $this->assertStringContainsString('no-cache', (string) $response->headers->get('Cache-Control'));
         $this->assertStringContainsString('no-store', (string) $response->headers->get('Cache-Control'));
     }
+
+    public function test_register_with_existing_user_email_and_matching_password_signs_in_without_overwriting(): void
+    {
+        $existing = User::factory()->create([
+            'student_number' => '2024-CRT-EXISTING',
+            'first_name' => 'Original',
+            'last_name' => 'Student',
+            'name' => 'Original Student',
+            'email' => 'registered.existing@crt.edu.ph',
+            'role' => 'student',
+            'status' => 'active',
+            'password' => 'secret-password-123',
+        ]);
+
+        $response = $this->post('/register', [
+            'student_number' => '2024-CRT-DIFFERENT',
+            'first_name' => 'AttemptedNewFirst',
+            'last_name' => 'AttemptedNewLast',
+            'email' => 'registered.existing@crt.edu.ph',
+            'password' => 'secret-password-123',
+            'password_confirmation' => 'secret-password-123',
+            'terms' => true,
+        ]);
+
+        $response->assertRedirect('/student/dashboard');
+        $this->assertAuthenticatedAs($existing);
+
+        $fresh = $existing->fresh();
+        // Entry is not overwritten
+        $this->assertEquals('Original', $fresh->first_name);
+        $this->assertEquals('Student', $fresh->last_name);
+        $this->assertEquals('Original Student', $fresh->name);
+        $this->assertEquals('2024-CRT-EXISTING', $fresh->student_number);
+    }
 }

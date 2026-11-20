@@ -62,24 +62,24 @@ class SocialAuthController extends Controller
             ]);
         }
 
-        // Find existing user by google_id or by email
+        // Find existing user by google_id or by email (case-insensitive)
+        $googleEmail = strtolower(trim((string) $googleUser->getEmail()));
         $user = User::where('google_id', $googleUser->getId())->first()
-            ?? User::where('email', $googleUser->getEmail())->first();
+            ?? User::whereRaw('LOWER(email) = ?', [$googleEmail])->first();
 
         if ($user) {
-            // Link google_id and avatar if not already set
-            $updateData = [];
+            // Rule: If user is already registered in the system, do NOT overwrite their entry.
+            // Preserve their existing name, student number, role, profile picture, and password.
+            // Only link google_id if not already set to enable Google OAuth for this registered account.
+            $linkData = [];
             if (! $user->google_id) {
-                $updateData['google_id'] = $googleUser->getId();
-            }
-            if (! $user->google_avatar && $googleUser->getAvatar()) {
-                $updateData['google_avatar'] = $googleUser->getAvatar();
+                $linkData['google_id'] = $googleUser->getId();
             }
             if ($user->email_verified_at === null) {
-                $updateData['email_verified_at'] = now();
+                $linkData['email_verified_at'] = now();
             }
-            if (! empty($updateData)) {
-                $user->update($updateData);
+            if (! empty($linkData)) {
+                $user->update($linkData);
             }
 
             // Inactive account check
@@ -93,17 +93,17 @@ class SocialAuthController extends Controller
             if ($user->isStudent() && $user->isPending()) {
                 request()->session()->put('pending_approval_user_id', $user->id);
 
-                return redirect()->route('approval.pending');
+                return redirect()->route('approval.pending')->with('info', "Account recognized for {$user->email}. Your registration is currently awaiting instructor approval.");
             }
 
-            // Log the user in
+            // Log the user into their existing registered account
             Auth::login($user, true);
             request()->session()->regenerate();
-            ActivityLog::record('login', 'User signed in via Google OAuth', $user->id, User::class, $user->id);
+            ActivityLog::record('login', 'User signed into existing registered account via Google OAuth', $user->id, User::class, $user->id);
 
             return $user->isAdmin()
-                ? redirect()->intended(route('admin.dashboard'))->with('success', "Welcome back, {$user->name}!")
-                : redirect()->intended(route('student.dashboard'))->with('success', "Welcome back, {$user->name}!");
+                ? redirect()->intended(route('admin.dashboard'))->with('success', "Signed in to your existing account ({$user->email}). Welcome back, {$user->name}!")
+                : redirect()->intended(route('student.dashboard'))->with('success', "Signed in to your existing account ({$user->email}). Welcome back, {$user->name}!");
         }
 
         // --- New user via Google: register as a pending student ---
