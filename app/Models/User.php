@@ -33,6 +33,8 @@ class User extends Authenticatable
         'otp_code',
         'otp_expires_at',
         'profile_picture',
+        'google_id',
+        'google_avatar',
         'role',
         'status',
         'approved_by',
@@ -113,6 +115,10 @@ class User extends Authenticatable
     {
         if ($this->profile_picture && Storage::disk('public')->exists($this->profile_picture)) {
             return Storage::url($this->profile_picture);
+        }
+
+        if ($this->google_avatar) {
+            return $this->google_avatar;
         }
 
         $name = urlencode($this->name ?: ($this->first_name.' '.$this->last_name));
