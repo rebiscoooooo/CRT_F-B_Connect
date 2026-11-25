@@ -147,14 +147,14 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
             {/* Header Banner */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8 min-w-0">
                 <div className="min-w-0">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold uppercase tracking-wider mb-2">
-                        <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0B6E8A]/30 border border-[#A8E6E8]/20 text-[#A8E6E8] text-xs font-semibold uppercase tracking-wider mb-2">
+                        <ShieldCheck className="w-3.5 h-3.5 text-[#2EC4D6]" />
                         Authorized Staff &amp; Faculty
                     </div>
-                    <h1 className="text-xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                    <h1 className="text-xl sm:text-3xl font-black text-[#F4FBFC] tracking-tight">
                         Teacher &amp; Administrator Management
                     </h1>
-                    <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                    <p className="text-xs sm:text-sm text-[#A8E6E8]/70 mt-1">
                         Create, manage, and assign authorized teacher and administrator accounts for curriculum instruction.
                     </p>
                 </div>
@@ -162,7 +162,7 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                 <div className="w-full sm:w-auto shrink-0">
                     <button
                         onClick={() => setIsAddOpen(true)}
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm shadow-blue-500/20 hover:shadow-md transition-all cursor-pointer"
+                        className="cyber-glow-btn w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold rounded-xl cursor-pointer"
                     >
                         <UserPlus className="w-4 h-4" />
                         <span>Add Teacher / Admin</span>
@@ -172,50 +172,50 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
 
             {/* Statistics Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
-                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Total Staff</span>
-                    <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-2">
+                <div className="cyber-glass-card cyber-glass-card-hover p-4 sm:p-5">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#A8E6E8]/70">Total Staff</span>
+                    <div className="text-2xl sm:text-3xl font-black text-[#F4FBFC] mt-2">
                         {stats.total_staff || 0}
                     </div>
-                    <p className="text-[11px] text-slate-500 mt-1">Total instructors &amp; admins</p>
+                    <p className="text-[11px] text-[#A8E6E8]/60 mt-1">Total instructors &amp; admins</p>
                 </div>
 
-                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Teachers / Chefs</span>
-                    <div className="text-2xl sm:text-3xl font-black text-sky-600 mt-2">
+                <div className="cyber-glass-card cyber-glass-card-hover p-4 sm:p-5">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#A8E6E8]/70">Teachers / Chefs</span>
+                    <div className="text-2xl sm:text-3xl font-black text-[#2EC4D6] mt-2">
                         {stats.teacher_count || 0}
                     </div>
-                    <p className="text-[11px] text-slate-500 mt-1">Active curriculum educators</p>
+                    <p className="text-[11px] text-[#A8E6E8]/60 mt-1">Active curriculum educators</p>
                 </div>
 
-                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Administrators</span>
-                    <div className="text-2xl sm:text-3xl font-black text-blue-700 mt-2">
+                <div className="cyber-glass-card cyber-glass-card-hover p-4 sm:p-5">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#A8E6E8]/70">Administrators</span>
+                    <div className="text-2xl sm:text-3xl font-black text-[#A8E6E8] mt-2">
                         {stats.admin_count || 0}
                     </div>
-                    <p className="text-[11px] text-slate-500 mt-1">Full system privilege holders</p>
+                    <p className="text-[11px] text-[#A8E6E8]/60 mt-1">Full system privilege holders</p>
                 </div>
 
-                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Active Status</span>
-                    <div className="text-2xl sm:text-3xl font-black text-emerald-600 mt-2">
+                <div className="cyber-glass-card cyber-glass-card-hover p-4 sm:p-5">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#A8E6E8]/70">Active Status</span>
+                    <div className="text-2xl sm:text-3xl font-black text-emerald-400 mt-2">
                         {stats.active_count || 0}
                     </div>
-                    <p className="text-[11px] text-slate-500 mt-1">Ready for portal access</p>
+                    <p className="text-[11px] text-[#A8E6E8]/60 mt-1">Ready for portal access</p>
                 </div>
             </div>
 
             {/* Filters Bar */}
-            <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs mb-6 min-w-0">
+            <div className="cyber-glass-card p-3.5 sm:p-5 mb-6 min-w-0">
                 <form onSubmit={handleSearch} className="flex flex-col lg:flex-row gap-2.5 sm:gap-3 items-stretch lg:items-center">
                     <div className="relative flex-1 min-w-0 w-full">
-                        <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                        <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A8E6E8]/50 pointer-events-none" />
                         <input
                             type="text"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search staff by name, email, or contact number..."
-                            className="w-full pl-10 pr-4 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none transition-all"
+                            className="cyber-glass-input w-full pl-10 pr-4 py-2 text-xs rounded-xl"
                         />
                     </div>
 
@@ -226,11 +226,11 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                 setRoleFilter(e.target.value);
                                 applyFilters({ search, role: e.target.value, status: statusFilter, sort: sortBy });
                             }}
-                            className="w-full lg:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
+                            className="cyber-glass-input w-full lg:w-auto px-3 py-2 text-xs rounded-xl cursor-pointer"
                         >
-                            <option value="">All Roles</option>
-                            <option value="teacher">Teachers / Instructors</option>
-                            <option value="admin">Administrators</option>
+                            <option value="" className="bg-[#061923] text-[#F4FBFC]">All Roles</option>
+                            <option value="teacher" className="bg-[#061923] text-[#F4FBFC]">Teachers / Instructors</option>
+                            <option value="admin" className="bg-[#061923] text-[#F4FBFC]">Administrators</option>
                         </select>
 
                         <select
@@ -239,11 +239,11 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                 setStatusFilter(e.target.value);
                                 applyFilters({ search, role: roleFilter, status: e.target.value, sort: sortBy });
                             }}
-                            className="w-full lg:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
+                            className="cyber-glass-input w-full lg:w-auto px-3 py-2 text-xs rounded-xl cursor-pointer"
                         >
-                            <option value="">All Statuses</option>
-                            <option value="active">Active Only</option>
-                            <option value="inactive">Inactive Only</option>
+                            <option value="" className="bg-[#061923] text-[#F4FBFC]">All Statuses</option>
+                            <option value="active" className="bg-[#061923] text-[#F4FBFC]">Active Only</option>
+                            <option value="inactive" className="bg-[#061923] text-[#F4FBFC]">Inactive Only</option>
                         </select>
 
                         <select
@@ -252,17 +252,17 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                 setSortBy(e.target.value);
                                 applyFilters({ search, role: roleFilter, status: statusFilter, sort: e.target.value });
                             }}
-                            className="col-span-2 sm:col-span-1 lg:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
+                            className="cyber-glass-input col-span-2 sm:col-span-1 lg:w-auto px-3 py-2 text-xs rounded-xl cursor-pointer"
                         >
-                            <option value="latest">Joined (Newest)</option>
-                            <option value="oldest">Joined (Oldest)</option>
-                            <option value="name">Name (A-Z)</option>
-                            <option value="resources">Most Lessons Created</option>
+                            <option value="latest" className="bg-[#061923] text-[#F4FBFC]">Joined (Newest)</option>
+                            <option value="oldest" className="bg-[#061923] text-[#F4FBFC]">Joined (Oldest)</option>
+                            <option value="name" className="bg-[#061923] text-[#F4FBFC]">Name (A-Z)</option>
+                            <option value="resources" className="bg-[#061923] text-[#F4FBFC]">Most Lessons Created</option>
                         </select>
 
                         <button
                             type="submit"
-                            className="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-2xs cursor-pointer flex items-center justify-center gap-1"
+                            className="cyber-glow-btn px-4 py-2 text-xs font-bold rounded-xl cursor-pointer flex items-center justify-center gap-1"
                         >
                             <Search className="w-3.5 h-3.5 sm:hidden" />
                             <span>Filter</span>
@@ -272,7 +272,7 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                             <button
                                 type="button"
                                 onClick={handleResetFilters}
-                                className="px-3 py-2 text-xs font-bold text-slate-500 hover:text-slate-800"
+                                className="cyber-oauth-btn px-3 py-2 text-xs font-bold rounded-xl"
                             >
                                 Reset
                             </button>
@@ -282,16 +282,16 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
             </div>
 
             {/* Staff Table */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden mb-6 min-w-0">
+            <div className="cyber-glass-card overflow-hidden mb-6 min-w-0">
                 {/* Horizontal scroll hint on mobile */}
-                <div className="sm:hidden px-3.5 py-2 bg-slate-50/90 border-b border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                <div className="sm:hidden px-3.5 py-2 bg-[#061923]/60 border-b border-[#A8E6E8]/15 flex items-center justify-between text-[11px] text-[#A8E6E8] font-medium">
                     <span>Swipe horizontally to view full table</span>
-                    <ArrowRight className="w-3.5 h-3.5 text-blue-500 animate-pulse" />
+                    <ArrowRight className="w-3.5 h-3.5 text-[#2EC4D6] animate-pulse" />
                 </div>
                 <div className="overflow-x-auto overscroll-x-contain touch-pan-x">
                     <table className="w-full min-w-[700px] text-left text-xs border-collapse">
                         <thead>
-                            <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
+                            <tr className="cyber-table-header">
                                 <th className="py-3.5 px-6">Staff Member</th>
                                 <th className="py-3.5 px-6">System Role</th>
                                 <th className="py-3.5 px-6">Email Address</th>
@@ -301,29 +301,29 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                 <th className="py-3.5 px-6 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
+                        <tbody className="divide-y divide-[#A8E6E8]/10">
                             {teachers.data && teachers.data.length > 0 ? (
                                 teachers.data.map((staff) => {
                                     const isSelf = staff.id === currentUserId;
                                     const isAdminRole = staff.role === 'admin';
 
                                     return (
-                                        <tr key={staff.id} className="hover:bg-blue-50/30 transition-colors">
+                                        <tr key={staff.id} className="cyber-table-row transition-colors">
                                             {/* Staff Member Avatar & Name */}
                                             <td className="py-3.5 px-6">
                                                 <div className="flex items-center gap-3">
                                                     <button
                                                         type="button"
                                                         onClick={() => setProfileModalStaff(staff)}
-                                                        className="relative group/avatar cursor-pointer shrink-0 rounded-xl overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                                                        className="relative group/avatar cursor-pointer shrink-0 rounded-xl overflow-hidden focus:outline-none focus:ring-2 focus:ring-[#2EC4D6]/50"
                                                         title={`View profile for ${staff.name}`}
                                                     >
                                                         <img
                                                             src={staff.avatar_url}
                                                             alt={staff.name}
-                                                            className="w-10 h-10 rounded-xl object-cover ring-2 ring-slate-200/80 group-hover/avatar:ring-blue-500 group-hover/avatar:scale-105 transition-all shadow-2xs"
+                                                            className="w-10 h-10 rounded-xl object-cover ring-2 ring-[#2EC4D6]/30 group-hover/avatar:ring-[#2EC4D6] group-hover/avatar:scale-105 transition-all shadow-md"
                                                         />
-                                                        <div className="absolute inset-0 bg-blue-600/30 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
+                                                        <div className="absolute inset-0 bg-[#0B6E8A]/50 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
                                                             <Eye className="w-3.5 h-3.5 text-white" />
                                                         </div>
                                                     </button>
@@ -331,19 +331,19 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                                         <button
                                                             type="button"
                                                             onClick={() => setProfileModalStaff(staff)}
-                                                            className="font-bold text-slate-900 hover:text-blue-600 text-left block truncate cursor-pointer transition-colors"
+                                                            className="font-bold text-[#F4FBFC] hover:text-[#2EC4D6] text-left block truncate cursor-pointer transition-colors"
                                                             title={`Click to preview profile of ${staff.name}`}
                                                         >
                                                             <span className="flex items-center gap-1.5">
                                                                 {staff.name}
                                                                 {isSelf && (
-                                                                    <span className="text-[10px] font-semibold text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded-md">
+                                                                    <span className="text-[10px] font-semibold text-[#2EC4D6] bg-[#0B6E8A]/40 border border-[#2EC4D6]/30 px-1.5 py-0.2 rounded-md">
                                                                         (You)
                                                                     </span>
                                                                 )}
                                                             </span>
                                                         </button>
-                                                        <p className="text-[10px] text-slate-400">
+                                                        <p className="text-[10px] text-[#A8E6E8]/60">
                                                             Joined {new Date(staff.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
                                                         </p>
                                                     </div>
@@ -352,49 +352,49 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
 
                                             {/* Role Badge */}
                                             <td className="py-3.5 px-6">
-                                                <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                                                <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${
                                                     isAdminRole
-                                                        ? 'bg-blue-100 text-blue-800'
-                                                        : 'bg-sky-100 text-sky-800'
+                                                        ? 'bg-blue-500/20 text-[#A8E6E8] border-[#2EC4D6]/30'
+                                                        : 'bg-sky-500/20 text-sky-200 border-sky-500/30'
                                                 }`}>
                                                     {isAdminRole ? (
-                                                        <Shield className="w-3 h-3 text-blue-600" />
+                                                        <Shield className="w-3 h-3 text-[#2EC4D6]" />
                                                     ) : (
-                                                        <GraduationCap className="w-3 h-3 text-sky-600" />
+                                                        <GraduationCap className="w-3 h-3 text-sky-300" />
                                                     )}
                                                     {isAdminRole ? 'Administrator' : 'Teacher / Instructor'}
                                                 </span>
                                             </td>
 
                                             {/* Email */}
-                                            <td className="py-3.5 px-6 text-slate-600 font-medium">
+                                            <td className="py-3.5 px-6 text-[#F4FBFC] font-medium">
                                                 {staff.email}
                                             </td>
 
                                             {/* Contact */}
-                                            <td className="py-3.5 px-6 hidden sm:table-cell text-slate-500">
+                                            <td className="py-3.5 px-6 hidden sm:table-cell text-[#A8E6E8]/80 font-mono">
                                                 {staff.contact_number || '—'}
                                             </td>
 
                                             {/* Lessons Uploaded */}
                                             <td className="py-3.5 px-6 hidden md:table-cell">
-                                                <span className="font-bold text-slate-800">
+                                                <span className="font-bold text-[#F4FBFC]">
                                                     {staff.resources_count || 0}
                                                 </span>
-                                                <span className="text-[10px] text-slate-400 ml-1">materials</span>
+                                                <span className="text-[10px] text-[#A8E6E8]/60 ml-1">materials</span>
                                             </td>
 
                                             {/* Status */}
                                             <td className="py-3.5 px-6">
-                                                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold capitalize ${
+                                                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold capitalize border ${
                                                     staff.status === 'active'
-                                                        ? 'bg-emerald-100 text-emerald-800'
-                                                        : 'bg-slate-100 text-slate-600'
+                                                        ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                                                        : 'bg-[#A8E6E8]/10 text-[#A8E6E8]/60 border-[#A8E6E8]/20'
                                                 }`}>
                                                     {staff.status === 'active' ? (
-                                                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                                                        <CheckCircle2 className="w-3 h-3 text-emerald-400" />
                                                     ) : (
-                                                        <XCircle className="w-3 h-3 text-slate-400" />
+                                                        <XCircle className="w-3 h-3 text-[#A8E6E8]/60" />
                                                     )}
                                                     {staff.status}
                                                 </span>
@@ -405,7 +405,7 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                                 <div className="flex items-center justify-end gap-1.5">
                                                     <button
                                                         onClick={() => setProfileModalStaff(staff)}
-                                                        className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
+                                                        className="p-1.5 text-[#A8E6E8] hover:text-[#2EC4D6] hover:bg-[#0B6E8A]/30 rounded-lg transition-colors cursor-pointer"
                                                         title="View staff profile overview"
                                                     >
                                                         <Eye className="w-3.5 h-3.5" />
@@ -413,7 +413,7 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
 
                                                     <button
                                                         onClick={() => handleEditOpen(staff)}
-                                                        className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
+                                                        className="p-1.5 text-[#A8E6E8] hover:text-[#2EC4D6] hover:bg-[#0B6E8A]/30 rounded-lg transition-colors cursor-pointer"
                                                         title="Edit details"
                                                     >
                                                         <Edit3 className="w-3.5 h-3.5" />
@@ -424,10 +424,10 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                                         disabled={isSelf}
                                                         className={`p-1.5 rounded-lg transition-colors ${
                                                             isSelf
-                                                                ? 'text-slate-200 cursor-not-allowed'
+                                                                ? 'text-[#A8E6E8]/20 cursor-not-allowed'
                                                                 : staff.status === 'active'
-                                                                ? 'text-slate-400 hover:text-amber-600 hover:bg-amber-50'
-                                                                : 'text-slate-400 hover:text-emerald-600 hover:bg-emerald-50'
+                                                                ? 'text-[#A8E6E8] hover:text-amber-400 hover:bg-amber-500/20'
+                                                                : 'text-[#A8E6E8] hover:text-emerald-400 hover:bg-emerald-500/20'
                                                         }`}
                                                         title={isSelf ? 'Cannot deactivate self' : staff.status === 'active' ? 'Deactivate account' : 'Activate account'}
                                                     >
@@ -446,8 +446,8 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                                         disabled={isSelf}
                                                         className={`p-1.5 rounded-lg transition-colors ${
                                                             isSelf
-                                                                ? 'text-slate-200 cursor-not-allowed'
-                                                                : 'text-slate-400 hover:text-rose-600 hover:bg-rose-50'
+                                                                ? 'text-[#A8E6E8]/20 cursor-not-allowed'
+                                                                : 'text-[#A8E6E8] hover:text-[#2EC4D6] hover:bg-[#0B6E8A]/20'
                                                         }`}
                                                         title={isSelf ? 'Cannot delete self' : 'Delete staff record'}
                                                     >
@@ -460,7 +460,7 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                 })
                             ) : (
                                 <tr>
-                                    <td colSpan={7} className="py-12 text-center text-slate-400">
+                                    <td colSpan={7} className="py-12 text-center text-[#A8E6E8]/60">
                                         No teacher or administrator records found.
                                     </td>
                                 </tr>
@@ -477,23 +477,23 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
             <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="Add Teacher / Administrator">
                 <form onSubmit={handleAddSubmit} className="space-y-4">
                     {/* Automated Email Notice */}
-                    <div className="p-3 bg-blue-50/80 border border-blue-200/80 rounded-2xl flex items-start gap-2.5">
-                        <Mail className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                        <div className="text-[11px] text-blue-900 leading-normal">
-                            <span className="font-bold">Automated Email Notification:</span> An onboarding email with login credentials (email and temporary password) will be automatically sent to the registered email address upon submission.
+                    <div className="p-3 bg-[#0B6E8A]/30 border border-[#A8E6E8]/25 rounded-2xl flex items-start gap-2.5">
+                        <Mail className="w-4 h-4 text-[#2EC4D6] shrink-0 mt-0.5" />
+                        <div className="text-[11px] text-[#A8E6E8] leading-normal">
+                            <span className="font-bold text-[#F4FBFC]">Automated Email Notification:</span> An onboarding email with login credentials (email and temporary password) will be automatically sent to the registered email address upon submission.
                         </div>
                     </div>
 
                     {/* Role Selection */}
                     <div>
-                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                            Account Role <span className="text-rose-500">*</span>
+                        <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1.5">
+                            Account Role <span className="text-rose-400">*</span>
                         </label>
                         <div className="grid grid-cols-2 gap-3">
                             <label className={`p-3 rounded-xl border text-xs flex items-center gap-2.5 cursor-pointer transition-all ${
                                 addForm.role === 'teacher'
-                                    ? 'border-sky-500 bg-sky-50 text-sky-950 font-bold ring-2 ring-sky-500/20'
-                                    : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+                                    ? 'border-[#2EC4D6] bg-[#0B6E8A]/40 text-[#F4FBFC] font-bold ring-2 ring-[#2EC4D6]/30'
+                                    : 'border-[#A8E6E8]/20 bg-[#061923]/40 text-[#A8E6E8] hover:bg-[#0B6E8A]/20'
                             }`}>
                                 <input
                                     type="radio"
@@ -503,17 +503,17 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                     onChange={(e) => setAddForm({ ...addForm, role: e.target.value })}
                                     className="hidden"
                                 />
-                                <GraduationCap className="w-4 h-4 text-sky-600 shrink-0" />
+                                <GraduationCap className="w-4 h-4 text-[#2EC4D6] shrink-0" />
                                 <div>
-                                    <p className="leading-snug">Teacher / Instructor</p>
-                                    <p className="text-[10px] font-normal text-slate-500">Upload lessons &amp; monitor students</p>
+                                    <p className="leading-snug text-[#F4FBFC]">Teacher / Instructor</p>
+                                    <p className="text-[10px] font-normal text-[#A8E6E8]/70">Upload lessons &amp; monitor students</p>
                                 </div>
                             </label>
 
                             <label className={`p-3 rounded-xl border text-xs flex items-center gap-2.5 cursor-pointer transition-all ${
                                 addForm.role === 'admin'
-                                    ? 'border-blue-600 bg-blue-50 text-blue-950 font-bold ring-2 ring-blue-500/20'
-                                    : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+                                    ? 'border-[#2EC4D6] bg-[#0B6E8A]/40 text-[#F4FBFC] font-bold ring-2 ring-[#2EC4D6]/30'
+                                    : 'border-[#A8E6E8]/20 bg-[#061923]/40 text-[#A8E6E8] hover:bg-[#0B6E8A]/20'
                             }`}>
                                 <input
                                     type="radio"
@@ -523,10 +523,10 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                     onChange={(e) => setAddForm({ ...addForm, role: e.target.value })}
                                     className="hidden"
                                 />
-                                <Shield className="w-4 h-4 text-blue-600 shrink-0" />
+                                <Shield className="w-4 h-4 text-[#2EC4D6] shrink-0" />
                                 <div>
-                                    <p className="leading-snug">Full Administrator</p>
-                                    <p className="text-[10px] font-normal text-slate-500">Full system &amp; user management</p>
+                                    <p className="leading-snug text-[#F4FBFC]">Full Administrator</p>
+                                    <p className="text-[10px] font-normal text-[#A8E6E8]/70">Full system &amp; user management</p>
                                 </div>
                             </label>
                         </div>
@@ -534,28 +534,28 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
 
                     <div className="grid grid-cols-2 gap-3">
                         <div>
-                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                                First Name <span className="text-rose-500">*</span>
+                            <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
+                                First Name <span className="text-rose-400">*</span>
                             </label>
                             <input
                                 type="text"
                                 value={addForm.first_name}
                                 onChange={(e) => setAddForm({ ...addForm, first_name: e.target.value })}
                                 placeholder="e.g. Maria"
-                                className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                                 required
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                                Last Name <span className="text-rose-500">*</span>
+                            <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
+                                Last Name <span className="text-rose-400">*</span>
                             </label>
                             <input
                                 type="text"
                                 value={addForm.last_name}
                                 onChange={(e) => setAddForm({ ...addForm, last_name: e.target.value })}
                                 placeholder="e.g. Santos"
-                                className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                                 required
                             />
                         </div>
@@ -563,7 +563,7 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
 
                     <div className="grid grid-cols-2 gap-3">
                         <div>
-                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                            <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                                 Middle Name (Optional)
                             </label>
                             <input
@@ -571,11 +571,11 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                 value={addForm.middle_name}
                                 onChange={(e) => setAddForm({ ...addForm, middle_name: e.target.value })}
                                 placeholder="e.g. Elena"
-                                className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                            <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                                 Contact Number
                             </label>
                             <input
@@ -583,65 +583,65 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                 value={addForm.contact_number}
                                 onChange={(e) => setAddForm({ ...addForm, contact_number: e.target.value })}
                                 placeholder="e.g. +63 918 555 1001"
-                                className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                            Institutional Email Address <span className="text-rose-500">*</span>
+                        <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
+                            Institutional Email Address <span className="text-rose-400">*</span>
                         </label>
                         <input
                             type="email"
                             value={addForm.email}
                             onChange={(e) => setAddForm({ ...addForm, email: e.target.value })}
                             placeholder="e.g. chef.santos@crt.edu.ph"
-                            className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                            className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                             required
                         />
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                         <div>
-                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                                Temporary Password <span className="text-rose-500">*</span>
+                            <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
+                                Temporary Password <span className="text-rose-400">*</span>
                             </label>
                             <input
                                 type="text"
                                 value={addForm.password}
                                 onChange={(e) => setAddForm({ ...addForm, password: e.target.value })}
-                                className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                                 required
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                                Initial Status <span className="text-rose-500">*</span>
+                            <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
+                                Initial Status <span className="text-rose-400">*</span>
                             </label>
                             <select
                                 value={addForm.status}
                                 onChange={(e) => setAddForm({ ...addForm, status: e.target.value })}
-                                className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none text-slate-700"
+                                className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                             >
-                                <option value="active">Active (Can Login Immediately)</option>
-                                <option value="inactive">Inactive</option>
+                                <option value="active" className="bg-[#061923] text-[#F4FBFC]">Active (Can Login Immediately)</option>
+                                <option value="inactive" className="bg-[#061923] text-[#F4FBFC]">Inactive</option>
                             </select>
                         </div>
                     </div>
 
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <div className="pt-3 border-t border-[#A8E6E8]/15 flex items-center justify-end gap-2.5">
                         <button
                             type="button"
                             onClick={() => setIsAddOpen(false)}
-                            className="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl"
+                            className="cyber-oauth-btn px-4 py-2 text-xs font-bold rounded-xl"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
                             disabled={isSubmittingAdd}
-                            className="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm disabled:opacity-50 cursor-pointer"
+                            className="cyber-glow-btn px-5 py-2 text-xs font-bold rounded-xl disabled:opacity-50 cursor-pointer"
                         >
                             {isSubmittingAdd ? 'Registering...' : 'Add Account'}
                         </button>
@@ -654,41 +654,41 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                 {editForm && (
                     <form onSubmit={handleEditSubmit} className="space-y-4">
                         <div>
-                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                            <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1.5">
                                 Account Role
                             </label>
                             <select
                                 value={editForm.role}
                                 onChange={(e) => setEditForm({ ...editForm, role: e.target.value })}
-                                className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none text-slate-700 font-semibold"
+                                className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl font-semibold"
                             >
-                                <option value="teacher">Teacher / Instructor</option>
-                                <option value="admin">Full Administrator</option>
+                                <option value="teacher" className="bg-[#061923] text-[#F4FBFC]">Teacher / Instructor</option>
+                                <option value="admin" className="bg-[#061923] text-[#F4FBFC]">Full Administrator</option>
                             </select>
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
                             <div>
-                                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                                    First Name <span className="text-rose-500">*</span>
+                                <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
+                                    First Name <span className="text-rose-400">*</span>
                                 </label>
                                 <input
                                     type="text"
                                     value={editForm.first_name}
                                     onChange={(e) => setEditForm({ ...editForm, first_name: e.target.value })}
-                                    className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                    className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                                    Last Name <span className="text-rose-500">*</span>
+                                <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
+                                    Last Name <span className="text-rose-400">*</span>
                                 </label>
                                 <input
                                     type="text"
                                     value={editForm.last_name}
                                     onChange={(e) => setEditForm({ ...editForm, last_name: e.target.value })}
-                                    className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                    className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                                     required
                                 />
                             </div>
@@ -696,58 +696,58 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
 
                         <div className="grid grid-cols-2 gap-3">
                             <div>
-                                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                                <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                                     Middle Name
                                 </label>
                                 <input
                                     type="text"
                                     value={editForm.middle_name}
                                     onChange={(e) => setEditForm({ ...editForm, middle_name: e.target.value })}
-                                    className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                    className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                                <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                                     Contact Number
                                 </label>
                                 <input
                                     type="text"
                                     value={editForm.contact_number}
                                     onChange={(e) => setEditForm({ ...editForm, contact_number: e.target.value })}
-                                    className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                    className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                                Email Address <span className="text-rose-500">*</span>
+                            <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
+                                Email Address <span className="text-rose-400">*</span>
                             </label>
                             <input
                                 type="email"
                                 value={editForm.email}
                                 onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                                className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                                 required
                             />
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
                             <div>
-                                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                                <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                                     Account Status
                                 </label>
                                 <select
                                     value={editForm.status}
                                     onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
-                                    className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none text-slate-700"
+                                    className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                                 >
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
+                                    <option value="active" className="bg-[#061923] text-[#F4FBFC]">Active</option>
+                                    <option value="inactive" className="bg-[#061923] text-[#F4FBFC]">Inactive</option>
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                                <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                                     Reset Password (Optional)
                                 </label>
                                 <input
@@ -755,23 +755,23 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                     value={editForm.password}
                                     onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
                                     placeholder="Leave blank to keep"
-                                    className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                    className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                                 />
                             </div>
                         </div>
 
-                        <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                        <div className="pt-3 border-t border-[#A8E6E8]/15 flex items-center justify-end gap-2.5">
                             <button
                                 type="button"
                                 onClick={() => setIsEditOpen(false)}
-                                className="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl"
+                                className="cyber-oauth-btn px-4 py-2 text-xs font-bold rounded-xl"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
                                 disabled={isSubmittingEdit}
-                                className="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm disabled:opacity-50 cursor-pointer"
+                                className="cyber-glow-btn px-5 py-2 text-xs font-bold rounded-xl disabled:opacity-50 cursor-pointer"
                             >
                                 {isSubmittingEdit ? 'Saving...' : 'Save Changes'}
                             </button>
@@ -783,11 +783,11 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
             {/* Modal: Delete Confirmation */}
             <Modal isOpen={isDeleteOpen} onClose={() => setIsDeleteOpen(false)} title="Confirm Staff Account Removal">
                 <div className="space-y-4">
-                    <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-start gap-3">
-                        <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+                    <div className="p-4 rounded-xl bg-[#2EC4D6]/15 border border-[#2EC4D6]/30 text-xs text-[#F4FBFC] flex items-start gap-3">
+                        <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
                         <div>
-                            <p className="font-bold">Are you sure you want to delete this staff account?</p>
-                            <p className="mt-1">
+                            <p className="font-bold text-rose-300">Are you sure you want to delete this staff account?</p>
+                            <p className="mt-1 text-[#F4FBFC]">
                                 This will remove account access for <strong>{deletingUser?.name}</strong> ({deletingUser?.email}). Their uploaded lessons will remain safe in the library.
                             </p>
                         </div>
@@ -797,14 +797,14 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                         <button
                             type="button"
                             onClick={() => setIsDeleteOpen(false)}
-                            className="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl"
+                            className="cyber-oauth-btn px-4 py-2 text-xs font-bold rounded-xl"
                         >
                             Cancel
                         </button>
                         <button
                             type="button"
                             onClick={handleDelete}
-                            className="px-5 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-sm cursor-pointer"
+                            className="px-5 py-2 text-xs font-bold text-white bg-[#2EC4D6] hover:bg-[#0B6E8A] rounded-xl shadow-md cursor-pointer transition-colors"
                         >
                             Yes, Remove Account
                         </button>
@@ -816,7 +816,7 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                 {profileModalStaff && (
                     <div className="space-y-5">
                         {/* Header Banner & Avatar */}
-                        <div className="relative rounded-2xl bg-gradient-to-r from-blue-700 via-blue-800 to-sky-700 p-6 text-white text-center overflow-hidden">
+                        <div className="relative rounded-2xl bg-gradient-to-r from-[#0B6E8A] via-[#1ab8cb] to-[#2EC4D6] p-6 text-white text-center overflow-hidden">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
                             <div className="relative z-10 flex flex-col items-center">
                                 <img
@@ -827,7 +827,7 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                 <h3 className="mt-3 text-lg sm:text-xl font-black text-white tracking-tight flex items-center gap-2 justify-center">
                                     {profileModalStaff.name}
                                     {profileModalStaff.id === currentUserId && (
-                                        <span className="text-[10px] font-semibold text-blue-200 bg-white/20 px-2 py-0.5 rounded-md">
+                                        <span className="text-[10px] font-semibold text-[#061923] bg-white/80 px-2 py-0.5 rounded-md">
                                             You
                                         </span>
                                     )}
@@ -835,13 +835,13 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                 <div className="mt-1 flex items-center gap-2 flex-wrap justify-center">
                                     <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
                                         profileModalStaff.role === 'admin'
-                                            ? 'bg-blue-500 text-white shadow-xs'
-                                            : 'bg-sky-500 text-white shadow-xs'
+                                            ? 'bg-[#061923]/60 text-[#A8E6E8] border border-[#2EC4D6]/40 shadow-xs'
+                                            : 'bg-[#061923]/60 text-sky-200 border border-sky-400/40 shadow-xs'
                                     }`}>
                                         {profileModalStaff.role === 'admin' ? (
-                                            <Shield className="w-3 h-3 text-white" />
+                                            <Shield className="w-3 h-3 text-[#2EC4D6]" />
                                         ) : (
-                                            <GraduationCap className="w-3 h-3 text-white" />
+                                            <GraduationCap className="w-3 h-3 text-sky-300" />
                                         )}
                                         {profileModalStaff.role === 'admin' ? 'Administrator' : 'Teacher / Instructor'}
                                     </span>
@@ -858,44 +858,44 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                         </div>
 
                         {/* Profile Details List */}
-                        <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 space-y-3 text-xs">
-                            <div className="flex items-center gap-3 text-slate-700">
-                                <div className="w-8 h-8 rounded-lg bg-blue-100/70 text-blue-600 flex items-center justify-center shrink-0">
+                        <div className="bg-[#061923]/50 rounded-2xl p-4 border border-[#A8E6E8]/15 space-y-3 text-xs">
+                            <div className="flex items-center gap-3 text-[#F4FBFC]">
+                                <div className="w-8 h-8 rounded-lg bg-[#0B6E8A]/30 text-[#2EC4D6] border border-[#A8E6E8]/20 flex items-center justify-center shrink-0">
                                     <Mail className="w-4 h-4" />
                                 </div>
                                 <div className="min-w-0 flex-1">
-                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Email Address</span>
-                                    <p className="font-semibold text-slate-900 truncate">{profileModalStaff.email}</p>
+                                    <span className="text-[10px] font-bold text-[#A8E6E8]/70 uppercase tracking-wider block">Email Address</span>
+                                    <p className="font-semibold text-[#F4FBFC] truncate">{profileModalStaff.email}</p>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-3 text-slate-700">
-                                <div className="w-8 h-8 rounded-lg bg-emerald-100/70 text-emerald-600 flex items-center justify-center shrink-0">
+                            <div className="flex items-center gap-3 text-[#F4FBFC]">
+                                <div className="w-8 h-8 rounded-lg bg-[#0B6E8A]/30 text-[#2EC4D6] border border-[#A8E6E8]/20 flex items-center justify-center shrink-0">
                                     <Phone className="w-4 h-4" />
                                 </div>
                                 <div className="min-w-0 flex-1">
-                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Contact Number</span>
-                                    <p className="font-semibold text-slate-900 font-mono">{profileModalStaff.contact_number || 'Not provided'}</p>
+                                    <span className="text-[10px] font-bold text-[#A8E6E8]/70 uppercase tracking-wider block">Contact Number</span>
+                                    <p className="font-semibold text-[#F4FBFC] font-mono">{profileModalStaff.contact_number || 'Not provided'}</p>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-3 text-slate-700">
-                                <div className="w-8 h-8 rounded-lg bg-indigo-100/70 text-indigo-600 flex items-center justify-center shrink-0">
+                            <div className="flex items-center gap-3 text-[#F4FBFC]">
+                                <div className="w-8 h-8 rounded-lg bg-[#0B6E8A]/30 text-[#2EC4D6] border border-[#A8E6E8]/20 flex items-center justify-center shrink-0">
                                     <BookOpen className="w-4 h-4" />
                                 </div>
                                 <div className="min-w-0 flex-1">
-                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Curriculum Materials Contributed</span>
-                                    <p className="font-semibold text-slate-900">{profileModalStaff.resources_count || 0} educational materials</p>
+                                    <span className="text-[10px] font-bold text-[#A8E6E8]/70 uppercase tracking-wider block">Curriculum Materials Contributed</span>
+                                    <p className="font-semibold text-[#F4FBFC]">{profileModalStaff.resources_count || 0} educational materials</p>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-3 text-slate-700">
-                                <div className="w-8 h-8 rounded-lg bg-sky-100/70 text-sky-600 flex items-center justify-center shrink-0">
+                            <div className="flex items-center gap-3 text-[#F4FBFC]">
+                                <div className="w-8 h-8 rounded-lg bg-[#0B6E8A]/30 text-[#2EC4D6] border border-[#A8E6E8]/20 flex items-center justify-center shrink-0">
                                     <Calendar className="w-4 h-4" />
                                 </div>
                                 <div className="min-w-0 flex-1">
-                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Account Created</span>
-                                    <p className="font-semibold text-slate-900">
+                                    <span className="text-[10px] font-bold text-[#A8E6E8]/70 uppercase tracking-wider block">Account Created</span>
+                                    <p className="font-semibold text-[#F4FBFC]">
                                         {new Date(profileModalStaff.created_at).toLocaleDateString([], { month: 'long', day: 'numeric', year: 'numeric' })}
                                     </p>
                                 </div>
@@ -903,7 +903,7 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+                        <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[#A8E6E8]/15">
                             <button
                                 type="button"
                                 onClick={() => {
@@ -911,14 +911,14 @@ export default function TeacherIndex({ teachers = { data: [] }, filters = {}, st
                                     setProfileModalStaff(null);
                                     handleEditOpen(st);
                                 }}
-                                className="px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition-all"
+                                className="cyber-glow-btn px-4 py-2 text-xs font-bold rounded-xl"
                             >
                                 Edit Account Details
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setProfileModalStaff(null)}
-                                className="px-4 py-2 text-xs font-semibold text-slate-500 hover:text-slate-800"
+                                className="cyber-oauth-btn px-4 py-2 text-xs font-semibold rounded-xl"
                             >
                                 Close
                             </button>

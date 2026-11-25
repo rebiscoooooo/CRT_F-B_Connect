@@ -66,18 +66,18 @@ export default function Sidebar({ isOpen, onClose }) {
             {/* Mobile backdrop */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-xs lg:hidden transition-opacity"
+                    className="fixed inset-0 z-40 bg-black/70 backdrop-blur-xs lg:hidden transition-opacity"
                     onClick={onClose}
                 />
             )}
 
             {/* Sidebar drawer container */}
             <aside
-                className={`fixed top-0 bottom-0 left-0 z-40 w-64 bg-white border-r border-slate-200/80 shadow-[4px_0_24px_rgba(15,23,42,0.02)] flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'
+                className={`fixed top-0 bottom-0 left-0 z-40 w-64 cyber-glass-sidebar shadow-[4px_0_24px_rgba(4,18,26,0.6)] flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'
                     }`}
             >
                 {/* Brand Header */}
-                <div className="h-16 flex items-center justify-between px-5 border-b border-slate-100 bg-gradient-to-b from-slate-50/50 to-transparent">
+                <div className="h-16 flex items-center justify-between px-5 border-b border-[#A8E6E8]/15 bg-[#061923]/40">
                     <ApplicationLogo
                         size="sm"
                         showText={true}
@@ -87,7 +87,7 @@ export default function Sidebar({ isOpen, onClose }) {
                     />
                     <button
                         onClick={onClose}
-                        className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 lg:hidden transition-colors"
+                        className="p-1.5 rounded-xl text-[#A8E6E8] hover:text-[#F4FBFC] hover:bg-[#0B6E8A]/30 lg:hidden transition-colors"
                         aria-label="Close menu"
                     >
                         <X className="w-5 h-5" />
@@ -96,24 +96,24 @@ export default function Sidebar({ isOpen, onClose }) {
 
                 {/* Professional Inset User Card */}
                 <div className="px-3.5 pt-3 pb-1">
-                    <div className="p-3 rounded-2xl bg-gradient-to-br from-slate-50 via-blue-50/20 to-sky-50/30 border border-slate-200/70 shadow-2xs">
+                    <div className="p-3 rounded-2xl bg-[#0A3D4F]/50 border border-[#A8E6E8]/20 shadow-sm">
                         <div className="flex items-center gap-3">
                             <div className="relative shrink-0">
                                 <img
                                     src={user?.avatar_url}
                                     alt={user?.name}
-                                    className="w-10 h-10 rounded-xl object-cover ring-2 ring-white shadow-xs"
+                                    className="w-10 h-10 rounded-xl object-cover ring-2 ring-[#2EC4D6]/40 shadow-xs"
                                 />
-                                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full shadow-xs" />
+                                <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-[#061923] rounded-full shadow-xs" />
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-xs font-bold text-slate-900 truncate leading-snug">
+                                <p className="text-xs font-bold text-[#F4FBFC] truncate leading-snug">
                                     {user?.name || 'User'}
                                 </p>
                                 <div className="mt-0.5">
                                     <span className={`inline-flex items-center px-2 py-0.5 text-[9px] font-bold rounded-md tracking-wider uppercase ${isAdmin
-                                        ? 'bg-blue-100/80 text-blue-700 border border-blue-200/60'
-                                        : 'bg-emerald-100/80 text-emerald-700 border border-emerald-200/60'
+                                        ? 'bg-[#0B6E8A]/50 text-[#2EC4D6] border border-[#2EC4D6]/30'
+                                        : 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30'
                                         }`}>
                                         {isAdmin ? 'Instructor / Admin' : 'Student'}
                                     </span>
@@ -125,9 +125,9 @@ export default function Sidebar({ isOpen, onClose }) {
 
                 {/* Navigation links */}
                 <div className="flex-1 overflow-y-auto px-3.5 py-3 space-y-1">
-                    <div className="px-2 pt-1 pb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                    <div className="px-2 pt-1 pb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-[#A8E6E8]/60">
                         <span>{isAdmin ? 'Administrative Portal' : 'Student Classroom'}</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#A8E6E8]/30" />
                     </div>
 
                     {currentNav.map((item) => {
@@ -139,66 +139,66 @@ export default function Sidebar({ isOpen, onClose }) {
                                 href={item.href}
                                 onClick={() => onClose && onClose()}
                                 className={`group relative flex items-center gap-3 px-2.5 py-2 rounded-xl text-xs font-semibold transition-all duration-150 ${active
-                                    ? 'bg-blue-50/90 text-blue-700 font-bold border border-blue-200/70 shadow-2xs'
-                                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'
+                                    ? 'bg-[#0B6E8A]/45 text-[#F4FBFC] font-bold border border-[#2EC4D6]/40 shadow-[0_0_15px_rgba(46,196,214,0.25)]'
+                                    : 'text-[#A8E6E8]/80 hover:text-[#F4FBFC] hover:bg-[#0B6E8A]/20 border border-transparent'
                                     }`}
                             >
                                 <div
                                     className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-150 ${active
-                                        ? 'bg-blue-600 text-white shadow-xs shadow-blue-500/30'
-                                        : 'bg-slate-100/80 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-600 group-hover:scale-105'
+                                        ? 'cyber-glow-btn text-[#F4FBFC]'
+                                        : 'bg-[#0A3D4F]/60 text-[#A8E6E8] group-hover:bg-[#0B6E8A]/40 group-hover:text-[#2EC4D6] group-hover:scale-105'
                                         }`}
                                 >
                                     <Icon className="w-4 h-4" />
                                 </div>
                                 <span className="truncate flex-1">{item.name}</span>
                                 {active && (
-                                    <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0 shadow-xs" />
-                                )}
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#2EC4D6] shrink-0 shadow-[0_0_6px_#2EC4D6]" />
+                                )}{/* already uses palette - keep */}
                             </Link>
                         );
                     })}
 
-                    <div className="pt-4 px-2 pb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                    <div className="pt-4 px-2 pb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-[#A8E6E8]/60">
                         <span>Account</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#A8E6E8]/30" />
                     </div>
 
                     <Link
                         href="/profile"
                         onClick={() => onClose && onClose()}
                         className={`group relative flex items-center gap-3 px-2.5 py-2 rounded-xl text-xs font-semibold transition-all duration-150 ${currentUrl.startsWith('/profile')
-                            ? 'bg-blue-50/90 text-blue-700 font-bold border border-blue-200/70 shadow-2xs'
-                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 border border-transparent'
+                            ? 'bg-[#0B6E8A]/45 text-[#F4FBFC] font-bold border border-[#2EC4D6]/40 shadow-[0_0_15px_rgba(46,196,214,0.25)]'
+                            : 'text-[#A8E6E8]/80 hover:text-[#F4FBFC] hover:bg-[#0B6E8A]/20 border border-transparent'
                             }`}
                     >
                         <div
                             className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-150 ${currentUrl.startsWith('/profile')
-                                ? 'bg-blue-600 text-white shadow-xs shadow-blue-500/30'
-                                : 'bg-slate-100/80 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-600 group-hover:scale-105'
+                                ? 'cyber-glow-btn text-[#F4FBFC]'
+                                : 'bg-[#0A3D4F]/60 text-[#A8E6E8] group-hover:bg-[#0B6E8A]/40 group-hover:text-[#2EC4D6] group-hover:scale-105'
                                 }`}
                         >
                             <User className="w-4 h-4" />
                         </div>
                         <span className="truncate flex-1">Profile &amp; Settings</span>
                         {currentUrl.startsWith('/profile') && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0 shadow-xs" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#2EC4D6] shrink-0 shadow-[0_0_6px_#2EC4D6]" />
                         )}
                     </Link>
                 </div>
 
                 {/* Footer Sign Out & PWA Install */}
-                <div className="p-3.5 border-t border-slate-100 bg-slate-50/40 space-y-2">
+                <div className="p-3.5 border-t border-[#A8E6E8]/15 bg-[#061923]/50 space-y-2">
                     <PwaInstallButton className="w-full justify-center" text="Install Application" />
                     <button
                         type="button"
                         onClick={() => secureLogout()}
-                        className="w-full group flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-rose-600 bg-white hover:bg-rose-50/70 border border-slate-200/70 hover:border-rose-200 shadow-2xs hover:shadow-xs transition-all duration-150"
+                        className="w-full group flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-[#A8E6E8] hover:text-rose-300 cyber-oauth-btn border border-[#A8E6E8]/20 hover:border-rose-400/40 shadow-xs transition-all duration-150 cursor-pointer"
                     >
-                        <LogOut className="w-4 h-4 text-slate-400 group-hover:text-rose-500 group-hover:-translate-x-0.5 transition-all" />
+                        <LogOut className="w-4 h-4 text-[#A8E6E8]/70 group-hover:text-rose-400 group-hover:-translate-x-0.5 transition-all" />
                         <span>Sign Out</span>
                     </button>
-                    <p className="text-[10px] text-center text-slate-400 mt-2 font-medium">
+                    <p className="text-[10px] text-center text-[#A8E6E8]/50 mt-2 font-medium">
                         CRT F&amp;B Connect • LMS
                     </p>
                 </div>

@@ -88,10 +88,10 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
             {/* Top Bar */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8 min-w-0">
                 <div className="min-w-0">
-                    <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    <h1 className="text-xl sm:text-3xl font-black text-[#F4FBFC] tracking-tight">
                         Educational Resources Management
                     </h1>
-                    <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                    <p className="text-xs sm:text-sm text-[#A8E6E8]/70 mt-1">
                         Organize curriculum folders, upload masterclass videos, PDF modules, and visual aids.
                     </p>
                 </div>
@@ -99,14 +99,14 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
                 <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-2.5 w-full sm:w-auto shrink-0">
                     <button
                         onClick={() => setIsFolderModalOpen(true)}
-                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs transition-all text-center cursor-pointer"
+                        className="cyber-oauth-btn inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold rounded-xl text-center cursor-pointer"
                     >
-                        <FolderPlus className="w-4 h-4 text-blue-600 shrink-0" />
+                        <FolderPlus className="w-4 h-4 text-[#2EC4D6] shrink-0" />
                         <span>New Folder</span>
                     </button>
                     <Link
                         href="/admin/resources/create"
-                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm shadow-blue-500/20 hover:shadow-md transition-all text-center"
+                        className="cyber-glow-btn inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold rounded-xl text-center cursor-pointer"
                     >
                         <Plus className="w-4 h-4 shrink-0" />
                         <span>Add Resource</span>
@@ -124,33 +124,37 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
                             key={cat.id}
                             className={`p-5 rounded-2xl border transition-all cursor-pointer relative group flex flex-col justify-between ${
                                 isSelected
-                                    ? 'bg-blue-50/70 border-blue-400 shadow-sm'
-                                    : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-sm'
+                                    ? 'bg-[#0B6E8A]/40 border-[#2EC4D6] shadow-lg shadow-[#2EC4D6]/20 ring-1 ring-[#2EC4D6]/40 text-[#F4FBFC]'
+                                    : 'cyber-glass-card cyber-glass-card-hover'
                             }`}
                             onClick={() => handleCategoryChange(isSelected ? '' : cat.slug)}
                         >
                             <div>
                                 <div className="flex items-center justify-between mb-3">
-                                    <div className={`p-2.5 rounded-xl ${isSelected ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-600'} group-hover:scale-105 transition-transform`}>
+                                    <div className={`p-2.5 rounded-xl border ${
+                                        isSelected
+                                            ? 'bg-[#2EC4D6] text-[#061923] border-[#2EC4D6]'
+                                            : 'bg-[#0B6E8A]/30 text-[#2EC4D6] border-[#A8E6E8]/20'
+                                    } group-hover:scale-105 transition-transform`}>
                                         <IconComponent className="w-5 h-5" />
                                     </div>
-                                    <span className="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                                    <span className="text-xs font-bold text-[#A8E6E8] bg-[#0B6E8A]/40 border border-[#A8E6E8]/20 px-2 py-0.5 rounded-full">
                                         {cat.resources_count}
                                     </span>
                                 </div>
-                                <h3 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                                <h3 className="text-sm font-bold text-[#F4FBFC] group-hover:text-[#2EC4D6] transition-colors">
                                     {cat.name}
                                 </h3>
-                                <p className="text-[11px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                                <p className="text-[11px] text-[#A8E6E8]/70 mt-1 line-clamp-2 leading-relaxed">
                                     {cat.description}
                                 </p>
                             </div>
 
-                            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <div className="mt-4 pt-3 border-t border-[#A8E6E8]/15 flex items-center justify-between">
                                 <Link
                                     href={`/admin/resources/category/${cat.slug}`}
                                     onClick={(e) => e.stopPropagation()}
-                                    className="text-[11px] font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1"
+                                    className="text-[11px] font-bold text-[#2EC4D6] hover:text-[#A8E6E8] inline-flex items-center gap-1 transition-colors"
                                 >
                                     Browse Folders ({cat.folders_count})
                                     <ArrowRight className="w-3 h-3" />
@@ -162,16 +166,16 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
             </div>
 
             {/* Search and Filters Bar */}
-            <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs mb-6 min-w-0">
+            <div className="cyber-glass-card p-3.5 sm:p-4 mb-6 min-w-0">
                 <form onSubmit={handleSearch} className="flex flex-col lg:flex-row items-stretch lg:items-center gap-2.5 sm:gap-3">
                     <div className="relative flex-1 min-w-0 w-full">
-                        <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                        <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A8E6E8]/50 pointer-events-none" />
                         <input
                             type="text"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search resources by title, description, or keyword..."
-                            className="w-full pl-10 pr-4 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20 transition-all"
+                            className="cyber-glass-input w-full pl-10 pr-4 py-2 text-xs rounded-xl"
                         />
                     </div>
 
@@ -180,14 +184,14 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
                         <select
                             value={typeFilter}
                             onChange={(e) => handleTypeChange(e.target.value)}
-                            className="w-full lg:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
+                            className="cyber-glass-input w-full lg:w-auto px-3 py-2 text-xs rounded-xl cursor-pointer"
                         >
-                            <option value="">All Types</option>
-                            <option value="video">Video Lessons</option>
-                            <option value="illustration">Illustrations</option>
-                            <option value="pdf">PDF Modules</option>
-                            <option value="text">Text Lessons</option>
-                            <option value="other">Other Materials</option>
+                            <option value="" className="bg-[#061923] text-[#F4FBFC]">All Types</option>
+                            <option value="video" className="bg-[#061923] text-[#F4FBFC]">Video Lessons</option>
+                            <option value="illustration" className="bg-[#061923] text-[#F4FBFC]">Illustrations</option>
+                            <option value="pdf" className="bg-[#061923] text-[#F4FBFC]">PDF Modules</option>
+                            <option value="text" className="bg-[#061923] text-[#F4FBFC]">Text Lessons</option>
+                            <option value="other" className="bg-[#061923] text-[#F4FBFC]">Other Materials</option>
                         </select>
 
                         {/* Visibility filter */}
@@ -197,12 +201,12 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
                                 setVisibilityFilter(e.target.value);
                                 applyFilters({ search, category: categoryFilter, type: typeFilter, visibility: e.target.value, sort: sortBy });
                             }}
-                            className="w-full lg:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
+                            className="cyber-glass-input w-full lg:w-auto px-3 py-2 text-xs rounded-xl cursor-pointer"
                         >
-                            <option value="">All Statuses</option>
-                            <option value="published">Published</option>
-                            <option value="draft">Draft</option>
-                            <option value="archived">Archived</option>
+                            <option value="" className="bg-[#061923] text-[#F4FBFC]">All Statuses</option>
+                            <option value="published" className="bg-[#061923] text-[#F4FBFC]">Published</option>
+                            <option value="draft" className="bg-[#061923] text-[#F4FBFC]">Draft</option>
+                            <option value="archived" className="bg-[#061923] text-[#F4FBFC]">Archived</option>
                         </select>
 
                         {/* Sort */}
@@ -212,18 +216,18 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
                                 setSortBy(e.target.value);
                                 applyFilters({ search, category: categoryFilter, type: typeFilter, visibility: visibilityFilter, sort: e.target.value });
                             }}
-                            className="col-span-2 sm:col-span-1 lg:w-auto px-3 py-2 text-xs bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-blue-600 focus:outline-none text-slate-700 font-medium cursor-pointer"
+                            className="cyber-glass-input col-span-2 sm:col-span-1 lg:w-auto px-3 py-2 text-xs rounded-xl cursor-pointer"
                         >
-                            <option value="latest">Latest First</option>
-                            <option value="oldest">Oldest First</option>
-                            <option value="title">Alphabetical (A-Z)</option>
-                            <option value="views">Most Viewed</option>
-                            <option value="downloads">Most Downloaded</option>
+                            <option value="latest" className="bg-[#061923] text-[#F4FBFC]">Latest First</option>
+                            <option value="oldest" className="bg-[#061923] text-[#F4FBFC]">Oldest First</option>
+                            <option value="title" className="bg-[#061923] text-[#F4FBFC]">Alphabetical (A-Z)</option>
+                            <option value="views" className="bg-[#061923] text-[#F4FBFC]">Most Viewed</option>
+                            <option value="downloads" className="bg-[#061923] text-[#F4FBFC]">Most Downloaded</option>
                         </select>
 
                         <button
                             type="submit"
-                            className="col-span-2 lg:col-span-1 px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-2xs transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                            className="cyber-glow-btn col-span-2 lg:col-span-1 px-4 py-2 text-xs font-bold rounded-xl cursor-pointer flex items-center justify-center gap-1.5"
                         >
                             <Search className="w-3.5 h-3.5 sm:hidden" />
                             <span>Filter</span>
@@ -238,10 +242,10 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
                     {resources.data.map((res) => (
                         <div
                             key={res.id}
-                            className="bg-white rounded-2xl border border-slate-200 hover:border-blue-300 shadow-2xs hover:shadow-md transition-all overflow-hidden flex flex-col group"
+                            className="cyber-glass-card cyber-glass-card-hover overflow-hidden flex flex-col group"
                         >
                             {/* Card Media Preview Header */}
-                            <div className="relative aspect-video bg-slate-900 overflow-hidden flex items-center justify-center">
+                            <div className="relative aspect-video bg-[#061923] overflow-hidden flex items-center justify-center border-b border-[#A8E6E8]/15">
                                 {res.thumbnail_url ? (
                                     <img
                                         src={res.thumbnail_url}
@@ -255,25 +259,27 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     />
                                 ) : (
-                                    <div className="text-slate-500 flex flex-col items-center">
-                                        {res.resource_type === 'video' ? <Video className="w-10 h-10 text-blue-500" /> :
-                                         res.resource_type === 'pdf' ? <FileText className="w-10 h-10 text-emerald-500" /> :
-                                         res.resource_type === 'text' ? <BookOpen className="w-10 h-10 text-amber-500" /> :
-                                         <Folder className="w-10 h-10 text-slate-400" />}
+                                    <div className="text-[#A8E6E8]/40 flex flex-col items-center">
+                                        {res.resource_type === 'video' ? <Video className="w-10 h-10 text-[#2EC4D6]" /> :
+                                         res.resource_type === 'pdf' ? <FileText className="w-10 h-10 text-emerald-400" /> :
+                                         res.resource_type === 'text' ? <BookOpen className="w-10 h-10 text-amber-400" /> :
+                                         <Folder className="w-10 h-10 text-[#A8E6E8]/50" />}
                                     </div>
                                 )}
 
-                                <span className={`absolute top-2.5 left-2.5 px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-md shadow-xs ${
-                                    res.resource_type === 'video' ? 'bg-blue-600 text-white' :
-                                    res.resource_type === 'illustration' ? 'bg-sky-500 text-white' :
-                                    res.resource_type === 'pdf' ? 'bg-emerald-600 text-white' :
-                                    'bg-amber-600 text-white'
+                                <span className={`absolute top-2.5 left-2.5 px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-md shadow-md border ${
+                                    res.resource_type === 'video' ? 'bg-[#0B6E8A]/90 text-[#F4FBFC] border-[#2EC4D6]/40' :
+                                    res.resource_type === 'illustration' ? 'bg-sky-500/90 text-white border-sky-400/40' :
+                                    res.resource_type === 'pdf' ? 'bg-emerald-600/90 text-white border-emerald-400/40' :
+                                    'bg-amber-600/90 text-white border-amber-400/40'
                                 }`}>
                                     {res.resource_type}
                                 </span>
 
-                                <span className={`absolute top-2.5 right-2.5 px-2 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider backdrop-blur-md ${
-                                    res.visibility === 'published' ? 'bg-emerald-500/90 text-white' : 'bg-slate-700/90 text-white'
+                                <span className={`absolute top-2.5 right-2.5 px-2 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider backdrop-blur-md border ${
+                                    res.visibility === 'published'
+                                        ? 'bg-emerald-500/25 text-emerald-300 border-emerald-500/30'
+                                        : 'bg-[#061923]/80 text-[#A8E6E8]/70 border-[#A8E6E8]/20'
                                 }`}>
                                     {res.visibility}
                                 </span>
@@ -282,40 +288,40 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
                             {/* Content */}
                             <div className="p-5 flex-1 flex flex-col justify-between">
                                 <div>
-                                    <div className="text-[11px] font-semibold text-blue-600 uppercase tracking-wider mb-1 truncate">
+                                    <div className="text-[11px] font-semibold text-[#2EC4D6] uppercase tracking-wider mb-1 truncate">
                                         {res.category?.name} {res.folder ? `› ${res.folder.name}` : ''}
                                     </div>
                                     <Link
                                         href={`/admin/resources/${res.id}`}
-                                        className="text-sm font-bold text-slate-900 hover:text-blue-600 transition-colors line-clamp-1 block"
+                                        className="text-sm font-bold text-[#F4FBFC] hover:text-[#2EC4D6] transition-colors line-clamp-1 block"
                                     >
                                         {res.title}
                                     </Link>
-                                    <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                                    <p className="text-xs text-[#A8E6E8]/70 mt-1 line-clamp-2 leading-relaxed">
                                         {res.description || 'No description provided.'}
                                     </p>
                                 </div>
 
-                                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-medium">
+                                <div className="mt-4 pt-3 border-t border-[#A8E6E8]/15 flex items-center justify-between text-xs text-[#A8E6E8]/70 font-medium">
                                     <span className="flex items-center gap-1">
-                                        <Eye className="w-3.5 h-3.5" />
+                                        <Eye className="w-3.5 h-3.5 text-[#2EC4D6]" />
                                         {res.views_count}
                                     </span>
                                     <span className="flex items-center gap-1">
-                                        <Download className="w-3.5 h-3.5" />
+                                        <Download className="w-3.5 h-3.5 text-[#2EC4D6]" />
                                         {res.downloads_count}
                                     </span>
-                                    <span className="text-[11px] font-mono">
+                                    <span className="text-[11px] font-mono text-[#A8E6E8]">
                                         {res.formatted_file_size}
                                     </span>
                                 </div>
                             </div>
 
                             {/* Action Bar */}
-                            <div className="px-5 py-3 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between">
+                            <div className="px-5 py-3 bg-[#061923]/60 border-t border-[#A8E6E8]/15 flex items-center justify-between">
                                 <Link
                                     href={`/admin/resources/${res.id}`}
-                                    className="text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1"
+                                    className="text-xs font-bold text-[#2EC4D6] hover:text-[#A8E6E8] inline-flex items-center gap-1 transition-colors"
                                 >
                                     View Details
                                     <ArrowRight className="w-3.5 h-3.5" />
@@ -323,7 +329,7 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
                                 <div className="flex items-center gap-1">
                                     <Link
                                         href={`/admin/resources/${res.id}/edit`}
-                                        className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 rounded"
+                                        className="p-1 text-[#A8E6E8] hover:text-[#2EC4D6] hover:bg-[#0B6E8A]/30 rounded transition-colors"
                                         title="Edit"
                                     >
                                         <Edit3 className="w-3.5 h-3.5" />
@@ -334,16 +340,16 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
                     ))}
                 </div>
             ) : (
-                <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center my-6">
-                    <FolderKanban className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                    <h3 className="text-base font-bold text-slate-800">No resources found</h3>
-                    <p className="text-xs text-slate-500 mt-1">
+                <div className="cyber-glass-card p-12 text-center my-6">
+                    <FolderKanban className="w-12 h-12 text-[#A8E6E8]/30 mx-auto mb-3" />
+                    <h3 className="text-base font-bold text-[#F4FBFC]">No resources found</h3>
+                    <p className="text-xs text-[#A8E6E8]/70 mt-1">
                         Try adjusting your search filters or upload a new educational material.
                     </p>
                     <div className="mt-5">
                         <Link
                             href="/admin/resources/create"
-                            className="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700"
+                            className="cyber-glow-btn inline-flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl"
                         >
                             <Plus className="w-4 h-4" />
                             Upload First Resource
@@ -363,23 +369,23 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
             >
                 <form onSubmit={handleCreateFolder} className="space-y-4">
                     <div>
-                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                             Resource Category
                         </label>
                         <select
                             value={folderForm.category_id}
                             onChange={(e) => setFolderForm({ ...folderForm, category_id: e.target.value })}
-                            className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                            className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                             required
                         >
                             {categories.map((c) => (
-                                <option key={c.id} value={c.id}>{c.name}</option>
+                                <option key={c.id} value={c.id} className="bg-[#061923] text-[#F4FBFC]">{c.name}</option>
                             ))}
                         </select>
                     </div>
 
                     <div>
-                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                             Folder Name
                         </label>
                         <input
@@ -387,36 +393,36 @@ export default function ResourceIndex({ categories = [], resources = { data: [] 
                             value={folderForm.name}
                             onChange={(e) => setFolderForm({ ...folderForm, name: e.target.value })}
                             placeholder="e.g. Fine Dining Table Setting Masterclass"
-                            className="w-full px-3.5 py-2 text-sm bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                            className="cyber-glass-input w-full px-3.5 py-2 text-sm rounded-xl"
                             required
                         />
                     </div>
 
                     <div>
-                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                            Description <span className="text-slate-400 font-normal text-[10px]">(Optional)</span>
+                        <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
+                            Description <span className="text-[#A8E6E8]/50 font-normal text-[10px]">(Optional)</span>
                         </label>
                         <textarea
                             value={folderForm.description}
                             onChange={(e) => setFolderForm({ ...folderForm, description: e.target.value })}
                             rows={3}
                             placeholder="Briefly describe the contents or learning objective of this folder..."
-                            className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                            className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                         />
                     </div>
 
-                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#A8E6E8]/15">
                         <button
                             type="button"
                             onClick={() => setIsFolderModalOpen(false)}
-                            className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
+                            className="cyber-oauth-btn px-4 py-2 text-xs font-semibold rounded-xl"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
                             disabled={isCreatingFolder}
-                            className="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm"
+                            className="cyber-glow-btn px-5 py-2 text-xs font-bold rounded-xl"
                         >
                             {isCreatingFolder ? 'Creating...' : 'Create Folder'}
                         </button>

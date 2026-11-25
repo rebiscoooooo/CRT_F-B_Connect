@@ -74,32 +74,32 @@ export default function CategoryView({ category, folders = [], resources = { dat
             <Head title={`${category.name} — CRT F&B Connect`} />
 
             {/* Breadcrumbs */}
-            <nav className="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-6">
-                <Link href="/admin/resources" className="hover:text-blue-600 transition-colors">
+            <nav className="flex items-center gap-2 text-xs font-semibold text-[#A8E6E8]/70 mb-6">
+                <Link href="/admin/resources" className="hover:text-[#2EC4D6] transition-colors">
                     Resources
                 </Link>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                <span className="text-slate-900 font-bold">{category.name}</span>
+                <ChevronRight className="w-3.5 h-3.5 text-[#A8E6E8]/40" />
+                <span className="text-[#F4FBFC] font-bold">{category.name}</span>
             </nav>
 
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 cyber-glass-card p-6">
                 <div>
-                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">{category.name}</h1>
-                    <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl">{category.description}</p>
+                    <h1 className="text-2xl font-black text-[#F4FBFC] tracking-tight">{category.name}</h1>
+                    <p className="text-xs sm:text-sm text-[#A8E6E8]/70 mt-1 max-w-2xl">{category.description}</p>
                 </div>
 
                 <div className="flex items-center gap-2.5">
                     <button
                         onClick={() => setIsCreateFolderOpen(true)}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs transition-all"
+                        className="cyber-oauth-btn inline-flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl transition-all"
                     >
-                        <FolderPlus className="w-4 h-4 text-blue-600" />
+                        <FolderPlus className="w-4 h-4 text-[#2EC4D6]" />
                         Create Folder
                     </button>
                     <Link
                         href="/admin/resources/create"
-                        className="inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm transition-all"
+                        className="cyber-glow-btn inline-flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-xl transition-all"
                     >
                         <Plus className="w-4 h-4" />
                         Upload to {category.name}
@@ -110,8 +110,8 @@ export default function CategoryView({ category, folders = [], resources = { dat
             {/* Folders in this Category */}
             <div className="mb-10">
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                        <Folder className="w-5 h-5 text-blue-600" />
+                    <h3 className="text-base font-bold text-[#F4FBFC] flex items-center gap-2">
+                        <Folder className="w-5 h-5 text-[#2EC4D6]" />
                         Dedicated Learning Folders ({folders.length})
                     </h3>
                 </div>
@@ -121,11 +121,11 @@ export default function CategoryView({ category, folders = [], resources = { dat
                         {folders.map((folder) => (
                             <div
                                 key={folder.id}
-                                className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-blue-300 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group"
+                                className="cyber-glass-card cyber-glass-card-hover p-5 flex flex-col justify-between group"
                             >
                                 <div>
                                     <div className="flex items-start justify-between gap-2 mb-2">
-                                        <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600 group-hover:scale-105 transition-transform">
+                                        <div className="p-2.5 rounded-xl bg-[#0B6E8A]/30 border border-[#A8E6E8]/20 text-[#2EC4D6] group-hover:scale-105 transition-transform">
                                             <Folder className="w-5 h-5" />
                                         </div>
                                         <div className="flex items-center gap-1">
@@ -134,7 +134,7 @@ export default function CategoryView({ category, folders = [], resources = { dat
                                                     setEditingFolder({ ...folder });
                                                     setIsEditFolderOpen(true);
                                                 }}
-                                                className="p-1 text-slate-400 hover:text-slate-600 rounded"
+                                                className="p-1 text-[#A8E6E8]/60 hover:text-[#2EC4D6] rounded transition-colors"
                                                 title="Rename / Edit"
                                             >
                                                 <Edit3 className="w-3.5 h-3.5" />
@@ -144,7 +144,7 @@ export default function CategoryView({ category, folders = [], resources = { dat
                                                     setDeletingFolder(folder);
                                                     setIsDeleteConfirmOpen(true);
                                                 }}
-                                                className="p-1 text-slate-400 hover:text-rose-600 rounded"
+                                                className="p-1 text-[#A8E6E8]/60 hover:text-[#2EC4D6] rounded transition-colors"
                                                 title="Delete Folder"
                                             >
                                                 <Trash2 className="w-3.5 h-3.5" />
@@ -154,22 +154,22 @@ export default function CategoryView({ category, folders = [], resources = { dat
 
                                     <Link
                                         href={`/admin/resources/folder/${folder.id}`}
-                                        className="text-sm font-bold text-slate-900 hover:text-blue-600 transition-colors block"
+                                        className="text-sm font-bold text-[#F4FBFC] hover:text-[#2EC4D6] transition-colors block"
                                     >
                                         {folder.name}
                                     </Link>
-                                    <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                                    <p className="text-xs text-[#A8E6E8]/70 mt-1 line-clamp-2 leading-relaxed">
                                         {folder.description || 'Curriculum unit module folder.'}
                                     </p>
                                 </div>
 
-                                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                                    <span className="font-semibold text-slate-500">
+                                <div className="mt-4 pt-3 border-t border-[#A8E6E8]/15 flex items-center justify-between text-xs">
+                                    <span className="font-semibold text-[#A8E6E8]">
                                         {folder.resources_count} {folder.resources_count === 1 ? 'material' : 'materials'}
                                     </span>
                                     <Link
                                         href={`/admin/resources/folder/${folder.id}`}
-                                        className="font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                                        className="font-bold text-[#2EC4D6] hover:text-[#A8E6E8] flex items-center gap-1 transition-colors"
                                     >
                                         Open Folder
                                         <ChevronRight className="w-3.5 h-3.5" />
@@ -179,7 +179,7 @@ export default function CategoryView({ category, folders = [], resources = { dat
                         ))}
                     </div>
                 ) : (
-                    <div className="p-6 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-center text-xs text-slate-400">
+                    <div className="p-6 cyber-glass-card text-center text-xs text-[#A8E6E8]/60">
                         No folders created yet in this category. You can create subfolders to categorize learning units.
                     </div>
                 )}
@@ -188,22 +188,22 @@ export default function CategoryView({ category, folders = [], resources = { dat
             {/* Direct Category Resources Section */}
             <div>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-                    <h3 className="text-base font-bold text-slate-900">
+                    <h3 className="text-base font-bold text-[#F4FBFC]">
                         All Resources in {category.name}
                     </h3>
 
                     <form onSubmit={handleSearch} className="flex items-center gap-2">
                         <div className="relative">
-                            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#A8E6E8]/50" />
                             <input
                                 type="text"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 placeholder="Search this category..."
-                                className="pl-9 pr-3 py-1.5 text-xs bg-white rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 w-48 sm:w-64"
+                                className="cyber-glass-input pl-9 pr-3 py-1.5 text-xs rounded-xl w-48 sm:w-64"
                             />
                         </div>
-                        <button type="submit" className="px-3 py-1.5 text-xs font-bold text-white bg-blue-600 rounded-xl">
+                        <button type="submit" className="cyber-glow-btn px-3 py-1.5 text-xs font-bold rounded-xl cursor-pointer">
                             Filter
                         </button>
                     </form>
@@ -214,21 +214,21 @@ export default function CategoryView({ category, folders = [], resources = { dat
                         {resources.data.map((res) => (
                             <div
                                 key={res.id}
-                                className="bg-white rounded-2xl border border-slate-200 shadow-2xs hover:shadow-md transition-all overflow-hidden flex flex-col group"
+                                className="cyber-glass-card cyber-glass-card-hover overflow-hidden flex flex-col group"
                             >
-                                <div className="relative aspect-video bg-slate-900 flex items-center justify-center overflow-hidden">
+                                <div className="relative aspect-video bg-[#061923] flex items-center justify-center overflow-hidden border-b border-[#A8E6E8]/15">
                                     {res.thumbnail_url ? (
                                         <img src={res.thumbnail_url} alt={res.title} className="w-full h-full object-cover" />
                                     ) : res.resource_type === 'illustration' && res.file_url ? (
                                         <img src={res.file_url} alt={res.title} className="w-full h-full object-cover" />
                                     ) : (
-                                        <div className="text-slate-400">
-                                            {res.resource_type === 'video' ? <Video className="w-10 h-10 text-blue-500" /> :
-                                             res.resource_type === 'pdf' ? <FileText className="w-10 h-10 text-emerald-500" /> :
-                                             <BookOpen className="w-10 h-10 text-amber-500" />}
+                                        <div className="text-[#A8E6E8]/40">
+                                            {res.resource_type === 'video' ? <Video className="w-10 h-10 text-[#2EC4D6]" /> :
+                                             res.resource_type === 'pdf' ? <FileText className="w-10 h-10 text-emerald-400" /> :
+                                             <BookOpen className="w-10 h-10 text-amber-400" />}
                                         </div>
                                     )}
-                                    <span className="absolute top-2.5 left-2.5 px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-blue-600 text-white">
+                                    <span className="absolute top-2.5 left-2.5 px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-[#0B6E8A]/90 text-white border border-[#2EC4D6]/40">
                                         {res.resource_type}
                                     </span>
                                 </div>
@@ -237,32 +237,32 @@ export default function CategoryView({ category, folders = [], resources = { dat
                                     <div>
                                         <Link
                                             href={`/admin/resources/${res.id}`}
-                                            className="text-sm font-bold text-slate-900 hover:text-blue-600 line-clamp-1"
+                                            className="text-sm font-bold text-[#F4FBFC] hover:text-[#2EC4D6] transition-colors line-clamp-1"
                                         >
                                             {res.title}
                                         </Link>
-                                        <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                                        <p className="text-xs text-[#A8E6E8]/70 mt-1 line-clamp-2 leading-relaxed">
                                             {res.description || 'No description provided.'}
                                         </p>
                                     </div>
-                                    <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400 font-medium">
-                                        <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" />{res.views_count}</span>
-                                        <span className="flex items-center gap-1"><Download className="w-3.5 h-3.5" />{res.downloads_count}</span>
-                                        <span className="font-mono text-[11px]">{res.formatted_file_size}</span>
+                                    <div className="mt-4 pt-3 border-t border-[#A8E6E8]/15 flex items-center justify-between text-xs text-[#A8E6E8]/70 font-medium">
+                                        <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5 text-[#2EC4D6]" />{res.views_count}</span>
+                                        <span className="flex items-center gap-1"><Download className="w-3.5 h-3.5 text-[#2EC4D6]" />{res.downloads_count}</span>
+                                        <span className="font-mono text-[11px] text-[#A8E6E8]">{res.formatted_file_size}</span>
                                     </div>
                                 </div>
 
-                                <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                                <div className="px-5 py-3 bg-[#061923]/60 border-t border-[#A8E6E8]/15 flex items-center justify-between">
                                     <Link
                                         href={`/admin/resources/${res.id}`}
-                                        className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1"
+                                        className="text-xs font-bold text-[#2EC4D6] hover:text-[#A8E6E8] flex items-center gap-1 transition-colors"
                                     >
                                         View Resource
                                         <ChevronRight className="w-3.5 h-3.5" />
                                     </Link>
                                     <Link
                                         href={`/admin/resources/${res.id}/edit`}
-                                        className="text-xs text-slate-400 hover:text-slate-600"
+                                        className="text-xs text-[#A8E6E8]/60 hover:text-[#2EC4D6] transition-colors"
                                     >
                                         <Edit3 className="w-3.5 h-3.5" />
                                     </Link>
@@ -271,7 +271,7 @@ export default function CategoryView({ category, folders = [], resources = { dat
                         ))}
                     </div>
                 ) : (
-                    <div className="p-12 bg-white rounded-2xl border border-slate-200 text-center text-xs text-slate-400">
+                    <div className="p-12 cyber-glass-card text-center text-xs text-[#A8E6E8]/60">
                         No resources uploaded in this category yet.
                     </div>
                 )}
@@ -287,7 +287,7 @@ export default function CategoryView({ category, folders = [], resources = { dat
             >
                 <form onSubmit={handleCreateFolder} className="space-y-4">
                     <div>
-                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                             Folder Name
                         </label>
                         <input
@@ -295,13 +295,13 @@ export default function CategoryView({ category, folders = [], resources = { dat
                             value={folderForm.name}
                             onChange={(e) => setFolderForm({ ...folderForm, name: e.target.value })}
                             placeholder="e.g. Dining Room Operations & Safety"
-                            className="w-full px-3.5 py-2 text-sm bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                            className="cyber-glass-input w-full px-3.5 py-2 text-sm rounded-xl"
                             required
                         />
                     </div>
 
                     <div>
-                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                             Description
                         </label>
                         <textarea
@@ -309,22 +309,22 @@ export default function CategoryView({ category, folders = [], resources = { dat
                             onChange={(e) => setFolderForm({ ...folderForm, description: e.target.value })}
                             rows={3}
                             placeholder="Folder curriculum scope or description..."
-                            className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                            className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                         />
                     </div>
 
-                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#A8E6E8]/15">
                         <button
                             type="button"
                             onClick={() => setIsCreateFolderOpen(false)}
-                            className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
+                            className="cyber-oauth-btn px-4 py-2 text-xs font-semibold rounded-xl"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
                             disabled={isSubmittingFolder}
-                            className="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl"
+                            className="cyber-glow-btn px-5 py-2 text-xs font-bold rounded-xl"
                         >
                             {isSubmittingFolder ? 'Creating...' : 'Create Folder'}
                         </button>
@@ -341,41 +341,41 @@ export default function CategoryView({ category, folders = [], resources = { dat
                 {editingFolder && (
                     <form onSubmit={handleUpdateFolder} className="space-y-4">
                         <div>
-                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                            <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                                 Folder Name
                             </label>
                             <input
                                 type="text"
                                 value={editingFolder.name}
                                 onChange={(e) => setEditingFolder({ ...editingFolder, name: e.target.value })}
-                                className="w-full px-3.5 py-2 text-sm bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                className="cyber-glass-input w-full px-3.5 py-2 text-sm rounded-xl"
                                 required
                             />
                         </div>
 
                         <div>
-                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                            <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                                 Description
                             </label>
                             <textarea
                                 value={editingFolder.description || ''}
                                 onChange={(e) => setEditingFolder({ ...editingFolder, description: e.target.value })}
                                 rows={3}
-                                className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                             />
                         </div>
 
-                        <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+                        <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#A8E6E8]/15">
                             <button
                                 type="button"
                                 onClick={() => setIsEditFolderOpen(false)}
-                                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
+                                className="cyber-oauth-btn px-4 py-2 text-xs font-semibold rounded-xl"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
-                                className="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl"
+                                className="cyber-glow-btn px-5 py-2 text-xs font-bold rounded-xl"
                             >
                                 Save Changes
                             </button>
@@ -391,21 +391,21 @@ export default function CategoryView({ category, folders = [], resources = { dat
                 title="Confirm Folder Deletion"
             >
                 <div className="space-y-4">
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                        Are you sure you want to delete folder <strong className="text-slate-900">{deletingFolder?.name}</strong>? Any resources assigned to this folder will be unlinked but kept safely in the category library.
+                    <p className="text-xs text-[#F4FBFC] leading-relaxed">
+                        Are you sure you want to delete folder <strong className="text-[#2EC4D6]">{deletingFolder?.name}</strong>? Any resources assigned to this folder will be unlinked but kept safely in the category library.
                     </p>
-                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#A8E6E8]/15">
                         <button
                             type="button"
                             onClick={() => setIsDeleteConfirmOpen(false)}
-                            className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
+                            className="cyber-oauth-btn px-4 py-2 text-xs font-semibold rounded-xl"
                         >
                             Cancel
                         </button>
                         <button
                             type="button"
                             onClick={handleDeleteFolder}
-                            className="px-5 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl"
+                            className="px-5 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 rounded-xl transition-colors cursor-pointer"
                         >
                             Yes, Delete Folder
                         </button>

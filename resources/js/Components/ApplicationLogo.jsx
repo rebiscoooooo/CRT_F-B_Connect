@@ -26,7 +26,7 @@ export default function ApplicationLogo({
     const logoElement = (
         <div className={`inline-flex items-center gap-3 ${className}`}>
             <div
-                className={`relative flex-shrink-0 ${dimension} rounded-full bg-white ring-2 ring-blue-500/20 shadow-sm shadow-blue-500/10 overflow-hidden flex items-center justify-center`}
+                className={`relative flex-shrink-0 ${dimension} rounded-full bg-[#061923] ring-2 ring-[#2EC4D6]/30 shadow-sm shadow-[#2EC4D6]/10 overflow-hidden flex items-center justify-center`}
             >
                 <img
                     src="/images/logo-badge.png"
@@ -44,11 +44,11 @@ export default function ApplicationLogo({
 
             {showText && (
                 <div className={`leading-tight text-left ${textClassName}`}>
-                    <span className="font-extrabold text-slate-900 tracking-tight block text-sm sm:text-base">
-                        CRT F&amp;B <span className="text-blue-600">Connect</span>
+                    <span className="font-extrabold text-[#F4FBFC] tracking-tight block text-sm sm:text-base">
+                        CRT F&amp;B <span className="bg-gradient-to-r from-[#2EC4D6] to-[#A8E6E8] bg-clip-text text-transparent">Connect</span>
                     </span>
                     {subtitle && (
-                        <span className="block text-[10px] font-semibold text-blue-600 uppercase tracking-wider">
+                        <span className="block text-[10px] font-semibold text-[#A8E6E8]/70 uppercase tracking-wider">
                             {subtitle}
                         </span>
                     )}

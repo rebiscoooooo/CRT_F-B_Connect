@@ -367,15 +367,15 @@ export default function ManualAssessmentModal({
                 {/* Introduction Banner */}
                 <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
                     <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center shrink-0">
-                            <Layers className="w-5 h-5 text-indigo-300" />
+                        <div className="w-10 h-10 rounded-xl bg-[#0B6E8A]/25 border border-[#2EC4D6]/40 flex items-center justify-center shrink-0">
+                            <Layers className="w-5 h-5 text-[#2EC4D6]" />
                         </div>
                         <div>
                             <div className="flex items-center gap-2">
-                                <h3 className="font-extrabold text-sm sm:text-base text-white">
+                                <h3 className="font-extrabold text-sm sm:text-base text-[#F4FBFC]">
                                     Manual Reviewer &amp; Question Builder
                                 </h3>
-                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-400/20 text-indigo-200 border border-indigo-300/20">
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#0B6E8A]/30 text-[#2EC4D6] border border-[#2EC4D6]/40">
                                     {questions.length} / 10+ Items
                                 </span>
                             </div>
@@ -389,9 +389,9 @@ export default function ManualAssessmentModal({
                         <button
                             type="button"
                             onClick={() => setShowSettings(!showSettings)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/10 transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0A3D4F]/30 hover:bg-[#0B6E8A]/30 text-[#F4FBFC] text-xs font-bold border border-[#A8E6E8]/20 transition-colors cursor-pointer"
                         >
-                            <Sliders className="w-3.5 h-3.5 text-indigo-300" />
+                            <Sliders className="w-3.5 h-3.5 text-[#2EC4D6]" />
                             {showSettings ? 'Hide Settings' : 'Quiz Settings'}
                         </button>
 
@@ -399,7 +399,7 @@ export default function ManualAssessmentModal({
                             <button
                                 type="button"
                                 onClick={handlePreset10Questions}
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl cyber-glow-btn text-[#F4FBFC] text-xs font-bold transition-all shadow-xs cursor-pointer"
                                 title="Instantly fill up to 10 questions"
                             >
                                 <Sparkles className="w-3.5 h-3.5" />
@@ -411,17 +411,17 @@ export default function ManualAssessmentModal({
 
                 {/* Collapsible Quiz Settings */}
                 {showSettings && (
-                    <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4 text-xs transition-all">
+                    <div className="p-5 rounded-2xl bg-[#0A3D4F]/30 border border-[#A8E6E8]/20 space-y-4 text-xs transition-all">
                         <div className="flex items-center justify-between">
-                            <h4 className="font-bold uppercase tracking-wider text-slate-500 text-[11px] flex items-center gap-1.5">
-                                <Sliders className="w-3.5 h-3.5 text-indigo-600" />
+                            <h4 className="font-bold uppercase tracking-wider text-[#A8E6E8]/70 text-[11px] flex items-center gap-1.5">
+                                <Sliders className="w-3.5 h-3.5 text-[#2EC4D6]" />
                                 Global Assessment &amp; Reviewer Parameters
                             </h4>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="sm:col-span-2">
-                                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
+                                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#A8E6E8] mb-1">
                                     Assessment / Reviewer Title
                                 </label>
                                 <input
@@ -429,15 +429,15 @@ export default function ManualAssessmentModal({
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                     placeholder="e.g. Knife Skills & Prep Hygiene Knowledge Check"
-                                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white focus:border-indigo-600 focus:outline-none text-xs font-semibold"
+                                    className="cyber-glass-input w-full px-3.5 py-2 rounded-xl text-xs font-semibold"
                                 />
                                 {clientErrors.title && (
-                                    <p className="text-[11px] text-rose-600 font-semibold mt-1">{clientErrors.title}</p>
+                                    <p className="text-[11px] text-rose-400 font-semibold mt-1">{clientErrors.title}</p>
                                 )}
                             </div>
 
                             <div className="sm:col-span-2">
-                                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
+                                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#A8E6E8] mb-1">
                                     Reviewer Instructions / Objective (Optional)
                                 </label>
                                 <textarea
@@ -445,47 +445,47 @@ export default function ManualAssessmentModal({
                                     onChange={(e) => setDescription(e.target.value)}
                                     rows={2}
                                     placeholder="Brief instructions or summary of what students will practice..."
-                                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white focus:border-indigo-600 focus:outline-none text-xs"
+                                    className="cyber-glass-input w-full px-3.5 py-2 rounded-xl text-xs"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
+                                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#A8E6E8] mb-1">
                                     Passing Percentage Requirement
                                 </label>
                                 <select
                                     value={passingPercentage}
                                     onChange={(e) => setPassingPercentage(Number(e.target.value))}
-                                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white focus:border-indigo-600 focus:outline-none text-xs"
+                                    className="cyber-glass-input w-full px-3.5 py-2 rounded-xl text-xs"
                                 >
-                                    <option value={60}>60% (Minimum)</option>
-                                    <option value={70}>70%</option>
-                                    <option value={75}>75% (Standard)</option>
-                                    <option value={80}>80%</option>
-                                    <option value={85}>85%</option>
-                                    <option value={90}>90% (Strict)</option>
+                                    <option value={60} className="bg-[#061923] text-[#F4FBFC]">60% (Minimum)</option>
+                                    <option value={70} className="bg-[#061923] text-[#F4FBFC]">70%</option>
+                                    <option value={75} className="bg-[#061923] text-[#F4FBFC]">75% (Standard)</option>
+                                    <option value={80} className="bg-[#061923] text-[#F4FBFC]">80%</option>
+                                    <option value={85} className="bg-[#061923] text-[#F4FBFC]">85%</option>
+                                    <option value={90} className="bg-[#061923] text-[#F4FBFC]">90% (Strict)</option>
                                 </select>
                             </div>
 
                             <div>
-                                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
+                                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#A8E6E8] mb-1">
                                     Time Limit
                                 </label>
                                 <select
                                     value={timeLimitMinutes}
                                     onChange={(e) => setTimeLimitMinutes(Number(e.target.value))}
-                                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white focus:border-indigo-600 focus:outline-none text-xs"
+                                    className="cyber-glass-input w-full px-3.5 py-2 rounded-xl text-xs"
                                 >
-                                    <option value={0}>No Time Limit (Free Practice)</option>
-                                    <option value={10}>10 Minutes</option>
-                                    <option value={15}>15 Minutes (Recommended)</option>
-                                    <option value={20}>20 Minutes</option>
-                                    <option value={30}>30 Minutes</option>
+                                    <option value={0} className="bg-[#061923] text-[#F4FBFC]">No Time Limit (Free Practice)</option>
+                                    <option value={10} className="bg-[#061923] text-[#F4FBFC]">10 Minutes</option>
+                                    <option value={15} className="bg-[#061923] text-[#F4FBFC]">15 Minutes (Recommended)</option>
+                                    <option value={20} className="bg-[#061923] text-[#F4FBFC]">20 Minutes</option>
+                                    <option value={30} className="bg-[#061923] text-[#F4FBFC]">30 Minutes</option>
                                 </select>
                             </div>
 
                             <div className="sm:col-span-2">
-                                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
+                                <label className="block text-[11px] font-bold uppercase tracking-wider text-[#A8E6E8] mb-1">
                                     Visibility to Students
                                 </label>
                                 <div className="flex items-center gap-3">
@@ -495,9 +495,9 @@ export default function ManualAssessmentModal({
                                             name="modal_is_published"
                                             checked={isPublished === true}
                                             onChange={() => setIsPublished(true)}
-                                            className="text-indigo-600"
+                                            className="text-[#2EC4D6]"
                                         />
-                                        <span className="text-xs font-semibold text-slate-800">Live / Published (Accessible to students)</span>
+                                        <span className="text-xs font-semibold text-[#F4FBFC]">Live / Published (Accessible to students)</span>
                                     </label>
                                     <label className="inline-flex items-center gap-2 cursor-pointer">
                                         <input
@@ -505,9 +505,9 @@ export default function ManualAssessmentModal({
                                             name="modal_is_published"
                                             checked={isPublished === false}
                                             onChange={() => setIsPublished(false)}
-                                            className="text-indigo-600"
+                                            className="text-[#2EC4D6]"
                                         />
-                                        <span className="text-xs font-semibold text-slate-800">Draft Mode (Admins only)</span>
+                                        <span className="text-xs font-semibold text-[#A8E6E8]/80">Draft Mode (Admins only)</span>
                                     </label>
                                 </div>
                             </div>
@@ -516,9 +516,9 @@ export default function ManualAssessmentModal({
                 )}
 
                 {/* View Switcher & Question Cards Tabs */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#A8E6E8]/15 pb-3">
                     <div className="flex items-center gap-2 overflow-x-auto py-1 max-w-full">
-                        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 shrink-0">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-[#A8E6E8]/60 shrink-0">
                             Cards:
                         </span>
                         {questions.map((q, idx) => {
@@ -542,16 +542,16 @@ export default function ManualAssessmentModal({
                                     }}
                                     className={`w-7 h-7 rounded-lg text-xs font-black transition-all flex items-center justify-center shrink-0 cursor-pointer relative ${
                                         isSelected
-                                            ? 'bg-indigo-600 text-white shadow-xs'
+                                            ? 'cyber-glow-btn shadow-xs'
                                             : hasError
-                                            ? 'bg-rose-100 text-rose-700 ring-1 ring-rose-300'
-                                            : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                                            ? 'bg-rose-500/20 text-rose-300 ring-1 ring-rose-400'
+                                            : 'bg-[#0A3D4F]/40 text-[#A8E6E8] hover:bg-[#0B6E8A]/40 border border-[#A8E6E8]/20'
                                     }`}
                                     title={`Question #${idx + 1}`}
                                 >
                                     {idx + 1}
                                     {hasError && (
-                                        <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-rose-600" />
+                                        <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-rose-400" />
                                     )}
                                 </button>
                             );
@@ -560,7 +560,7 @@ export default function ManualAssessmentModal({
                         <button
                             type="button"
                             onClick={handleAddQuestion}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-dashed border-indigo-300 text-indigo-700 hover:bg-indigo-50 text-xs font-bold transition-colors shrink-0 cursor-pointer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-dashed border-[#2EC4D6]/50 text-[#2EC4D6] hover:bg-[#0B6E8A]/30 text-xs font-bold transition-colors shrink-0 cursor-pointer"
                         >
                             <Plus className="w-3.5 h-3.5" />
                             Add
@@ -568,14 +568,14 @@ export default function ManualAssessmentModal({
                     </div>
 
                     <div className="flex items-center gap-2 shrink-0">
-                        <div className="inline-flex p-0.5 rounded-xl bg-slate-100 border border-slate-200 text-xs font-semibold">
+                        <div className="inline-flex p-0.5 rounded-xl bg-[#061923]/60 border border-[#A8E6E8]/20 text-xs font-semibold">
                             <button
                                 type="button"
                                 onClick={() => setViewMode('list')}
                                 className={`px-3 py-1 rounded-lg transition-colors cursor-pointer ${
                                     viewMode === 'list'
-                                        ? 'bg-white text-slate-900 font-bold shadow-2xs'
-                                        : 'text-slate-500 hover:text-slate-900'
+                                        ? 'bg-[#0B6E8A] text-[#F4FBFC] font-bold shadow-2xs'
+                                        : 'text-[#A8E6E8]/70 hover:text-[#F4FBFC]'
                                 }`}
                             >
                                 All Cards (List)
@@ -585,8 +585,8 @@ export default function ManualAssessmentModal({
                                 onClick={() => setViewMode('card')}
                                 className={`px-3 py-1 rounded-lg transition-colors cursor-pointer ${
                                     viewMode === 'card'
-                                        ? 'bg-white text-slate-900 font-bold shadow-2xs'
-                                        : 'text-slate-500 hover:text-slate-900'
+                                        ? 'bg-[#0B6E8A] text-[#F4FBFC] font-bold shadow-2xs'
+                                        : 'text-[#A8E6E8]/70 hover:text-[#F4FBFC]'
                                 }`}
                             >
                                 Single Card Focus
@@ -620,13 +620,13 @@ export default function ManualAssessmentModal({
                                 type="button"
                                 disabled={activeCardIndex === 0}
                                 onClick={() => setActiveCardIndex((prev) => Math.max(0, prev - 1))}
-                                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold disabled:opacity-40 cursor-pointer"
+                                className="cyber-oauth-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold disabled:opacity-40 cursor-pointer"
                             >
                                 <ChevronLeft className="w-4 h-4" />
                                 Previous Card
                             </button>
 
-                            <span className="text-xs font-bold text-slate-500">
+                            <span className="text-xs font-bold text-[#A8E6E8]/70">
                                 Card {activeCardIndex + 1} of {questions.length}
                             </span>
 
@@ -634,7 +634,7 @@ export default function ManualAssessmentModal({
                                 type="button"
                                 disabled={activeCardIndex === questions.length - 1}
                                 onClick={() => setActiveCardIndex((prev) => Math.min(questions.length - 1, prev + 1))}
-                                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold disabled:opacity-40 cursor-pointer"
+                                className="cyber-oauth-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold disabled:opacity-40 cursor-pointer"
                             >
                                 Next Card
                                 <ChevronRight className="w-4 h-4" />
@@ -667,7 +667,7 @@ export default function ManualAssessmentModal({
                             <button
                                 type="button"
                                 onClick={handleAddQuestion}
-                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl border-2 border-dashed border-indigo-200 hover:border-indigo-400 bg-indigo-50/50 hover:bg-indigo-50 text-indigo-700 text-xs font-bold transition-all cursor-pointer"
+                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl border-2 border-dashed border-[#2EC4D6]/40 hover:border-[#2EC4D6] bg-[#0B6E8A]/20 hover:bg-[#0B6E8A]/35 text-[#2EC4D6] text-xs font-bold transition-all cursor-pointer"
                             >
                                 <Plus className="w-4 h-4" />
                                 Add Another Question Card (#{questions.length + 1})
@@ -677,11 +677,11 @@ export default function ManualAssessmentModal({
                 )}
 
                 {/* Modal Action Bar */}
-                <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div className="flex items-center gap-2 text-xs text-slate-500">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <div className="pt-4 border-t border-[#A8E6E8]/15 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-2 text-xs text-[#A8E6E8]/80">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                         <span>
-                            Ready to save <strong>{questions.length}</strong> {questions.length === 1 ? 'question' : 'questions'} (
+                            Ready to save <strong className="text-[#F4FBFC]">{questions.length}</strong> {questions.length === 1 ? 'question' : 'questions'} (
                             {questions.reduce((acc, curr) => acc + (Number(curr.points) || 1), 0)} total points)
                         </span>
                     </div>
@@ -690,7 +690,7 @@ export default function ManualAssessmentModal({
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer"
+                            className="cyber-oauth-btn px-4 py-2 text-xs font-semibold rounded-xl cursor-pointer"
                         >
                             Cancel
                         </button>
@@ -699,7 +699,7 @@ export default function ManualAssessmentModal({
                             type="button"
                             onClick={handleSubmit}
                             disabled={isSubmitting}
-                            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-md shadow-indigo-500/20 disabled:opacity-60 cursor-pointer"
+                            className="cyber-glow-btn inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all disabled:opacity-60 cursor-pointer"
                         >
                             <Layers className="w-4 h-4" />
                             {isSubmitting ? 'Saving Assessment...' : 'Save Assessment & Reviewer Cards'}
@@ -743,21 +743,21 @@ function QuestionCardEditor({
         <div
             className={`p-5 rounded-2xl border transition-all ${
                 hasError
-                    ? 'border-rose-300 bg-rose-50/20'
-                    : 'border-slate-200 bg-white shadow-2xs hover:border-slate-300'
+                    ? 'border-rose-500/50 bg-rose-500/10'
+                    : 'border-[#A8E6E8]/20 bg-[#061923]/40 shadow-md hover:border-[#2EC4D6]/40'
             }`}
         >
             {/* Card Header */}
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-[#A8E6E8]/15">
                 <div className="flex items-center gap-2.5">
-                    <span className="w-7 h-7 rounded-xl bg-indigo-600 text-white font-black text-xs flex items-center justify-center shrink-0 shadow-2xs">
+                    <span className="w-7 h-7 rounded-xl bg-[#0B6E8A] text-[#F4FBFC] border border-[#2EC4D6]/40 font-black text-xs flex items-center justify-center shrink-0 shadow-xs">
                         #{index + 1}
                     </span>
                     <div>
-                        <h4 className="font-extrabold text-xs text-slate-900">
+                        <h4 className="font-extrabold text-xs text-[#F4FBFC]">
                             Reviewer Card #{index + 1}
                         </h4>
-                        <span className="text-[10px] text-slate-400 font-medium">
+                        <span className="text-[10px] text-[#A8E6E8]/60 font-medium">
                             {q.question_type === 'true_false' ? 'True / False Question' : 'Multiple Choice Question'}
                         </span>
                     </div>
@@ -765,14 +765,14 @@ function QuestionCardEditor({
 
                 <div className="flex items-center gap-1.5 flex-wrap">
                     {/* Type Toggle */}
-                    <div className="inline-flex p-0.5 rounded-lg bg-slate-100 border border-slate-200 text-[10px] font-bold">
+                    <div className="inline-flex p-0.5 rounded-lg bg-[#061923]/60 border border-[#A8E6E8]/20 text-[10px] font-bold">
                         <button
                             type="button"
                             onClick={() => onSetType(index, 'multiple_choice')}
                             className={`px-2 py-0.5 rounded-md transition-colors cursor-pointer ${
                                 q.question_type !== 'true_false'
-                                    ? 'bg-white text-indigo-700 shadow-2xs'
-                                    : 'text-slate-500 hover:text-slate-900'
+                                    ? 'bg-[#0B6E8A] text-[#F4FBFC] shadow-2xs'
+                                    : 'text-[#A8E6E8]/70 hover:text-[#F4FBFC]'
                             }`}
                         >
                             Multiple Choice
@@ -782,8 +782,8 @@ function QuestionCardEditor({
                             onClick={() => onSetType(index, 'true_false')}
                             className={`px-2 py-0.5 rounded-md transition-colors cursor-pointer ${
                                 q.question_type === 'true_false'
-                                    ? 'bg-white text-indigo-700 shadow-2xs'
-                                    : 'text-slate-500 hover:text-slate-900'
+                                    ? 'bg-[#0B6E8A] text-[#F4FBFC] shadow-2xs'
+                                    : 'text-[#A8E6E8]/70 hover:text-[#F4FBFC]'
                             }`}
                         >
                             True / False
@@ -791,7 +791,7 @@ function QuestionCardEditor({
                     </div>
 
                     {/* Points */}
-                    <div className="flex items-center gap-1 text-[11px] font-semibold text-slate-600 pl-1">
+                    <div className="flex items-center gap-1 text-[11px] font-semibold text-[#A8E6E8] pl-1">
                         <span>Pts:</span>
                         <input
                             type="number"
@@ -799,7 +799,7 @@ function QuestionCardEditor({
                             max="10"
                             value={q.points || 1}
                             onChange={(e) => onUpdate(index, 'points', Math.max(1, parseInt(e.target.value) || 1))}
-                            className="w-12 px-1.5 py-0.5 rounded-lg border border-slate-200 text-center font-bold text-xs"
+                            className="cyber-glass-input w-12 px-1.5 py-0.5 rounded-lg text-center font-bold text-xs"
                         />
                     </div>
 
@@ -808,7 +808,7 @@ function QuestionCardEditor({
                         type="button"
                         disabled={index === 0}
                         onClick={() => onMove(index, -1)}
-                        className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 disabled:opacity-30 cursor-pointer"
+                        className="p-1 rounded-lg text-[#A8E6E8]/60 hover:text-[#2EC4D6] hover:bg-[#0B6E8A]/30 disabled:opacity-30 cursor-pointer"
                         title="Move Up"
                     >
                         <ChevronUp className="w-4 h-4" />
@@ -817,7 +817,7 @@ function QuestionCardEditor({
                         type="button"
                         disabled={index === totalCount - 1}
                         onClick={() => onMove(index, 1)}
-                        className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 disabled:opacity-30 cursor-pointer"
+                        className="p-1 rounded-lg text-[#A8E6E8]/60 hover:text-[#2EC4D6] hover:bg-[#0B6E8A]/30 disabled:opacity-30 cursor-pointer"
                         title="Move Down"
                     >
                         <ChevronDown className="w-4 h-4" />
@@ -827,7 +827,7 @@ function QuestionCardEditor({
                     <button
                         type="button"
                         onClick={() => onDuplicate(index)}
-                        className="p-1 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors cursor-pointer"
+                        className="p-1 rounded-lg text-[#A8E6E8]/60 hover:text-[#2EC4D6] hover:bg-[#0B6E8A]/30 transition-colors cursor-pointer"
                         title="Duplicate Question"
                     >
                         <Copy className="w-4 h-4" />
@@ -837,7 +837,7 @@ function QuestionCardEditor({
                     <button
                         type="button"
                         onClick={() => onRemove(index)}
-                        className="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                        className="p-1 rounded-lg text-[#A8E6E8]/60 hover:text-rose-400 hover:bg-rose-500/20 transition-colors cursor-pointer"
                         title="Delete Question"
                     >
                         <Trash2 className="w-4 h-4" />
@@ -848,19 +848,19 @@ function QuestionCardEditor({
             {/* Question Prompt (Front) */}
             <div className="space-y-3">
                 <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1 flex items-center justify-between">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#A8E6E8] mb-1 flex items-center justify-between">
                         <span>Card Front: Question / Flashcard Prompt</span>
-                        <span className="text-[10px] text-slate-400 font-normal">Required</span>
+                        <span className="text-[10px] text-[#A8E6E8]/50 font-normal">Required</span>
                     </label>
                     <textarea
                         value={q.question_text}
                         onChange={(e) => onUpdate(index, 'question_text', e.target.value)}
                         rows={2}
                         placeholder="Type the question or review prompt here (e.g. What is the standard milk frothing temperature for a cappuccino?)"
-                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white focus:border-indigo-600 focus:outline-none text-xs font-semibold leading-relaxed placeholder:text-slate-400"
+                        className="cyber-glass-input w-full px-3.5 py-2 rounded-xl text-xs font-semibold leading-relaxed"
                     />
                     {clientErrors[`q_${index}_text`] && (
-                        <p className="text-[11px] text-rose-600 font-semibold mt-1">
+                        <p className="text-[11px] text-rose-400 font-semibold mt-1">
                             {clientErrors[`q_${index}_text`]}
                         </p>
                     )}
@@ -869,9 +869,9 @@ function QuestionCardEditor({
                 {/* Card Back: Options & Correct Answer Key */}
                 <div>
                     <div className="flex items-center justify-between mb-2">
-                        <label className="text-[11px] font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-[#A8E6E8] flex items-center gap-1.5">
                             <span>Card Back: Answer Choices &amp; Correct Answer Key</span>
-                            <span className="text-[10px] font-normal text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                            <span className="text-[10px] font-normal text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-full border border-emerald-500/30">
                                 Click radio to designate correct answer key
                             </span>
                         </label>
@@ -880,7 +880,7 @@ function QuestionCardEditor({
                             <button
                                 type="button"
                                 onClick={() => onAddOption(index)}
-                                className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-600 hover:text-indigo-800 cursor-pointer"
+                                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#2EC4D6] hover:text-[#A8E6E8] cursor-pointer"
                             >
                                 <Plus className="w-3 h-3" />
                                 Add Choice
@@ -897,8 +897,8 @@ function QuestionCardEditor({
                                     key={opt.key || optIdx}
                                     className={`p-2.5 rounded-xl border flex items-center gap-2 transition-all ${
                                         isCorrect
-                                            ? 'border-emerald-400 bg-emerald-50/70 shadow-xs ring-1 ring-emerald-400/40'
-                                            : 'border-slate-200 bg-slate-50/50 hover:bg-slate-50'
+                                            ? 'border-emerald-500/50 bg-emerald-500/15 shadow-xs ring-1 ring-emerald-500/30'
+                                            : 'border-[#A8E6E8]/20 bg-[#0A3D4F]/30 hover:bg-[#0A3D4F]/50'
                                     }`}
                                 >
                                     {/* Designate correct radio button */}
@@ -908,7 +908,7 @@ function QuestionCardEditor({
                                         className={`w-6 h-6 rounded-lg text-[11px] font-black flex items-center justify-center shrink-0 transition-all cursor-pointer ${
                                             isCorrect
                                                 ? 'bg-emerald-600 text-white shadow-2xs'
-                                                : 'bg-white border border-slate-300 text-slate-600 hover:border-emerald-500 hover:text-emerald-600'
+                                                : 'bg-[#061923]/60 border border-[#A8E6E8]/30 text-[#A8E6E8] hover:border-emerald-400 hover:text-emerald-300'
                                         }`}
                                         title={isCorrect ? 'Designated Correct Answer' : `Click to mark Option ${opt.key} as correct answer`}
                                     >
@@ -921,12 +921,12 @@ function QuestionCardEditor({
                                         value={opt.text}
                                         onChange={(e) => onUpdateOption(index, optIdx, e.target.value)}
                                         placeholder={`Option ${opt.key} text...`}
-                                        className="flex-1 bg-transparent border-0 text-xs text-slate-800 focus:outline-none placeholder:text-slate-400 font-medium"
+                                        className="flex-1 bg-transparent border-0 text-xs text-[#F4FBFC] focus:outline-none placeholder:text-[#A8E6E8]/40 font-medium"
                                     />
 
                                     {/* Correct Pill */}
                                     {isCorrect && (
-                                        <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider shrink-0 bg-emerald-200/60 px-1.5 py-0.5 rounded">
+                                        <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-wider shrink-0 bg-emerald-500/20 border border-emerald-500/30 px-1.5 py-0.5 rounded">
                                             Answer Key
                                         </span>
                                     )}
@@ -936,7 +936,7 @@ function QuestionCardEditor({
                                         <button
                                             type="button"
                                             onClick={() => onRemoveOption(index, optIdx)}
-                                            className="text-slate-400 hover:text-rose-600 p-1 rounded-md transition-colors cursor-pointer shrink-0"
+                                            className="text-[#A8E6E8]/50 hover:text-rose-400 p-1 rounded-md transition-colors cursor-pointer shrink-0"
                                             title="Delete option"
                                         >
                                             <Trash2 className="w-3 h-3" />
@@ -950,19 +950,19 @@ function QuestionCardEditor({
 
                 {/* Reviewer Pedagogical Explanation / Flashcard Back Notes */}
                 <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1 flex items-center justify-between">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-[#A8E6E8] mb-1 flex items-center justify-between">
                         <span className="flex items-center gap-1.5">
-                            <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
+                            <BookOpen className="w-3.5 h-3.5 text-[#2EC4D6]" />
                             Reviewer Pedagogical Explanation (Back of Flashcard)
                         </span>
-                        <span className="text-[10px] text-slate-400 font-normal">Optional study rationale</span>
+                        <span className="text-[10px] text-[#A8E6E8]/50 font-normal">Optional study rationale</span>
                     </label>
                     <textarea
                         value={q.explanation || ''}
                         onChange={(e) => onUpdate(index, 'explanation', e.target.value)}
                         rows={2}
                         placeholder="Pedagogical rationale explaining why the answer is correct (e.g. 60°C - 65°C preserves milk sweetness and emulsifies microfoam without scorching lactose)."
-                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-white focus:border-indigo-600 focus:outline-none text-xs text-slate-700 placeholder:text-slate-400 leading-relaxed"
+                        className="cyber-glass-input w-full px-3.5 py-2 rounded-xl text-xs leading-relaxed"
                     />
                 </div>
 
@@ -971,23 +971,23 @@ function QuestionCardEditor({
                     <button
                         type="button"
                         onClick={() => setTestFlip(!testFlip)}
-                        className="inline-flex items-center gap-1.5 text-[11px] font-bold text-indigo-600 hover:text-indigo-800 cursor-pointer"
+                        className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#2EC4D6] hover:text-[#A8E6E8] cursor-pointer"
                     >
                         <RotateCw className="w-3 h-3" />
                         {testFlip ? 'Close Flashcard Flip Preview' : 'Test Flashcard Flip Preview'}
                     </button>
 
                     {testFlip && (
-                        <div className="mt-2 p-4 rounded-xl border border-indigo-200 bg-indigo-50/40 space-y-2 text-xs">
-                            <div className="text-[10px] font-bold uppercase tracking-wider text-indigo-700">
+                        <div className="mt-2 p-4 rounded-xl border border-[#2EC4D6]/40 bg-[#0B6E8A]/25 space-y-2 text-xs">
+                            <div className="text-[10px] font-bold uppercase tracking-wider text-[#2EC4D6]">
                                 Flashcard Back Preview
                             </div>
-                            <div className="font-bold text-emerald-900 flex items-center gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                            <div className="font-bold text-emerald-300 flex items-center gap-2">
+                                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                                 Correct Answer: Option {q.correct_answer} — {correctOption?.text || '(empty)'}
                             </div>
                             {q.explanation && (
-                                <p className="text-[11px] text-slate-600 italic">
+                                <p className="text-[11px] text-[#A8E6E8]/80 italic">
                                     "{q.explanation}"
                                 </p>
                             )}

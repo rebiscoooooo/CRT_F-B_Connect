@@ -45,7 +45,7 @@ export default function StudentShow({ student, activities = [] }) {
             <div className="mb-6">
                 <Link
                     href="/admin/students"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#A8E6E8] hover:text-[#2EC4D6] transition-colors"
                 >
                     <ArrowLeft className="w-4 h-4" />
                     Back to Student Directory
@@ -55,44 +55,44 @@ export default function StudentShow({ student, activities = [] }) {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 {/* Profile Card (Left 5 cols) */}
                 <div className="lg:col-span-5 space-y-6">
-                    <div className="bg-white rounded-3xl border border-slate-200 shadow-2xs p-6 sm:p-8 text-center relative overflow-hidden">
-                        <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-r from-blue-600 to-sky-500" />
+                    <div className="cyber-glass-card p-6 sm:p-8 text-center relative overflow-hidden">
+                        <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-r from-[#0B6E8A] via-[#1ab8cb] to-[#2EC4D6]" />
 
                         <div className="relative pt-8">
                             <img
                                 src={student.avatar_url}
                                 alt={student.name}
-                                className="w-24 h-24 rounded-2xl object-cover mx-auto ring-4 ring-white shadow-md"
+                                className="w-24 h-24 rounded-2xl object-cover mx-auto ring-4 ring-[#2EC4D6]/40 shadow-xl"
                             />
-                            <h2 className="mt-4 text-xl font-bold text-slate-900">{student.name}</h2>
-                            <p className="text-xs font-mono font-bold text-blue-600 mt-0.5">{student.student_number}</p>
-                            <span className={`inline-block px-3 py-1 mt-2 text-[10px] font-bold uppercase rounded-full ${
+                            <h2 className="mt-4 text-xl font-black text-[#F4FBFC]">{student.name}</h2>
+                            <p className="text-xs font-mono font-bold text-[#2EC4D6] mt-0.5">{student.student_number}</p>
+                            <span className={`inline-block px-3 py-1 mt-2 text-[10px] font-bold uppercase rounded-full border ${
                                 student.status === 'active'
-                                    ? 'bg-emerald-50 text-emerald-700'
+                                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
                                     : student.status === 'pending'
-                                    ? 'bg-amber-50 text-amber-800 border border-amber-200'
-                                    : 'bg-rose-50 text-rose-700'
+                                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/30'
+                                    : 'bg-[#2EC4D6]/20 text-[#2EC4D6] border-[#2EC4D6]/40'
                             }`}>
                                 {student.status === 'pending' ? 'Pending Approval' : student.status}
                             </span>
                         </div>
 
-                        <div className="mt-6 pt-6 border-t border-slate-100 text-left space-y-3 text-xs">
-                            <div className="flex items-center gap-3 text-slate-600">
-                                <Mail className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                        <div className="mt-6 pt-6 border-t border-[#A8E6E8]/15 text-left space-y-3 text-xs">
+                            <div className="flex items-center gap-3 text-[#F4FBFC]">
+                                <Mail className="w-4 h-4 text-[#2EC4D6] flex-shrink-0" />
                                 <span className="truncate">{student.email}</span>
                             </div>
-                            <div className="flex items-center gap-3 text-slate-600">
-                                <Phone className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                            <div className="flex items-center gap-3 text-[#F4FBFC]">
+                                <Phone className="w-4 h-4 text-[#2EC4D6] flex-shrink-0" />
                                 <span>{student.contact_number || 'No contact number provided'}</span>
                             </div>
-                            <div className="flex items-center gap-3 text-slate-600">
-                                <Calendar className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                            <div className="flex items-center gap-3 text-[#A8E6E8]">
+                                <Calendar className="w-4 h-4 text-[#2EC4D6] flex-shrink-0" />
                                 <span>Enrolled {new Date(student.created_at).toLocaleDateString([], { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                             </div>
                             {student.approved_at && (
-                                <div className="flex items-center gap-3 text-emerald-700 bg-emerald-50/70 p-2.5 rounded-xl border border-emerald-200/60">
-                                    <CheckCircle className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                                <div className="flex items-center gap-3 text-emerald-300 bg-emerald-500/15 p-2.5 rounded-xl border border-emerald-500/30">
+                                    <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                                     <span>
                                         Approved by {student.approver?.name || 'Administrator'} on {new Date(student.approved_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
                                     </span>
@@ -100,11 +100,11 @@ export default function StudentShow({ student, activities = [] }) {
                             )}
                         </div>
 
-                        <div className="mt-6 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-center gap-2">
+                        <div className="mt-6 pt-6 border-t border-[#A8E6E8]/15 flex flex-wrap items-center justify-center gap-2">
                             {student.status === 'pending' && (
                                 <button
                                     onClick={handleApprove}
-                                    className="px-4 py-2 text-xs font-bold rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-all flex items-center gap-1.5"
+                                    className="px-4 py-2 text-xs font-bold rounded-xl text-white bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 shadow-md shadow-emerald-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                                 >
                                     <CheckCircle className="w-4 h-4" />
                                     Approve Account
@@ -112,17 +112,17 @@ export default function StudentShow({ student, activities = [] }) {
                             )}
                             <button
                                 onClick={handleToggleStatus}
-                                className={`px-4 py-2 text-xs font-bold rounded-xl border transition-colors ${
+                                className={`px-4 py-2 text-xs font-bold rounded-xl border transition-colors cursor-pointer ${
                                     student.status === 'active'
-                                        ? 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
-                                        : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                                        ? 'bg-[#2EC4D6]/15 text-[#2EC4D6] border-[#2EC4D6]/30 hover:bg-[#0B6E8A]/25'
+                                        : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/25'
                                 }`}
                             >
                                 {student.status === 'active' ? 'Deactivate Account' : 'Activate Account'}
                             </button>
                             <button
                                 onClick={() => setIsEditOpen(true)}
-                                className="px-4 py-2 text-xs font-bold bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 rounded-xl"
+                                className="cyber-oauth-btn px-4 py-2 text-xs font-bold rounded-xl"
                             >
                                 Edit Profile
                             </button>
@@ -132,25 +132,25 @@ export default function StudentShow({ student, activities = [] }) {
 
                 {/* Activity Trail (Right 7 cols) */}
                 <div className="lg:col-span-7">
-                    <div className="bg-white rounded-3xl border border-slate-200 shadow-2xs p-6 sm:p-8">
-                        <h3 className="text-base font-bold text-slate-900 mb-1 flex items-center gap-2">
-                            <Activity className="w-5 h-5 text-blue-600" />
+                    <div className="cyber-glass-card p-6 sm:p-8">
+                        <h3 className="text-base font-bold text-[#F4FBFC] mb-1 flex items-center gap-2">
+                            <Activity className="w-5 h-5 text-[#2EC4D6]" />
                             Student Learning Activity Log
                         </h3>
-                        <p className="text-xs text-slate-500 mb-6">
+                        <p className="text-xs text-[#A8E6E8]/70 mb-6">
                             Record of resource downloads, module views, and logins.
                         </p>
 
-                        <div className="divide-y divide-slate-100">
+                        <div className="divide-y divide-[#A8E6E8]/10">
                             {activities.length > 0 ? (
                                 activities.map((act) => (
                                     <div key={act.id} className="py-3.5 flex items-start gap-3 text-xs">
-                                        <div className="p-2 rounded-xl bg-blue-50 text-blue-600 flex-shrink-0 mt-0.5">
+                                        <div className="p-2 rounded-xl bg-[#0B6E8A]/30 border border-[#A8E6E8]/20 text-[#2EC4D6] flex-shrink-0 mt-0.5">
                                             <Activity className="w-3.5 h-3.5" />
                                         </div>
                                         <div className="flex-1">
-                                            <p className="font-semibold text-slate-800 leading-snug">{act.description}</p>
-                                            <div className="flex items-center gap-3 mt-1 text-[11px] text-slate-400">
+                                            <p className="font-semibold text-[#F4FBFC] leading-snug">{act.description}</p>
+                                            <div className="flex items-center gap-3 mt-1 text-[11px] text-[#A8E6E8]/60">
                                                 <span>{new Date(act.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                                                 {act.ip_address && <span>IP: {act.ip_address}</span>}
                                             </div>
@@ -158,7 +158,7 @@ export default function StudentShow({ student, activities = [] }) {
                                     </div>
                                 ))
                             ) : (
-                                <div className="py-12 text-center text-xs text-slate-400">
+                                <div className="py-12 text-center text-xs text-[#A8E6E8]/50">
                                     No recorded activities for this student yet.
                                 </div>
                             )}
@@ -171,77 +171,77 @@ export default function StudentShow({ student, activities = [] }) {
             <Modal isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} title="Edit Student Profile">
                 <form onSubmit={handleEditSubmit} className="space-y-3.5">
                     <div>
-                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                             Student ID
                         </label>
                         <input
                             type="text"
                             value={editForm.student_number || ''}
                             onChange={(e) => setEditForm({ ...editForm, student_number: e.target.value })}
-                            className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                            className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                             required
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                         <div>
-                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                            <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                                 First Name
                             </label>
                             <input
                                 type="text"
                                 value={editForm.first_name || ''}
                                 onChange={(e) => setEditForm({ ...editForm, first_name: e.target.value })}
-                                className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                                 required
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                            <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                                 Last Name
                             </label>
                             <input
                                 type="text"
                                 value={editForm.last_name || ''}
                                 onChange={(e) => setEditForm({ ...editForm, last_name: e.target.value })}
-                                className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                                className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                                 required
                             />
                         </div>
                     </div>
                     <div>
-                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                             Email Address
                         </label>
                         <input
                             type="email"
                             value={editForm.email || ''}
                             onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                            className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                            className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                             required
                         />
                     </div>
                     <div>
-                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        <label className="block text-xs font-bold text-[#A8E6E8] uppercase tracking-wider mb-1">
                             Contact
                         </label>
                         <input
                             type="text"
                             value={editForm.contact_number || ''}
                             onChange={(e) => setEditForm({ ...editForm, contact_number: e.target.value })}
-                            className="w-full px-3.5 py-2 text-xs bg-white rounded-xl border border-slate-200 focus:border-blue-600 focus:outline-none"
+                            className="cyber-glass-input w-full px-3.5 py-2 text-xs rounded-xl"
                         />
                     </div>
-                    <div className="flex items-center justify-end gap-2 pt-4 border-t border-slate-100">
+                    <div className="flex items-center justify-end gap-2 pt-4 border-t border-[#A8E6E8]/15">
                         <button
                             type="button"
                             onClick={() => setIsEditOpen(false)}
-                            className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
+                            className="cyber-oauth-btn px-4 py-2 text-xs font-semibold rounded-xl"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="px-5 py-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl"
+                            className="cyber-glow-btn px-5 py-2 text-xs font-bold rounded-xl"
                         >
                             Save Changes
                         </button>

@@ -12,7 +12,7 @@ export default function Pagination({ links = [] }) {
                     return (
                         <span
                             key={index}
-                            className="px-3.5 py-2 text-xs font-medium text-slate-400 bg-white border border-slate-200 rounded-lg cursor-not-allowed select-none"
+                            className="px-3.5 py-2 text-xs font-medium text-[#A8E6E8]/40 bg-[#0A3D4F]/20 border border-[#A8E6E8]/10 rounded-lg cursor-not-allowed select-none"
                             dangerouslySetInnerHTML={{ __html: link.label }}
                         />
                     );
@@ -23,10 +23,10 @@ export default function Pagination({ links = [] }) {
                         key={index}
                         href={link.url}
                         preserveScroll
-                        className={`px-3.5 py-2 text-xs font-semibold rounded-lg transition-colors border ${
+                        className={`px-3.5 py-2 text-xs font-semibold rounded-lg transition-all border ${
                             link.active
-                                ? 'bg-blue-600 text-white border-blue-600 shadow-sm shadow-blue-500/20'
-                                : 'bg-white text-slate-700 hover:bg-slate-50 border-slate-200 hover:border-slate-300'
+                                ? 'cyber-glow-btn text-[#F4FBFC] border-[#2EC4D6]/60 shadow-[0_0_12px_rgba(46,196,214,0.3)]'
+                                : 'bg-[#0A3D4F]/30 text-[#A8E6E8] hover:bg-[#0B6E8A]/30 hover:text-[#F4FBFC] border-[#A8E6E8]/20 hover:border-[#2EC4D6]/40'
                         }`}
                         dangerouslySetInnerHTML={{ __html: link.label }}
                     />

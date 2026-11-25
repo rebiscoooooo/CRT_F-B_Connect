@@ -90,9 +90,9 @@ export default function LandingNavbar() {
         <header className="sticky top-0 z-50 w-full px-3 sm:px-6 lg:px-8 pt-3 sm:pt-4 pb-2 transition-all duration-300">
             <div ref={navRef} className="max-w-7xl mx-auto">
                 <nav
-                    className={`rounded-2xl sm:rounded-3xl transition-all duration-300 ${isScrolled
-                            ? 'glass-nav-scrolled bg-white/85 shadow-[0_14px_38px_0_rgba(15,23,42,0.09),inset_0_1px_1px_0_rgba(255,255,255,0.95)]'
-                            : 'glass-nav bg-white/75 shadow-[0_8px_32px_0_rgba(15,23,42,0.06),inset_0_1px_1px_0_rgba(255,255,255,0.9)]'
+                    className={`rounded-2xl sm:rounded-3xl transition-all duration-300 cyber-glass-card ${isScrolled
+                            ? 'bg-[#061923]/90 shadow-[0_14px_38px_0_rgba(4,18,26,0.6)] border border-[#A8E6E8]/25'
+                            : 'bg-[#061923]/75 shadow-[0_8px_32px_0_rgba(4,18,26,0.4)] border border-[#A8E6E8]/18'
                         }`}
                 >
                     <div className="px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
@@ -110,20 +110,20 @@ export default function LandingNavbar() {
                                     size="md"
                                     className="group-hover:scale-105 transition-transform duration-300"
                                 />
-                                <div className="absolute -inset-1 rounded-full bg-blue-500/10 blur-sm -z-10 group-hover:bg-blue-500/20 transition-colors" />
+                                <div className="absolute -inset-1 rounded-full bg-[#2EC4D6]/20 blur-sm -z-10 group-hover:bg-[#2EC4D6]/35 transition-colors" />
                             </div>
                             <div className="flex flex-col min-w-0">
-                                <span className="text-sm sm:text-xl font-black tracking-tight text-slate-900 leading-tight truncate">
-                                    CRT F&amp;B <span className="bg-gradient-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent">Connect</span>
+                                <span className="text-sm sm:text-xl font-black tracking-tight text-[#F4FBFC] leading-tight truncate">
+                                    CRT F&amp;B <span className="bg-gradient-to-r from-[#2EC4D6] to-[#A8E6E8] bg-clip-text text-transparent">Connect</span>
                                 </span>
-                                <span className="hidden sm:block text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                <span className="hidden sm:block text-[10px] sm:text-[11px] font-bold text-[#A8E6E8]/70 uppercase tracking-wider">
                                     College of Research &amp; Technology
                                 </span>
                             </div>
                         </a>
 
                         {/* Center Navigation Links (Pill Dock) */}
-                        <div className="hidden lg:flex items-center gap-1 p-1.5 rounded-full bg-slate-900/[0.03] border border-slate-200/50 backdrop-blur-md shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]">
+                        <div className="hidden lg:flex items-center gap-1 p-1.5 rounded-full bg-[#0A3D4F]/40 border border-[#A8E6E8]/20 backdrop-blur-md">
                             {navLinks.map((link) => {
                                 const isActive = activeSection === link.href.substring(1);
                                 return (
@@ -132,8 +132,8 @@ export default function LandingNavbar() {
                                         href={link.href}
                                         onClick={(e) => scrollToSection(e, link.href)}
                                         className={`relative px-3.5 py-1.5 rounded-full text-xs xl:text-sm font-semibold transition-all duration-200 ${isActive
-                                                ? 'bg-white text-blue-600 shadow-xs border border-slate-200/60 font-bold'
-                                                : 'text-slate-600 hover:text-blue-600 hover:bg-white/60'
+                                                ? 'bg-[#0B6E8A]/60 text-[#F4FBFC] shadow-[0_0_12px_rgba(46,196,214,0.3)] border border-[#2EC4D6]/40 font-bold'
+                                                : 'text-[#A8E6E8]/80 hover:text-[#F4FBFC] hover:bg-[#0B6E8A]/25'
                                             }`}
                                     >
                                         {link.name}
@@ -148,7 +148,7 @@ export default function LandingNavbar() {
                             {user ? (
                                 <Link
                                     href={dashboardUrl}
-                                    className="hidden sm:inline-flex relative group overflow-hidden items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-blue-600 via-blue-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 rounded-xl shadow-[0_4px_14px_0_rgba(37,99,235,0.35)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.45)] border border-white/20 transition-all duration-200 hover:-translate-y-0.5"
+                                    className="hidden sm:inline-flex relative group overflow-hidden items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-[#F4FBFC] cyber-glow-btn rounded-xl transition-all duration-200 hover:-translate-y-0.5 cursor-pointer"
                                 >
                                     <span>Dashboard</span>
                                     <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -158,14 +158,14 @@ export default function LandingNavbar() {
                                 <>
                                     <Link
                                         href="/login"
-                                        className="hidden sm:inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-slate-700 hover:text-blue-600 bg-white/50 hover:bg-white/90 border border-slate-200/60 hover:border-blue-200/80 rounded-xl shadow-xs backdrop-blur-md transition-all duration-200"
+                                        className="hidden sm:inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-[#A8E6E8] hover:text-[#F4FBFC] cyber-oauth-btn border border-[#A8E6E8]/20 hover:border-[#2EC4D6]/40 rounded-xl backdrop-blur-md transition-all duration-200"
                                     >
-                                        <LogIn className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-500" />
+                                        <LogIn className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2EC4D6]" />
                                         <span>Log In</span>
                                     </Link>
                                     <Link
                                         href="/register"
-                                        className="hidden md:inline-flex relative group overflow-hidden items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-blue-600 via-blue-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 rounded-xl shadow-[0_4px_14px_0_rgba(37,99,235,0.35)] hover:shadow-[0_6px_20px_rgba(37,99,235,0.45)] border border-white/20 transition-all duration-200 hover:-translate-y-0.5"
+                                        className="hidden md:inline-flex relative group overflow-hidden items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-[#F4FBFC] cyber-glow-btn rounded-xl transition-all duration-200 hover:-translate-y-0.5"
                                     >
                                         <UserPlus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                         <span>Get Started</span>
@@ -177,7 +177,7 @@ export default function LandingNavbar() {
                             {/* Mobile Hamburger Button — visible below lg */}
                             <button
                                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                                className="p-2 sm:p-2.5 rounded-xl bg-white/60 hover:bg-white/95 border border-slate-200/70 text-slate-700 hover:text-blue-600 shadow-xs backdrop-blur-md lg:hidden transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+                                className="p-2 sm:p-2.5 rounded-xl bg-[#0A3D4F]/50 hover:bg-[#0B6E8A]/40 border border-[#A8E6E8]/25 text-[#A8E6E8] hover:text-[#F4FBFC] backdrop-blur-md lg:hidden transition-all duration-200 focus:outline-none cursor-pointer"
                                 aria-label="Toggle navigation menu"
                                 aria-expanded={mobileMenuOpen}
                             >
@@ -192,7 +192,7 @@ export default function LandingNavbar() {
 
                     {/* Mobile Dropdown Panel */}
                     {mobileMenuOpen && (
-                        <div className="lg:hidden border-t border-slate-200/60 px-4 pt-3 pb-5 space-y-3 bg-white/70 backdrop-blur-xl rounded-b-2xl sm:rounded-b-3xl animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="lg:hidden border-t border-[#A8E6E8]/15 px-4 pt-3 pb-5 space-y-3 bg-[#061923]/95 backdrop-blur-xl rounded-b-2xl sm:rounded-b-3xl animate-in fade-in slide-in-from-top-2 duration-200">
                             <div className="flex flex-col space-y-1">
                                 {navLinks.map((link) => {
                                     const isActive = activeSection === link.href.substring(1);
@@ -202,23 +202,23 @@ export default function LandingNavbar() {
                                             href={link.href}
                                             onClick={(e) => scrollToSection(e, link.href)}
                                             className={`flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ${isActive
-                                                    ? 'bg-blue-50/80 text-blue-600 font-bold border border-blue-200/60 shadow-xs'
-                                                    : 'text-slate-600 hover:text-blue-600 hover:bg-white/60'
+                                                    ? 'bg-[#0B6E8A]/50 text-[#F4FBFC] font-bold border border-[#2EC4D6]/40'
+                                                    : 'text-[#A8E6E8]/80 hover:text-[#F4FBFC] hover:bg-[#0B6E8A]/20'
                                                 }`}
                                         >
                                             <span>{link.name}</span>
-                                            <ChevronRight className={`w-4 h-4 transition-transform ${isActive ? 'text-blue-600 translate-x-0.5' : 'text-slate-400'}`} />
+                                            <ChevronRight className={`w-4 h-4 transition-transform ${isActive ? 'text-[#2EC4D6] translate-x-0.5' : 'text-[#A8E6E8]/40'}`} />
                                         </a>
                                     );
                                 })}
                             </div>
 
-                            <div className="pt-3 border-t border-slate-200/60 flex flex-col sm:flex-row gap-2">
+                            <div className="pt-3 border-t border-[#A8E6E8]/15 flex flex-col sm:flex-row gap-2">
                                 <PwaInstallButton className="w-full justify-center" />
                                 {user ? (
                                     <Link
                                         href={dashboardUrl}
-                                        className="flex items-center justify-center gap-2 w-full py-2.5 px-4 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-600/20"
+                                        className="flex items-center justify-center gap-2 w-full py-2.5 px-4 text-sm font-bold text-[#F4FBFC] cyber-glow-btn rounded-xl shadow-md"
                                     >
                                         <span>Go to Dashboard</span>
                                         <ArrowRight className="w-4 h-4" />
@@ -227,14 +227,14 @@ export default function LandingNavbar() {
                                     <>
                                         <Link
                                             href="/login"
-                                            className="flex items-center justify-center gap-2 w-full py-2.5 px-4 text-sm font-semibold text-slate-700 bg-white/80 hover:bg-white border border-slate-200/80 rounded-xl shadow-xs"
+                                            className="flex items-center justify-center gap-2 w-full py-2.5 px-4 text-sm font-semibold text-[#A8E6E8] hover:text-[#F4FBFC] cyber-oauth-btn border border-[#A8E6E8]/20 rounded-xl"
                                         >
                                             <LogIn className="w-4 h-4" />
                                             <span>Log In</span>
                                         </Link>
                                         <Link
                                             href="/register"
-                                            className="flex items-center justify-center gap-2 w-full py-2.5 px-4 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-600/20"
+                                            className="flex items-center justify-center gap-2 w-full py-2.5 px-4 text-sm font-bold text-[#F4FBFC] cyber-glow-btn rounded-xl shadow-md"
                                         >
                                             <UserPlus className="w-4 h-4" />
                                             <span>Get Started</span>

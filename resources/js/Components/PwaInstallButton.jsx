@@ -42,9 +42,9 @@ export default function PwaInstallButton({
     };
 
     const variantClasses = {
-        primary: 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm shadow-blue-600/20',
-        outline: 'bg-white/80 hover:bg-white text-blue-600 border border-blue-200/80 shadow-2xs hover:border-blue-400',
-        ghost: 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60',
+        primary: 'cyber-glow-btn',
+        outline: 'cyber-oauth-btn',
+        ghost: 'text-[#A8E6E8] hover:text-[#2EC4D6] hover:bg-[#0B6E8A]/30',
     };
 
     return (

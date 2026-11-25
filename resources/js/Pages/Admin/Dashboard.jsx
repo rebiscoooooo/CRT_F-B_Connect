@@ -39,7 +39,7 @@ import {
 } from 'recharts';
 
 export default function Dashboard({ stats = {}, recentResources = [], recentStudents = [], recentActivities = [], chartData = {} }) {
-    const COLORS = ['#2563EB', '#38BDF8', '#818CF8', '#10B981', '#F59E0B', '#A855F7'];
+    const COLORS = ['#2EC4D6', '#0B6E8A', '#A8E6E8', '#10B981', '#F59E0B', '#38BDF8'];
 
     return (
         <AppLayout title="Administrator Dashboard">
@@ -48,7 +48,7 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
             {/* Header with Quick Actions */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                 <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
-                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white ring-2 ring-blue-500/20 shadow-xs overflow-hidden flex items-center justify-center flex-shrink-0">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#0B6E8A]/25 ring-2 ring-[#2EC4D6]/40 shadow-xs overflow-hidden flex items-center justify-center flex-shrink-0">
                         <img
                             src="/images/logo-badge.png"
                             alt="CRT F&B Connect"
@@ -59,10 +59,10 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                         />
                     </div>
                     <div className="min-w-0 flex-1">
-                        <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                        <h1 className="text-xl sm:text-3xl font-extrabold text-[#F4FBFC] tracking-tight leading-tight">
                             Administrator &amp; Instructor Overview
                         </h1>
-                        <p className="text-xs sm:text-sm text-slate-500 mt-1 truncate sm:whitespace-normal">
+                        <p className="text-xs sm:text-sm text-[#A8E6E8]/80 mt-1 truncate sm:whitespace-normal font-normal">
                             Live analytics, curriculum resources, and student enrollment records.
                         </p>
                     </div>
@@ -71,30 +71,30 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                 <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:items-center gap-2 sm:gap-2.5 w-full sm:w-auto">
                     <Link
                         href="/admin/resources/create"
-                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm shadow-blue-500/20 hover:shadow-md transition-all text-center"
+                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold text-[#F4FBFC] cyber-glow-btn rounded-xl shadow-sm transition-all text-center"
                     >
                         <Upload className="w-4 h-4 shrink-0" />
                         <span className="truncate">Upload Resource</span>
                     </Link>
                     <Link
                         href="/admin/students"
-                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs hover:shadow-xs transition-all text-center"
+                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold text-[#A8E6E8] hover:text-[#F4FBFC] cyber-oauth-btn border border-[#A8E6E8]/20 hover:border-[#2EC4D6]/40 rounded-xl transition-all text-center"
                     >
-                        <UserPlus className="w-4 h-4 text-blue-600 shrink-0" />
+                        <UserPlus className="w-4 h-4 text-[#2EC4D6] shrink-0" />
                         <span className="truncate">Manage Students</span>
                     </Link>
                     <Link
                         href="/admin/teachers"
-                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs hover:shadow-xs transition-all text-center"
+                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold text-[#A8E6E8] hover:text-[#F4FBFC] cyber-oauth-btn border border-[#A8E6E8]/20 hover:border-[#2EC4D6]/40 rounded-xl transition-all text-center"
                     >
-                        <ShieldCheck className="w-4 h-4 text-sky-600 shrink-0" />
+                        <ShieldCheck className="w-4 h-4 text-[#2EC4D6] shrink-0" />
                         <span className="truncate">Faculty &amp; Admins</span>
                     </Link>
                     <Link
                         href="/admin/assessments"
-                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-2xs hover:shadow-xs transition-all text-center"
+                        className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs font-semibold text-[#A8E6E8] hover:text-[#F4FBFC] cyber-oauth-btn border border-[#A8E6E8]/20 hover:border-[#2EC4D6]/40 rounded-xl transition-all text-center"
                     >
-                        <ClipboardCheck className="w-4 h-4 text-blue-600 shrink-0" />
+                        <ClipboardCheck className="w-4 h-4 text-[#2EC4D6] shrink-0" />
                         <span className="truncate">Assessments</span>
                     </Link>
                 </div>
@@ -134,39 +134,39 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
 
             {/* Secondary stats row */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-                <div className="p-4 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
+                <div className="p-4 cyber-glass-card rounded-xl border border-[#A8E6E8]/20 flex items-center justify-between">
                     <div>
-                        <p className="text-[11px] font-semibold text-slate-500 uppercase">Illustrations</p>
-                        <p className="text-xl font-bold text-slate-900 mt-1">{stats.total_illustrations}</p>
+                        <p className="text-[11px] font-semibold text-[#A8E6E8] uppercase">Illustrations</p>
+                        <p className="text-xl font-bold text-[#F4FBFC] mt-1">{stats.total_illustrations}</p>
                     </div>
-                    <div className="p-2.5 rounded-lg bg-sky-50 text-sky-600">
+                    <div className="p-2.5 rounded-lg bg-[#0B6E8A]/40 text-[#2EC4D6]">
                         <ImageIcon className="w-5 h-5" />
                     </div>
                 </div>
-                <div className="p-4 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
+                <div className="p-4 cyber-glass-card rounded-xl border border-[#A8E6E8]/20 flex items-center justify-between">
                     <div>
-                        <p className="text-[11px] font-semibold text-slate-500 uppercase">Text Lessons</p>
-                        <p className="text-xl font-bold text-slate-900 mt-1">{stats.total_texts}</p>
+                        <p className="text-[11px] font-semibold text-[#A8E6E8] uppercase">Text Lessons</p>
+                        <p className="text-xl font-bold text-[#F4FBFC] mt-1">{stats.total_texts}</p>
                     </div>
-                    <div className="p-2.5 rounded-lg bg-amber-50 text-amber-600">
+                    <div className="p-2.5 rounded-lg bg-amber-500/20 text-amber-300">
                         <BookOpen className="w-5 h-5" />
                     </div>
                 </div>
-                <div className="p-4 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
+                <div className="p-4 cyber-glass-card rounded-xl border border-[#A8E6E8]/20 flex items-center justify-between">
                     <div>
-                        <p className="text-[11px] font-semibold text-slate-500 uppercase">Other Materials</p>
-                        <p className="text-xl font-bold text-slate-900 mt-1">{stats.total_others}</p>
+                        <p className="text-[11px] font-semibold text-[#A8E6E8] uppercase">Other Materials</p>
+                        <p className="text-xl font-bold text-[#F4FBFC] mt-1">{stats.total_others}</p>
                     </div>
-                    <div className="p-2.5 rounded-lg bg-purple-50 text-purple-600">
+                    <div className="p-2.5 rounded-lg bg-[#0A3D4F]/50 text-[#A8E6E8]">
                         <Folder className="w-5 h-5" />
                     </div>
                 </div>
-                <div className="p-4 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
+                <div className="p-4 cyber-glass-card rounded-xl border border-[#A8E6E8]/20 flex items-center justify-between">
                     <div>
-                        <p className="text-[11px] font-semibold text-slate-500 uppercase">Resource Folders</p>
-                        <p className="text-xl font-bold text-slate-900 mt-1">{stats.total_folders}</p>
+                        <p className="text-[11px] font-semibold text-[#A8E6E8] uppercase">Resource Folders</p>
+                        <p className="text-xl font-bold text-[#F4FBFC] mt-1">{stats.total_folders}</p>
                     </div>
-                    <div className="p-2.5 rounded-lg bg-blue-50 text-blue-600">
+                    <div className="p-2.5 rounded-lg bg-[#0B6E8A]/40 text-[#2EC4D6]">
                         <FolderKanban className="w-5 h-5" />
                     </div>
                 </div>
@@ -175,13 +175,13 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
             {/* Interactive Analytics Section (Recharts) */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
                 {/* Registration Trends Chart (Area) */}
-                <div className="lg:col-span-7 bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-2xs min-w-0">
+                <div className="lg:col-span-7 cyber-glass-card p-4 sm:p-6 rounded-2xl border border-[#A8E6E8]/20 min-w-0">
                     <div className="flex items-center justify-between mb-6">
                         <div>
-                            <h3 className="text-base font-bold text-slate-900">Student Enrollment Trend</h3>
-                            <p className="text-xs text-slate-500 mt-0.5">Monthly registration distribution</p>
+                            <h3 className="text-base font-bold text-[#F4FBFC]">Student Enrollment Trend</h3>
+                            <p className="text-xs text-[#A8E6E8]/70 mt-0.5">Monthly registration distribution</p>
                         </div>
-                        <span className="p-2 rounded-lg bg-blue-50 text-blue-600">
+                        <span className="p-2 rounded-lg bg-[#0B6E8A]/40 text-[#2EC4D6]">
                             <TrendingUp className="w-4 h-4" />
                         </span>
                     </div>
@@ -191,26 +191,26 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                             <AreaChart data={chartData.registrationTrends || []}>
                                 <defs>
                                     <linearGradient id="studentGrad" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#2563EB" stopOpacity={0.4} />
-                                        <stop offset="95%" stopColor="#2563EB" stopOpacity={0.0} />
+                                        <stop offset="5%" stopColor="#2EC4D6" stopOpacity={0.4} />
+                                        <stop offset="95%" stopColor="#2EC4D6" stopOpacity={0.0} />
                                     </linearGradient>
                                 </defs>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                                <XAxis dataKey="month" stroke="#94a3b8" fontSize={11} />
-                                <YAxis stroke="#94a3b8" fontSize={11} allowDecimals={false} />
+                                <CartesianGrid strokeDasharray="3 3" stroke="rgba(168, 230, 232, 0.08)" />
+                                <XAxis dataKey="month" stroke="#A8E6E8" fontSize={11} />
+                                <YAxis stroke="#A8E6E8" fontSize={11} allowDecimals={false} />
                                 <Tooltip
                                     contentStyle={{
-                                        backgroundColor: '#0F172A',
+                                        backgroundColor: '#061923',
                                         borderRadius: '0.75rem',
-                                        border: 'none',
-                                        color: '#fff',
+                                        border: '1px solid rgba(168, 230, 232, 0.25)',
+                                        color: '#F4FBFC',
                                         fontSize: '12px',
                                     }}
                                 />
                                 <Area
                                     type="monotone"
                                     dataKey="students"
-                                    stroke="#2563EB"
+                                    stroke="#2EC4D6"
                                     strokeWidth={2.5}
                                     fillOpacity={1}
                                     fill="url(#studentGrad)"
@@ -222,11 +222,11 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                 </div>
 
                 {/* Resource Category Distribution (Pie / Donut) */}
-                <div className="lg:col-span-5 bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-2xs flex flex-col justify-between min-w-0">
+                <div className="lg:col-span-5 cyber-glass-card p-4 sm:p-6 rounded-2xl border border-[#A8E6E8]/20 flex flex-col justify-between min-w-0">
                     <div className="flex items-center justify-between mb-4">
                         <div>
-                            <h3 className="text-base font-bold text-slate-900">Resource Distribution</h3>
-                            <p className="text-xs text-slate-500 mt-0.5">Materials by category</p>
+                            <h3 className="text-base font-bold text-[#F4FBFC]">Resource Distribution</h3>
+                            <p className="text-xs text-[#A8E6E8]/70 mt-0.5">Materials by category</p>
                         </div>
                     </div>
 
@@ -249,10 +249,10 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                                 </Pie>
                                 <Tooltip
                                     contentStyle={{
-                                        backgroundColor: '#0F172A',
+                                        backgroundColor: '#061923',
                                         borderRadius: '0.75rem',
-                                        border: 'none',
-                                        color: '#fff',
+                                        border: '1px solid rgba(168, 230, 232, 0.25)',
+                                        color: '#F4FBFC',
                                         fontSize: '12px',
                                     }}
                                 />
@@ -260,11 +260,11 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                         </ResponsiveContainer>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-xs">
+                    <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#A8E6E8]/15 text-xs">
                         {(chartData.categoryDistribution || []).map((cat, i) => (
                             <div key={cat.name} className="flex items-center gap-2">
                                 <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
-                                <span className="truncate text-slate-600">{cat.name}: <strong className="text-slate-900">{cat.count}</strong></span>
+                                <span className="truncate text-[#A8E6E8]">{cat.name}: <strong className="text-[#F4FBFC]">{cat.count}</strong></span>
                             </div>
                         ))}
                     </div>
@@ -272,32 +272,32 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
             </div>
 
             {/* Upload Activity by Resource Type (Bar Chart) */}
-            <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-2xs mb-8 min-w-0">
+            <div className="cyber-glass-card p-4 sm:p-6 rounded-2xl border border-[#A8E6E8]/20 mb-8 min-w-0">
                 <div className="flex items-center justify-between mb-6">
                     <div>
-                        <h3 className="text-base font-bold text-slate-900">Materials Volume by Media Type</h3>
-                        <p className="text-xs text-slate-500 mt-0.5">Inventory of educational formats available</p>
+                        <h3 className="text-base font-bold text-[#F4FBFC]">Materials Volume by Media Type</h3>
+                        <p className="text-xs text-[#A8E6E8]/70 mt-0.5">Inventory of educational formats available</p>
                     </div>
                 </div>
 
                 <div className="h-60 w-full min-w-0">
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={chartData.resourceTypes || []}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                            <XAxis dataKey="type" stroke="#94a3b8" fontSize={11} />
-                            <YAxis stroke="#94a3b8" fontSize={11} allowDecimals={false} />
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(168, 230, 232, 0.08)" />
+                            <XAxis dataKey="type" stroke="#A8E6E8" fontSize={11} />
+                            <YAxis stroke="#A8E6E8" fontSize={11} allowDecimals={false} />
                             <Tooltip
-                                cursor={{ fill: 'rgba(37, 99, 235, 0.04)', radius: 8 }}
+                                cursor={{ fill: 'rgba(46, 196, 214, 0.1)', radius: 8 }}
                                 contentStyle={{
-                                    backgroundColor: '#0F172A',
+                                    backgroundColor: '#061923',
                                     borderRadius: '0.75rem',
-                                    border: 'none',
-                                    color: '#fff',
+                                    border: '1px solid rgba(168, 230, 232, 0.25)',
+                                    color: '#F4FBFC',
                                     fontSize: '12px',
-                                    boxShadow: '0 10px 25px -5px rgba(15, 23, 42, 0.3)',
+                                    boxShadow: '0 10px 25px -5px rgba(4, 18, 26, 0.5)',
                                 }}
                             />
-                            <Bar dataKey="count" fill="#2563EB" radius={[6, 6, 0, 0]} name="Materials Count" />
+                            <Bar dataKey="count" fill="#2EC4D6" radius={[6, 6, 0, 0]} name="Materials Count" />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -306,27 +306,27 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
             {/* Bottom 2-Column Section: Recent Uploads & Recent Students */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* Recent Resources */}
-                <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden min-w-0">
-                    <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-100">
+                <div className="lg:col-span-7 cyber-glass-card rounded-2xl border border-[#A8E6E8]/20 overflow-hidden min-w-0">
+                    <div className="flex items-center justify-between p-4 sm:p-6 border-b border-[#A8E6E8]/15">
                         <div>
-                            <h3 className="text-base font-bold text-slate-900">Recently Uploaded Resources</h3>
-                            <p className="text-xs text-slate-500 mt-0.5">Latest materials published to the catalog</p>
+                            <h3 className="text-base font-bold text-[#F4FBFC]">Recently Uploaded Resources</h3>
+                            <p className="text-xs text-[#A8E6E8]/70 mt-0.5">Latest materials published to the catalog</p>
                         </div>
                         <Link
                             href="/admin/resources"
-                            className="text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1"
+                            className="text-xs font-semibold text-[#2EC4D6] hover:text-[#F4FBFC] inline-flex items-center gap-1 transition-colors"
                         >
                             View All
                             <ArrowRight className="w-3.5 h-3.5" />
                         </Link>
                     </div>
 
-                    <div className="divide-y divide-slate-100">
+                    <div className="divide-y divide-[#A8E6E8]/10">
                         {recentResources.length > 0 ? (
                             recentResources.map((res) => (
-                                <div key={res.id} className="p-4 hover:bg-slate-50/80 transition-colors flex items-center justify-between gap-4">
+                                <div key={res.id} className="p-4 hover:bg-[#0B6E8A]/20 transition-colors flex items-center justify-between gap-4">
                                     <div className="flex items-center gap-3 overflow-hidden">
-                                        <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600 flex-shrink-0">
+                                        <div className="p-2.5 rounded-xl bg-[#0B6E8A]/40 text-[#2EC4D6] flex-shrink-0">
                                             {res.resource_type === 'video' ? <Video className="w-4 h-4" /> :
                                                 res.resource_type === 'illustration' ? <ImageIcon className="w-4 h-4" /> :
                                                     res.resource_type === 'pdf' ? <FileText className="w-4 h-4" /> :
@@ -335,28 +335,28 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                                         <div className="truncate">
                                             <Link
                                                 href={`/admin/resources/${res.id}`}
-                                                className="text-xs font-bold text-slate-900 hover:text-blue-600 truncate block"
+                                                className="text-xs font-bold text-[#F4FBFC] hover:text-[#2EC4D6] truncate block transition-colors"
                                             >
                                                 {res.title}
                                             </Link>
-                                            <p className="text-[11px] text-slate-500 mt-0.5 truncate">
+                                            <p className="text-[11px] text-[#A8E6E8]/70 mt-0.5 truncate">
                                                 {res.category?.name} {res.folder ? `› ${res.folder.name}` : ''}
                                             </p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-3 text-right flex-shrink-0">
-                                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${res.visibility === 'published' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'
+                                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${res.visibility === 'published' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30' : 'bg-[#0A3D4F]/50 text-[#A8E6E8] border border-[#A8E6E8]/20'
                                             }`}>
                                             {res.visibility}
                                         </span>
-                                        <span className="text-[11px] text-slate-400 font-mono hidden sm:block">
+                                        <span className="text-[11px] text-[#A8E6E8]/60 font-mono hidden sm:block">
                                             {new Date(res.created_at).toLocaleDateString([], { month: 'short', day: 'numeric' })}
                                         </span>
                                     </div>
                                 </div>
                             ))
                         ) : (
-                            <div className="p-8 text-center text-xs text-slate-400">
+                            <div className="p-8 text-center text-xs text-[#A8E6E8]/60">
                                 No resources uploaded yet.
                             </div>
                         )}
@@ -366,44 +366,44 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                 {/* Recent Students & Activities */}
                 <div className="lg:col-span-5 space-y-6 min-w-0">
                     {/* Recent Students */}
-                    <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
-                        <div className="flex items-center justify-between p-6 border-b border-slate-100">
+                    <div className="cyber-glass-card rounded-2xl border border-[#A8E6E8]/20 overflow-hidden">
+                        <div className="flex items-center justify-between p-6 border-b border-[#A8E6E8]/15">
                             <div>
-                                <h3 className="text-base font-bold text-slate-900">Recent Students</h3>
-                                <p className="text-xs text-slate-500 mt-0.5">Newly enrolled learners</p>
+                                <h3 className="text-base font-bold text-[#F4FBFC]">Recent Students</h3>
+                                <p className="text-xs text-[#A8E6E8]/70 mt-0.5">Newly enrolled learners</p>
                             </div>
                             <Link
                                 href="/admin/students"
-                                className="text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1"
+                                className="text-xs font-semibold text-[#2EC4D6] hover:text-[#F4FBFC] inline-flex items-center gap-1 transition-colors"
                             >
                                 All Students
                                 <ArrowRight className="w-3.5 h-3.5" />
                             </Link>
                         </div>
 
-                        <div className="divide-y divide-slate-100">
+                        <div className="divide-y divide-[#A8E6E8]/10">
                             {recentStudents.length > 0 ? (
                                 recentStudents.map((st) => (
-                                    <div key={st.id} className="p-4 hover:bg-slate-50/80 transition-colors flex items-center justify-between">
+                                    <div key={st.id} className="p-4 hover:bg-[#0B6E8A]/20 transition-colors flex items-center justify-between">
                                         <div className="flex items-center gap-3">
                                             <img
                                                 src={st.avatar_url}
                                                 alt={st.name}
-                                                className="w-8 h-8 rounded-lg object-cover ring-1 ring-slate-200"
+                                                className="w-8 h-8 rounded-lg object-cover ring-1 ring-[#2EC4D6]/35"
                                             />
                                             <div>
-                                                <p className="text-xs font-bold text-slate-900">{st.name}</p>
-                                                <p className="text-[11px] text-slate-500 font-mono">{st.student_number || st.email}</p>
+                                                <p className="text-xs font-bold text-[#F4FBFC]">{st.name}</p>
+                                                <p className="text-[11px] text-[#A8E6E8]/70 font-mono">{st.student_number || st.email}</p>
                                             </div>
                                         </div>
-                                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${st.status === 'active' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'
+                                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${st.status === 'active' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30' : 'bg-[#0A3D4F]/50 text-[#A8E6E8] border border-[#A8E6E8]/20'
                                             }`}>
                                             {st.status}
                                         </span>
                                     </div>
                                 ))
                             ) : (
-                                <div className="p-6 text-center text-xs text-slate-400">
+                                <div className="p-6 text-center text-xs text-[#A8E6E8]/60">
                                     No students registered yet.
                                 </div>
                             )}
@@ -411,12 +411,12 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                     </div>
 
                     {/* Recent Activity Log Snapshot */}
-                    <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs p-6">
+                    <div className="cyber-glass-card rounded-2xl border border-[#A8E6E8]/20 p-6">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-base font-bold text-slate-900">System Activity</h3>
+                            <h3 className="text-base font-bold text-[#F4FBFC]">System Activity</h3>
                             <Link
                                 href="/admin/activity-logs"
-                                className="text-xs font-semibold text-blue-600 hover:underline"
+                                className="text-xs font-semibold text-[#2EC4D6] hover:text-[#F4FBFC] hover:underline transition-colors"
                             >
                                 Full Log
                             </Link>
@@ -424,10 +424,10 @@ export default function Dashboard({ stats = {}, recentResources = [], recentStud
                         <div className="space-y-3">
                             {recentActivities.slice(0, 4).map((act) => (
                                 <div key={act.id} className="flex items-start gap-2.5 text-xs">
-                                    <Activity className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                                    <Activity className="w-4 h-4 text-[#2EC4D6] flex-shrink-0 mt-0.5" />
                                     <div className="flex-1">
-                                        <p className="text-slate-800 font-medium leading-snug">{act.description}</p>
-                                        <span className="text-[10px] text-slate-400">
+                                        <p className="text-[#F4FBFC] font-medium leading-snug">{act.description}</p>
+                                        <span className="text-[10px] text-[#A8E6E8]/60">
                                             {new Date(act.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                         </span>
                                     </div>

@@ -138,7 +138,7 @@ export default function Register({ allowRegistration = true }) {
                         />
                     </div>
                     {errors.student_number && (
-                        <p className="mt-1 text-xs text-rose-300 font-medium ml-1">{errors.student_number}</p>
+                        <p className="mt-1 text-xs text-[#F4FBFC] font-medium ml-1">{errors.student_number}</p>
                     )}
                 </div>
 

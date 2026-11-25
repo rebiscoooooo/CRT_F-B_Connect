@@ -20,14 +20,14 @@ export default function ApprovalPending({ student }) {
 
             {/* 2-Step Progress Indicator */}
             <div className="mb-6">
-                <div className="flex items-center justify-between text-xs font-bold text-slate-500 mb-2">
-                    <span className="flex items-center gap-1.5 text-emerald-600 font-extrabold">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <div className="flex items-center justify-between text-xs font-semibold text-[#A8E6E8]/70 mb-2">
+                    <span className="flex items-center gap-1.5 text-[#2EC4D6] font-bold">
+                        <CheckCircle2 className="w-4 h-4 text-[#2EC4D6]" />
                         1. Email Verified
                     </span>
-                    <span className="h-0.5 flex-1 mx-3 bg-emerald-500"></span>
-                    <span className="flex items-center gap-1.5 text-amber-600 font-extrabold">
-                        <span className="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center text-[10px] animate-pulse">2</span>
+                    <span className="h-0.5 flex-1 mx-3 bg-[#2EC4D6]/40"></span>
+                    <span className="flex items-center gap-1.5 text-amber-300 font-bold">
+                        <span className="w-5 h-5 rounded-full bg-amber-500 text-[#061923] flex items-center justify-center text-[10px] font-bold animate-pulse">2</span>
                         2. Teacher Approval
                     </span>
                 </div>
@@ -35,43 +35,43 @@ export default function ApprovalPending({ student }) {
 
             {/* Status Icon */}
             <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-amber-50 text-amber-600 rounded-3xl flex items-center justify-center mx-auto mb-3.5 shadow-inner ring-4 ring-amber-50">
+                <div className="w-16 h-16 bg-[#0B6E8A]/25 text-[#2EC4D6] rounded-3xl flex items-center justify-center mx-auto mb-3.5 border border-[#2EC4D6]/40 shadow-[0_0_20px_rgba(46,196,214,0.3)]">
                     <Clock className="w-8 h-8 animate-pulse" />
                 </div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 uppercase tracking-wider mb-2">
-                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-amber-500/20 border border-amber-400/30 text-amber-300 uppercase tracking-wider mb-2">
+                    <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
                     Pending Verification
                 </div>
-                <h2 className="text-xl font-black text-slate-900 tracking-tight">Account Awaiting Approval</h2>
-                <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                <h2 className="text-xl sm:text-2xl font-bold text-[#F4FBFC] tracking-tight">Account Awaiting Approval</h2>
+                <p className="text-xs text-[#A8E6E8]/80 mt-2 leading-relaxed">
                     Thank you for verifying your email. To protect our learning environment and prevent dummy accounts, your instructor or department administrator must confirm your enrollment before access is granted.
                 </p>
             </div>
 
             {/* Student Info Card */}
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 mb-6 space-y-2.5 text-xs">
+            <div className="cyber-glass-card-subtle rounded-2xl p-4 mb-6 space-y-2.5 text-xs text-[#F4FBFC]">
                 <div className="flex items-center justify-between">
-                    <span className="text-slate-500 font-medium">Student Name</span>
-                    <span className="font-bold text-slate-900">{student?.name || '—'}</span>
+                    <span className="text-[#A8E6E8]">Student Name</span>
+                    <span className="font-bold text-[#F4FBFC]">{student?.name || '—'}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                    <span className="text-slate-500 font-medium">Student ID Number</span>
-                    <span className="font-mono font-bold text-slate-900">{student?.student_number || '—'}</span>
+                    <span className="text-[#A8E6E8]">Student ID Number</span>
+                    <span className="font-mono font-bold text-[#2EC4D6]">{student?.student_number || '—'}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                    <span className="text-slate-500 font-medium">Email Address</span>
-                    <span className="font-medium text-slate-700 truncate max-w-[180px]">{student?.email || '—'}</span>
+                    <span className="text-[#A8E6E8]">Email Address</span>
+                    <span className="font-medium text-[#F4FBFC] truncate max-w-[180px]">{student?.email || '—'}</span>
                 </div>
-                <div className="flex items-center justify-between pt-1 border-t border-slate-200">
-                    <span className="text-slate-500 font-medium">Email Status</span>
-                    <span className="inline-flex items-center gap-1 text-emerald-600 font-bold">
+                <div className="flex items-center justify-between pt-1 border-t border-[#A8E6E8]/15">
+                    <span className="text-[#A8E6E8]">Email Status</span>
+                    <span className="inline-flex items-center gap-1 text-emerald-300 font-bold">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         Verified
                     </span>
                 </div>
                 <div className="flex items-center justify-between">
-                    <span className="text-slate-500 font-medium">Approval Status</span>
-                    <span className="inline-flex items-center gap-1 text-amber-700 font-bold">
+                    <span className="text-[#A8E6E8]">Approval Status</span>
+                    <span className="inline-flex items-center gap-1 text-amber-300 font-bold">
                         <Clock className="w-3.5 h-3.5" />
                         In Review
                     </span>
@@ -79,9 +79,9 @@ export default function ApprovalPending({ student }) {
             </div>
 
             {/* Notification Information */}
-            <div className="p-3 bg-blue-50/70 border border-blue-200/70 rounded-xl mb-6 flex items-start gap-2.5">
-                <AlertCircle className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                <p className="text-[11px] text-blue-800 leading-normal">
+            <div className="p-3 bg-[#0B6E8A]/20 border border-[#2EC4D6]/30 backdrop-blur-md rounded-xl mb-6 flex items-start gap-2.5">
+                <AlertCircle className="w-4 h-4 text-[#2EC4D6] shrink-0 mt-0.5" />
+                <p className="text-[11px] text-[#A8E6E8] leading-normal">
                     You will receive an email confirmation once your instructor approves your account. You can also click the button below at any time to re-check your status.
                 </p>
             </div>
@@ -92,7 +92,7 @@ export default function ApprovalPending({ student }) {
                     type="button"
                     onClick={handleCheckStatus}
                     disabled={isChecking}
-                    className="w-full py-3 px-4 rounded-xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:opacity-60 shadow-md shadow-blue-600/20 hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                    className="w-full py-3 px-4 rounded-xl text-sm font-semibold text-[#F4FBFC] cyber-glow-btn disabled:opacity-60 transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                     <RefreshCw className={`w-4 h-4 ${isChecking ? 'animate-spin' : ''}`} />
                     {isChecking ? 'Checking Status...' : 'Check Approval Status'}
@@ -100,7 +100,7 @@ export default function ApprovalPending({ student }) {
 
                 <Link
                     href="/login"
-                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition-all flex items-center justify-center gap-1.5"
+                    className="w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-[#A8E6E8] hover:text-[#F4FBFC] cyber-oauth-btn transition-all flex items-center justify-center gap-1.5"
                 >
                     <LogIn className="w-3.5 h-3.5" />
                     Return to Login

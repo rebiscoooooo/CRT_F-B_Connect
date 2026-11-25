@@ -100,7 +100,7 @@ export default function VideoPlayer({ src, title, poster }) {
 
     if (isYouTube) {
         return (
-            <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-950 shadow-2xl border border-slate-800">
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-[#061923] shadow-2xl border border-[#A8E6E8]/20">
                 <iframe
                     src={getYouTubeEmbedUrl(src)}
                     title={title || 'Video lesson'}
@@ -115,7 +115,7 @@ export default function VideoPlayer({ src, title, poster }) {
     return (
         <div
             ref={containerRef}
-            className="group relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-950 shadow-2xl border border-slate-800 select-none"
+            className="group relative w-full aspect-video rounded-2xl overflow-hidden bg-[#061923] shadow-2xl border border-[#A8E6E8]/20 select-none"
             onMouseEnter={() => setShowControls(true)}
             onMouseLeave={() => isPlaying && setShowControls(false)}
         >
@@ -133,10 +133,10 @@ export default function VideoPlayer({ src, title, poster }) {
             {/* Play Button Overlay (when paused) */}
             {!isPlaying && (
                 <div
-                    className="absolute inset-0 flex items-center justify-center bg-slate-950/40 backdrop-blur-xs cursor-pointer transition-opacity"
+                    className="absolute inset-0 flex items-center justify-center bg-[#061923]/50 backdrop-blur-xs cursor-pointer transition-opacity"
                     onClick={togglePlay}
                 >
-                    <div className="p-5 rounded-full bg-blue-600/90 text-white shadow-xl hover:scale-110 hover:bg-blue-600 transition-all duration-200">
+                    <div className="p-5 rounded-full bg-gradient-to-br from-[#0B6E8A] to-[#2EC4D6] text-[#F4FBFC] shadow-xl shadow-[#2EC4D6]/30 hover:scale-110 transition-all duration-200 border border-[#A8E6E8]/30">
                         <Play className="w-10 h-10 translate-x-0.5 fill-current" />
                     </div>
                 </div>
@@ -144,7 +144,7 @@ export default function VideoPlayer({ src, title, poster }) {
 
             {/* Controls Bar */}
             <div
-                className={`absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950/95 via-slate-950/70 to-transparent p-4 transition-all duration-300 ${
+                className={`absolute bottom-0 inset-x-0 bg-gradient-to-t from-[#061923]/95 via-[#061923]/75 to-transparent p-4 transition-all duration-300 ${
                     showControls ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
                 }`}
             >
@@ -156,7 +156,7 @@ export default function VideoPlayer({ src, title, poster }) {
                         max={duration || 100}
                         value={currentTime}
                         onChange={handleSeek}
-                        className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:h-2 transition-all"
+                        className="w-full h-1.5 bg-[#0A3D4F] rounded-lg appearance-none cursor-pointer accent-[#2EC4D6] hover:h-2 transition-all"
                     />
                 </div>
 
@@ -165,7 +165,7 @@ export default function VideoPlayer({ src, title, poster }) {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={togglePlay}
-                            className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                            className="p-1.5 rounded-lg hover:bg-[#0B6E8A]/30 transition-colors"
                             aria-label={isPlaying ? 'Pause' : 'Play'}
                         >
                             {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current" />}
@@ -174,7 +174,7 @@ export default function VideoPlayer({ src, title, poster }) {
                         <div className="flex items-center gap-2 group/vol">
                             <button
                                 onClick={toggleMute}
-                                className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                                className="p-1.5 rounded-lg hover:bg-[#0B6E8A]/30 transition-colors"
                                 aria-label="Toggle mute"
                             >
                                 {isMuted || volume === 0 ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
@@ -186,11 +186,11 @@ export default function VideoPlayer({ src, title, poster }) {
                                 step="0.05"
                                 value={isMuted ? 0 : volume}
                                 onChange={handleVolumeChange}
-                                className="w-16 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500 hidden sm:block"
+                                className="w-16 h-1 bg-[#0A3D4F] rounded-lg appearance-none cursor-pointer accent-[#2EC4D6] hidden sm:block"
                             />
                         </div>
 
-                        <span className="text-xs text-slate-300 font-mono tracking-tight">
+                        <span className="text-xs text-[#A8E6E8]/70 font-mono tracking-tight">
                             {formatTime(currentTime)} / {formatTime(duration)}
                         </span>
                     </div>
@@ -198,13 +198,13 @@ export default function VideoPlayer({ src, title, poster }) {
                     {/* Right Controls */}
                     <div className="flex items-center gap-2">
                         {/* Speed selector */}
-                        <div className="flex items-center bg-white/10 rounded-lg p-0.5 text-xs font-semibold">
+                        <div className="flex items-center bg-[#0A3D4F]/30 rounded-lg p-0.5 text-xs font-semibold border border-[#A8E6E8]/10">
                             {[1, 1.25, 1.5, 2].map((rate) => (
                                 <button
                                     key={rate}
                                     onClick={() => handleSpeedChange(rate)}
                                     className={`px-2 py-0.5 rounded-md transition-colors ${
-                                        playbackRate === rate ? 'bg-blue-600 text-white' : 'text-slate-300 hover:text-white'
+                                        playbackRate === rate ? 'cyber-glow-btn text-[#F4FBFC]' : 'text-[#A8E6E8]/70 hover:text-[#F4FBFC] hover:bg-[#0B6E8A]/30'
                                     }`}
                                 >
                                     {rate}x
@@ -214,7 +214,7 @@ export default function VideoPlayer({ src, title, poster }) {
 
                         <button
                             onClick={toggleFullscreen}
-                            className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                            className="p-1.5 rounded-lg hover:bg-[#0B6E8A]/30 transition-colors"
                             aria-label="Toggle Fullscreen"
                         >
                             <Maximize className="w-5 h-5" />
